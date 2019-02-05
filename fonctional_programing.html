@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Programmation fonctionelle avec R</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Philippe Massicotte" />
+    <meta name="date" content="2019-05-14" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/robot-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Programmation fonctionelle avec R
+## R à Québec 2019
+### Philippe Massicotte
+### 2019-05-14
+
+---
+
+
+&lt;!-- Font Awesome --&gt;
+&lt;link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"&gt;
+
+
+
+&lt;!-- class: center top --&gt;
+&lt;img src="images/myname.png" alt="drawing" width="400"/&gt;
+
+&lt;p align="left"&gt;
+
+- &lt;b&gt;Assistant de recherche à Takuvik&lt;/b&gt;&lt;br&gt;
+- Utilise R depuis plus de 6 ans&lt;br&gt;
+- Auteur de 3 libraries sur CRAN&lt;br&gt;
+- Blog R: www.pmassicotte.com&lt;br&gt;
+
+&lt;br&gt;
+&lt;i class="fab fa-github"&gt;&lt;/i&gt; https://github.com/PMassicotte &lt;br&gt;
+&lt;i class="far fa-envelope"&gt;&lt;/i&gt; philippe.massicotte@takuvik.ulaval.ca &lt;br&gt;
+&lt;i class="fab fa-twitter"&gt;&lt;/i&gt; @philmassicotte
+
+&lt;/p&gt;
+
+---
+
+class: inverse, center, middle
+
+# Plan de la formation
+
+---
+
+## Plan de la formation
+
+1. Introduction et mise en contexte
+2. xxx
+3. yyy
+
+---
+
+## TEST
+
+80% du temps utilisé pour nettoyer les données.
+
+- La manipulation de données est une tâche répétitive:
+  - Ouvrir et nettoyer plusieurs fichiers
+  - Autres exemple
+
+---
+
+## Exemple 1
+
+Lire plusieurs fichiers ayant le même format.
+
+
+```r
+data1 &lt;- read.csv("file1.csv")
+data2 &lt;- read.csv("file2.csv")
+data3 &lt;- read.csv("file3.csv")
+```
+
+Et effectuer la même conversion sur les 3 *data frame*.
+
+
+```r
+data1$date &lt;- as.Date(data1$date)
+data2$date &lt;- as.Date(data2$date)
+data3$date &lt;- as.Date(data3$date)
+```
+
+
+---
+
+## Exemple 2
+
+Répéter la même opération sur plusieurs colonnes.
+
+
+```r
+# Générer des données
+df &lt;- data.frame(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+
+df
+```
+
+```
+##             a           b          c          d
+## 1  -1.2070657 -0.47719270  0.1340882  1.1022975
+## 2   0.2774292 -0.99838644 -0.4906859 -0.4755931
+## 3   1.0844412 -0.77625389 -0.4405479 -0.7094400
+## 4  -2.3456977  0.06445882  0.4595894 -0.5012581
+## 5   0.4291247  0.95949406 -0.6937202 -1.6290935
+## 6   0.5060559 -0.11028549 -1.4482049 -1.1676193
+## 7  -0.5747400 -0.51100951  0.5747557 -2.1800396
+## 8  -0.5466319 -0.91119542 -1.0236557 -1.3409932
+## 9  -0.5644520 -0.83717168 -0.0151383 -0.2942939
+## 10 -0.8900378  2.41583518 -0.9359486 -0.4658975
+```
+---
+
+## Exemple 2
+
+Normaliser les données entre 0-1.
+
+
+```r
+df$a &lt;- (df$a - min(df$a, na.rm = TRUE)) /
+  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b &lt;- (df$b - min(df$b, na.rm = TRUE)) /
+  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$c &lt;- (df$c - min(df$a, na.rm = TRUE)) /
+  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$d &lt;- (df$d - min(df$d, na.rm = TRUE)) /
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+
+df
+```
+
+```
+##            a          b           c         d
+## 1  0.3319492 0.15265375  0.23329602 1.0000000
+## 2  0.7647291 0.00000000 -0.85372947 0.5192783
+## 3  1.0000000 0.06506096 -0.76649585 0.4480343
+## 4  0.0000000 0.31129943  0.79962569 0.5114592
+## 5  0.8089534 0.57344857 -1.20698276 0.1678518
+## 6  0.8313814 0.26011813 -2.51968768 0.3084450
+## 7  0.5162933 0.14274906  1.00000000 0.0000000
+## 8  0.5244878 0.02553760 -1.78102746 0.2556247
+## 9  0.5192926 0.04721860 -0.02633867 0.5745131
+## 10 0.4243735 1.00000000 -1.62842851 0.5222322
+```
+
+---
+
+## Exemple 2
+
+Quel est le problème?
+
+
+```r
+df$a &lt;- (df$a - min(df$a, na.rm = TRUE)) /
+  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b &lt;- (df$b - min(df$b, na.rm = TRUE)) /
+  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$c &lt;- (df$c - min(df$a, na.rm = TRUE)) /
+  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$d &lt;- (df$d - min(df$d, na.rm = TRUE)) /
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+```
+
+--
+
+Erreur de copié/collé!!!
+
+
+```r
+df$a &lt;- (df$a - min(df$a, na.rm = TRUE)) /
+  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b &lt;- (df$b - min(df$b, na.rm = TRUE)) /
+  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$c &lt;- (df$c - min(df$a, na.rm = TRUE)) /
+*  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$d &lt;- (df$d - min(df$d, na.rm = TRUE)) /
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+```
+
+---
+
+## Nombre raisonable de répétitions
+
+- DRY: **D**on't **R**epeate **Y**ourself
+
+- Il est souvent dit que si vous avez 3 copies du même code, **il est temps d'écrire une fonction**.
+
+---
+
+## Exemple 2
+
+Une première amélioration: **utiliser une fonction**.
+
+--
+
+- Étudier la formule de base
+
+
+```r
+(df$d - min(df$d, na.rm = TRUE)) / 
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+```
+
+--
+
+- Paramétriser le code -&gt; remplacer les variables par des arguments
+
+
+```r
+x &lt;- (x - min(x, na.rm = TRUE)) / 
+  (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+```
+
+--
+
+- Écrire une fonction
+
+
+```r
+scale_vector &lt;- function(x) {
+  res &lt;- (x - min(x, na.rm = TRUE)) / 
+    (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+  
+  return(res)
+}
+```
+
+---
+
+## Tester notre fonction
+
+
+```r
+v &lt;- c(0, 1, 45, 98)
+v
+```
+
+```
+## [1]  0  1 45 98
+```
+
+```r
+scale_vector(v)
+```
+
+```
+## [1] 0.00000000 0.01020408 0.45918367 1.00000000
+```
+--
+
+Ça semble fonctionner!
+
+---
+
+## Utiliser la fonction sur le *data frame*
+
+
+```r
+df$a &lt;- scale_vector(df$a)
+df$b &lt;- scale_vector(df$b)
+df$c &lt;- scale_vector(df$c)
+df$d &lt;- scale_vector(df$d)
+
+df
+```
+
+```
+##            a          b         c         d
+## 1  0.3319492 0.15265375 0.7821670 1.0000000
+## 2  0.7647291 0.00000000 0.4733256 0.5192783
+## 3  1.0000000 0.06506096 0.4981101 0.4480343
+## 4  0.0000000 0.31129943 0.9430704 0.5114592
+## 5  0.8089534 0.57344857 0.3729606 0.1678518
+## 6  0.8313814 0.26011813 0.0000000 0.3084450
+## 7  0.5162933 0.14274906 1.0000000 0.0000000
+## 8  0.5244878 0.02553760 0.2098653 0.2556247
+## 9  0.5192926 0.04721860 0.7084006 0.5745131
+## 10 0.4243735 1.00000000 0.2532211 0.5222322
+```
+
+---
+
+## Exemple 2
+
+Fonctionne très bien, mais il y a 4 répétitions. Toujours la possibilité de faire une faute de frappe.
+
+
+```r
+df$a &lt;- scale_vector(df$a)
+df$b &lt;- scale_vector(df$b)
+*df$c &lt;- scale_vector(df$b)
+df$d &lt;- scale_vector(df$d)
+```
+
+
+---
+
+## Utilisation des boucles
+
+
+```r
+df2 &lt;- df # Faire une copie du data frame
+
+# Boucle sur chacune des colonnes de df
+for(i in 1:ncol(df)) {
+  df2[, i] &lt;- scale_vector(df[, i])
+}
+
+df2
+```
+
+```
+##            a          b         c         d
+## 1  0.3319492 0.15265375 0.7821670 1.0000000
+## 2  0.7647291 0.00000000 0.4733256 0.5192783
+## 3  1.0000000 0.06506096 0.4981101 0.4480343
+## 4  0.0000000 0.31129943 0.9430704 0.5114592
+## 5  0.8089534 0.57344857 0.3729606 0.1678518
+## 6  0.8313814 0.26011813 0.0000000 0.3084450
+## 7  0.5162933 0.14274906 1.0000000 0.0000000
+## 8  0.5244878 0.02553760 0.2098653 0.2556247
+## 9  0.5192926 0.04721860 0.7084006 0.5745131
+## 10 0.4243735 1.00000000 0.2532211 0.5222322
+```
+
+---
+
+## Problèmes potentiels des boucles
+
+--
+
+Il faut bien gérer les index utilisées dans la boucle.
+
+
+```r
+for (i in 1:ncol(df)) {
+  df2[, i] &lt;- scale_vector(df[, i])
+
+  ... # Code super compliqué avec plusieurs lignes
+
+  i &lt;- i / pi
+}
+```
+
+--
+
+Propice aux erreurs lorsque plusieurs boucles imbriquées.
+
+
+```r
+for(i in 1:ncol(df)) {
+  for(j = 1:ncol(df)) {
+*    df2[j, i] &lt;- df[i, j]
+  }
+}
+```
+
+--
+
+Le boucles c'est bien, mais c'est encore mieux sans!
+
+---
+
+class: inverse, center, middle
+
+# Notes sur les boucles
+
+*They are not the evil you might think*
+
+---
+
+## Rapidité des boucles
+
+Contraitement à l'idée reçue, les boucles en R ne sont pas nécessairement lentes. La plupart du temps, la lenteur des boucles est liée au fait que la variable qui reçoit le résultat n'est pas initialisée.
+
+Dans l'exemple suivant, on veut créer une boucle qui créer un vecteur **dynamiquement** de 1 à *n*.
+
+.pull-left[
+
+**Boucle sans initialisation**
+
+
+```r
+n &lt;- 1000
+
+f_slow &lt;- function(n) {
+*  v &lt;- NULL
+  for (i in 1:n) 
+    v &lt;- c(v, i)
+  
+  return(v)
+}
+```
+]
+
+.pull-right[
+
+**Boucle avec initialisation**
+
+
+```r
+n &lt;- 1000
+
+f_fast &lt;- function(n) {
+*  v &lt;- rep(NA, n)
+  for (i in 1:n) 
+    v[i] &lt;- i
+  
+  return(v)
+}
+```
+
+]
+
+---
+
+## Rapidité des boucles
+
+
+```r
+# Calculer le temps d'exécution des deux fonctions/boucles
+timing &lt;- microbenchmark::microbenchmark(f_slow(n), f_fast(n))
+autoplot(timing)
+```
+
+![](fonctional_programing_files/figure-html/unnamed-chunk-18-1.svg)&lt;!-- --&gt;
+
+
+---
+
+## La librarie *purrr*
+
+
+```r
+df %&gt;% 
+  mutate_all(scale_vector)
+```
+
+```
+##            a          b         c         d
+## 1  0.3319492 0.15265375 0.7821670 1.0000000
+## 2  0.7647291 0.00000000 0.4733256 0.5192783
+## 3  1.0000000 0.06506096 0.4981101 0.4480343
+## 4  0.0000000 0.31129943 0.9430704 0.5114592
+## 5  0.8089534 0.57344857 0.3729606 0.1678518
+## 6  0.8313814 0.26011813 0.0000000 0.3084450
+## 7  0.5162933 0.14274906 1.0000000 0.0000000
+## 8  0.5244878 0.02553760 0.2098653 0.2556247
+## 9  0.5192926 0.04721860 0.7084006 0.5745131
+## 10 0.4243735 1.00000000 0.2532211 0.5222322
+```
+
+```r
+df %&gt;% 
+  map_dfc(scale_vector)
+```
+
+```
+## # A tibble: 10 x 4
+##        a      b     c     d
+##    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 0.332 0.153  0.782 1    
+##  2 0.765 0      0.473 0.519
+##  3 1     0.0651 0.498 0.448
+##  4 0     0.311  0.943 0.511
+##  5 0.809 0.573  0.373 0.168
+##  6 0.831 0.260  0     0.308
+##  7 0.516 0.143  1     0    
+##  8 0.524 0.0255 0.210 0.256
+##  9 0.519 0.0472 0.708 0.575
+## 10 0.424 1      0.253 0.522
+```
+
+---
+
+class: center, middle
+
+&lt;blockquote class="twitter-tweet" data-lang="de"&gt;&lt;p lang="en" dir="ltr"&gt;You&amp;#39;re doing it right if you get frustrated: if you&amp;#39;re not frustrated, you&amp;#39;re (probably) not stretching yourself mentally&lt;/p&gt;&amp;mdash; Hadley Wickham (@hadleywickham) &lt;a href="https://twitter.com/hadleywickham/status/565516733516349441?ref_src=twsrc%5Etfw"&gt;11. Februar 2015&lt;/a&gt;&lt;/blockquote&gt;
+&lt;/center&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

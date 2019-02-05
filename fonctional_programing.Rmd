@@ -1,0 +1,390 @@
+---
+title: "Programmation fonctionelle avec R"
+subtitle: "R à Québec 2019"
+author: "Philippe Massicotte"
+date: "2019-05-14"
+output:
+  xaringan::moon_reader:
+    yolo: false
+    lib_dir: libs
+    css: [default, default, robot-fonts]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, dev = "svg")
+options(htmltools.dir.version = FALSE)
+# names(xaringan:::list_css())
+
+library(tidyverse)
+library(extrafont)
+
+## Set default ggplot2 font size and font familly
+
+loadfonts(quiet = TRUE)
+theme_set(theme_bw(base_size = 12, base_family = "IBM Plex Sans"))
+
+
+```
+
+<!-- class: center top -->
+<img src="images/myname.png" alt="drawing" width="400"/>
+
+<p align="left">
+
+- <b>Assistant de recherche à Takuvik</b><br>
+- Utilise R depuis plus de 6 ans<br>
+- Auteur de 3 libraries sur CRAN<br>
+- Blog R: www.pmassicotte.com<br>
+
+<br>
+<i class="fab fa-github"></i> https://github.com/PMassicotte <br>
+<i class="far fa-envelope"></i> philippe.massicotte@takuvik.ulaval.ca <br>
+<i class="fab fa-twitter"></i> @philmassicotte
+
+</p>
+
+---
+
+class: inverse, center, middle
+
+# Plan de la formation
+
+---
+
+## Plan de la formation
+
+1. Introduction et mise en contexte
+2. xxx
+3. yyy
+
+---
+
+## TEST
+
+80% du temps utilisé pour nettoyer les données.
+
+- La manipulation de données est une tâche répétitive:
+  - Ouvrir et nettoyer plusieurs fichiers
+  - Autres exemple
+
+---
+
+## Exemple 1
+
+Lire plusieurs fichiers ayant le même format.
+
+```{r, eval=FALSE}
+data1 <- read.csv("file1.csv")
+data2 <- read.csv("file2.csv")
+data3 <- read.csv("file3.csv")
+```
+
+Et effectuer la même conversion sur les 3 *data frame*.
+
+```{r, eval=FALSE}
+data1$date <- as.Date(data1$date)
+data2$date <- as.Date(data2$date)
+data3$date <- as.Date(data3$date)
+```
+
+
+---
+
+## Exemple 2
+
+Répéter la même opération sur plusieurs colonnes.
+
+```{r, echo=-1}
+set.seed(1234)
+
+# Générer des données
+df <- data.frame(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+
+df
+
+```
+---
+
+## Exemple 2
+
+Normaliser les données entre 0-1.
+
+```{r}
+df$a <- (df$a - min(df$a, na.rm = TRUE)) /
+  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b <- (df$b - min(df$b, na.rm = TRUE)) /
+  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$c <- (df$c - min(df$a, na.rm = TRUE)) /
+  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$d <- (df$d - min(df$d, na.rm = TRUE)) /
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+
+df
+
+```
+
+---
+
+## Exemple 2
+
+Quel est le problème?
+
+```{r, eval=FALSE}
+df$a <- (df$a - min(df$a, na.rm = TRUE)) /
+  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b <- (df$b - min(df$b, na.rm = TRUE)) /
+  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$c <- (df$c - min(df$a, na.rm = TRUE)) /
+  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$d <- (df$d - min(df$d, na.rm = TRUE)) /
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+```
+
+--
+
+Erreur de copié/collé!!!
+
+```{r, eval=FALSE}
+df$a <- (df$a - min(df$a, na.rm = TRUE)) /
+  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b <- (df$b - min(df$b, na.rm = TRUE)) /
+  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$c <- (df$c - min(df$a, na.rm = TRUE)) /
+  {{(max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))}}
+df$d <- (df$d - min(df$d, na.rm = TRUE)) /
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+```
+
+---
+
+## Nombre raisonable de répétitions
+
+- DRY: **D**on't **R**epeate **Y**ourself
+
+- Il est souvent dit que si vous avez 3 copies du même code, **il est temps d'écrire une fonction**.
+
+---
+
+## Exemple 2
+
+Une première amélioration: **utiliser une fonction**.
+
+--
+
+- Étudier la formule de base
+
+```{r, eval=FALSE}
+(df$d - min(df$d, na.rm = TRUE)) / 
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+```
+
+--
+
+- Paramétriser le code -> remplacer les variables par des arguments
+
+```{r, eval=FALSE}
+x <- (x - min(x, na.rm = TRUE)) / 
+  (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+```
+
+--
+
+- Écrire une fonction
+
+```{r}
+scale_vector <- function(x) {
+  res <- (x - min(x, na.rm = TRUE)) / 
+    (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+  
+  return(res)
+}
+```
+
+---
+
+## Tester notre fonction
+
+```{r}
+v <- c(0, 1, 45, 98)
+v
+
+scale_vector(v)
+```
+--
+
+Ça semble fonctionner!
+
+---
+
+## Utiliser la fonction sur le *data frame*
+
+```{r}
+df$a <- scale_vector(df$a)
+df$b <- scale_vector(df$b)
+df$c <- scale_vector(df$c)
+df$d <- scale_vector(df$d)
+
+df
+```
+
+---
+
+## Exemple 2
+
+Fonctionne très bien, mais il y a 4 répétitions. Toujours la possibilité de faire une faute de frappe.
+
+```{r, eval=FALSE}
+df$a <- scale_vector(df$a)
+df$b <- scale_vector(df$b)
+{{df$c <- scale_vector(df$b)}}
+df$d <- scale_vector(df$d)
+```
+
+
+---
+
+## Utilisation des boucles
+
+```{r}
+
+df2 <- df # Faire une copie du data frame
+
+# Boucle sur chacune des colonnes de df
+for(i in 1:ncol(df)) {
+  df2[, i] <- scale_vector(df[, i])
+}
+
+df2
+
+```
+
+---
+
+## Problèmes potentiels des boucles
+
+--
+
+Il faut bien gérer les index utilisées dans la boucle.
+
+```{r, eval=FALSE}
+for (i in 1:ncol(df)) {
+  df2[, i] <- scale_vector(df[, i])
+
+  ... # Code super compliqué avec plusieurs lignes
+
+  i <- i / pi
+}
+```
+
+--
+
+Propice aux erreurs lorsque plusieurs boucles imbriquées.
+
+```{r, eval=FALSE}
+
+for(i in 1:ncol(df)) {
+  for(j = 1:ncol(df)) {
+    {{df2[j, i] <- df[i, j]}}
+  }
+}
+```
+
+--
+
+Le boucles c'est bien, mais c'est encore mieux sans!
+
+---
+
+class: inverse, center, middle
+
+# Notes sur les boucles
+
+*They are not the evil you might think*
+
+---
+
+## Rapidité des boucles
+
+Contraitement à l'idée reçue, les boucles en R ne sont pas nécessairement lentes. La plupart du temps, la lenteur des boucles est liée au fait que la variable qui reçoit le résultat n'est pas initialisée.
+
+Dans l'exemple suivant, on veut créer une boucle qui créer un vecteur **dynamiquement** de 1 à *n*.
+
+.pull-left[
+
+**Boucle sans initialisation**
+
+```{r}
+n <- 1000
+
+f_slow <- function(n) {
+  {{v <- NULL}}
+  for (i in 1:n) 
+    v <- c(v, i)
+  
+  return(v)
+}
+
+```
+]
+
+.pull-right[
+
+**Boucle avec initialisation**
+
+```{r}
+n <- 1000
+
+f_fast <- function(n) {
+  {{v <- rep(NA, n)}}
+  for (i in 1:n) 
+    v[i] <- i
+  
+  return(v)
+}
+```
+
+]
+
+---
+
+## Rapidité des boucles
+
+```{r, message=FALSE, echo=TRUE, fig.height=4}
+# Calculer le temps d'exécution des deux fonctions/boucles
+timing <- microbenchmark::microbenchmark(f_slow(n), f_fast(n))
+autoplot(timing)
+```
+
+
+---
+
+## La librarie *purrr*
+
+```{r}
+df %>% 
+  mutate_all(scale_vector)
+
+df %>% 
+  map_dfc(scale_vector)
+
+```
+
+---
+
+class: center, middle
+
+<blockquote class="twitter-tweet" data-lang="de"><p lang="en" dir="ltr">You&#39;re doing it right if you get frustrated: if you&#39;re not frustrated, you&#39;re (probably) not stretching yourself mentally</p>&mdash; Hadley Wickham (@hadleywickham) <a href="https://twitter.com/hadleywickham/status/565516733516349441?ref_src=twsrc%5Etfw">11. Februar 2015</a></blockquote>
+</center>
