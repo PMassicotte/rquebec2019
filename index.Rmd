@@ -65,7 +65,9 @@ class: inverse, center, middle
 2. xxx
 3. yyy
 
-<i class="far fa-arrow-alt-circle-right"></i> http://www.pmassicotte.com/rquebec2019/
+Présentation disponible à cette adresse: 
+
+**http://www.pmassicotte.com/rquebec2019/**
 
 ---
 
@@ -75,7 +77,7 @@ class: inverse, center, middle
 
 - La manipulation de données est une tâche répétitive:
   - Ouvrir et nettoyer plusieurs fichiers
-  - Autres exemple
+  - Autres exemples
 
 ---
 
