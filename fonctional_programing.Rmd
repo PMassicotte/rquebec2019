@@ -65,6 +65,8 @@ class: inverse, center, middle
 2. xxx
 3. yyy
 
+<i class="far fa-arrow-alt-circle-right"></i> http://www.pmassicotte.com/rquebec2019/
+
 ---
 
 ## TEST
