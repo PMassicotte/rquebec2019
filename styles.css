@@ -1,0 +1,51 @@
+.content-box { 
+    box-sizing: content-box;
+    	background-color: #e2e2e2;
+  /* Total width: 160px + (2 * 20px) + (2 * 8px) = 216px
+     Total height: 80px + (2 * 20px) + (2 * 8px) = 136px
+     Content box width: 160px
+     Content box height: 80px */
+}
+
+
+.content-box-blue,
+.content-box-gray,
+.content-box-grey,
+.content-box-army,
+.content-box-green,
+.content-box-purple,
+.content-box-red,
+.content-box-yellow {
+    border-radius: 15px;
+    margin: 0 0 25px;
+    overflow: hidden;
+    padding: 20px;
+    width: 100%;
+}
+
+.content-box-blue {
+    background-color: #3F69AA;
+    color: white;
+}
+
+.content-box-gray {
+    background-color: #838487;
+    color: white;
+    font-size: 30px;
+}
+
+.full-width {
+    display: flex;
+    width: 100%;
+    flex: 1 1 auto;
+}
+
+.remark-inline-code {
+  color: #F97B64;
+  font-weight: bold;
+}
+
+.inverse {
+    text-shadow: 0 0 0px #333;
+}
+

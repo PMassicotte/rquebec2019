@@ -1,0 +1,162 @@
+name,id,brewer,alcohol_by_volume,style,category,country
+Brockton Black Lager,3132,Granville Island Brewing,6.5,German-Style Schwarzbier,German Lager,Canada
+Cold Cock Porter (discontinued),3242,Big Rock Brewery,0.0,Porter,Irish Ale,Canada
+Premium Light,3384,Niagara Falls Brewing,0.0,American-Style Pale Ale,North American Ale,Canada
+#17 Cream Ale,3774,Big Ridge Brewing,0.0,American-Style Lager,North American Lager,Canada
+Molson Canadian,3836,Molson Breweries of Canada,5.0,American-Style Lager,North American Lager,Canada
+Quelque Chose,40,Unibroue,8.0,Belgian-Style Fruit Lambic,Belgian and French Ale,Canada
+Haupenthal Hefeweizen,647,Dockside Brewing,4.8000001907,South German-Style Hefeweizen,German Ale,Canada
+Auburn Ale,1206,Cameron's Brewing,5.0,American-Style Amber/Red Ale,North American Ale,Canada
+Full Moon Winter Ale,27,Molson Breweries of Canada,5.5999999046,Other Belgian-Style Ales,Belgian and French Ale,Canada
+Original Dark,1725,Sleeman Brewing & Malting,0.0,American-Style Lager,North American Lager,Canada
+Gritstone Premium Ale,1508,Niagara Falls Brewing,0.0,American-Style Brown Ale,North American Ale,Canada
+Labatt Crystal,3857,Labatt Ontario Breweries,5.0,American-Style Lager,North American Lager,Canada
+Labatt Sterling,3863,Labatt Ontario Breweries,4.0,American-Style Light Lager,North American Lager,Canada
+Mad Scow Stout,621,Taylor's Crossing Brewing,0.0,American-Style Stout,North American Ale,Canada
+Red Truck Ale,622,Taylor's Crossing Brewing,0.0,American-Style Amber/Red Ale,North American Ale,Canada
+Dominion Lager,625,Taylor's Crossing Brewing,0.0,American-Style Lager,North American Lager,Canada
+Old Bridge Dark Lager,648,Dockside Brewing,5.3000001907,American-Style Lager,North American Lager,Canada
+Black Irish Plain Porter,2035,Scotch Irish Brewing,0.0,Porter,Irish Ale,Canada
+Blitzen Christmas Ale,4445,Steamworks,8.5,Fruit Beer,Other Style,Canada
+Premium Lager,2626,Brick Brewing,0.0,American-Style Lager,North American Lager,Canada
+Springboard Lager,600,Central City Brewing Company,0.0,American-Style Lager,North American Lager,Canada
+Light Lager,601,Big Ridge Brewing,0.0,American-Style Lager,North American Lager,Canada
+Nut Brown Ale,609,Big River Brewing,0.0,American-Style Brown Ale,North American Ale,Canada
+Pilsner,612,Big River Brewing,0.0,NA,NA,Canada
+Pale Ale,618,R&B; Brewing,0.0,American-Style Pale Ale,North American Ale,Canada
+Honey Brown,629,Dix Barbecue & Brewery,0.0,American-Style Lager,North American Lager,Canada
+Pale Ale,634,Marine Pub & Brewhouse,0.0,American-Style Pale Ale,North American Ale,Canada
+Blonde Draft,639,Mission Springs Brewing,4.8000001907,NA,NA,Canada
+Kitsilano Maple Cream Ale,643,Granville Island Brewing Company,5.0,American-Style Lager,North American Lager,Canada
+Cypress Honey Lager,644,Granville Island Brewing Company,4.6999998093,American-Style Lager,North American Lager,Canada
+Clover Pale Ale,604,Big Ridge Brewing,0.0,American-Style Pale Ale,North American Ale,Canada
+Blonde Ale,615,Russell Brewing,0.0,NA,NA,Canada
+Game Day,631,Dix Barbecue & Brewery,0.0,NA,NA,Canada
+Hefeweizen,640,Granville Island Brewing Company,0.0,South German-Style Hefeweizen,German Ale,Canada
+Island Lager,641,Granville Island Brewing Company,5.0,American-Style Lager,North American Lager,Canada
+English Bay Pale Ale,642,Granville Island Brewing Company,5.0,American-Style Pale Ale,North American Ale,Canada
+1837,1991,Unibroue,7.0,Other Belgian-Style Ales,Belgian and French Ale,Canada
+Premium Dark,2669,Lwenbru Munich,0.0,NA,NA,Canada
+Don De Dieu,4043,Unibroue,9.0,Belgian-Style Tripel,Belgian and French Ale,Canada
+Iceberg Copper Bock,598,Central City Brewing Company,0.0,Traditional German-Style Bock,German Lager,Canada
+Old Sullivan Porter,602,Big Ridge Brewing,0.0,Porter,Irish Ale,Canada
+Red Truck Ale,632,Dix Barbecue & Brewery,0.0,American-Style Amber/Red Ale,North American Ale,Canada
+Rickard's Pale Ale,4900,Molson Breweries of Canada,0.0,American-Style India Pale Ale,North American Ale,Canada
+Labatt Blue,3853,Labatt Ontario Breweries,4.6999998093,American-Style Lager,North American Lager,Canada
+Vienna Lager,611,Big River Brewing,0.0,American-Style Lager,North American Lager,Canada
+Downtown Brown,627,Yaletown Brewing,0.0,American-Style Brown Ale,North American Ale,Canada
+Tropical Lager,628,Dix Barbecue & Brewery,0.0,American-Style Lager,North American Lager,Canada
+Cream Ale,638,Mission Springs Brewing,4.8000001907,American-Style Lager,North American Lager,Canada
+Steelhead Stout,597,Central City Brewing Company,0.0,American-Style Stout,North American Ale,Canada
+Boomers Red Ale,599,Central City Brewing Company,0.0,NA,NA,Canada
+Dry Stout,607,Big River Brewing,0.0,American-Style Stout,North American Ale,Canada
+Blonde Ale,613,Big River Brewing,0.0,NA,NA,Canada
+Pale Ale,617,Russell Brewing,0.0,American-Style Pale Ale,North American Ale,Canada
+Baden Powell Cream Ale,624,Taylor's Crossing Brewing,0.0,American-Style Lager,North American Lager,Canada
+Yippee IPA,626,Yaletown Brewing,0.0,American-Style India Pale Ale,North American Ale,Canada
+India Pale Ale,636,Mission Springs Brewing,5.8000001907,American-Style Pale Ale,North American Ale,Canada
+Island Lager,641,Granville Island Brewing Company,5.0,American-Style Lager,North American Lager,Canada
+Terrible,876,Unibroue,10.5,Other Belgian-Style Ales,Belgian and French Ale,Canada
+Maudite,4044,Unibroue,8.0,Belgian-Style Dark Strong Ale,Belgian and French Ale,Canada
+La Fin Du Monde,4361,Unibroue,9.0,Belgian-Style Tripel,Belgian and French Ale,Canada
+Heroica Oatmeal Stout,4437,Steamworks,0.0,Oatmeal Stout,British Ale,Canada
+Highland Scottish Ale,4448,Storm Brewing,0.0,Scotch Ale,British Ale,Canada
+Maple Wheat,2759,Niagara Falls Brewing,0.0,NA,NA,Canada
+Ã‰phÃ©mÃ¨re Pomme,4454,Unibroue,5.5,Belgian-Style White,Belgian and French Ale,Canada
+Carling,4897,Molson Breweries of Canada,4.0999999046,American-Style Lager,North American Lager,Canada
+Lager,605,Big Ridge Brewing,0.0,American-Style Lager,North American Lager,Canada
+Red Truck Ale,606,Big Ridge Brewing,0.0,American-Style Amber/Red Ale,North American Ale,Canada
+IPA,630,Dix Barbecue & Brewery,0.0,American-Style India Pale Ale,North American Ale,Canada
+Oatmeal Stout,637,Mission Springs Brewing,6.5,American-Style Stout,North American Ale,Canada
+Kitsilano Maple Cream Ale,643,Granville Island Brewing Company,5.0,American-Style Lager,North American Lager,Canada
+Cypress Honey Lager,644,Granville Island Brewing Company,4.6999998093,American-Style Lager,North American Lager,Canada
+PÃ©chÃ© Mortel,957,Dieu du Ciel,0.0,NA,NA,Canada
+Black Creek Porter,5893,Black Creek Historic Brewery,0.0,Smoke Beer,Other Style,Canada
+11,4042,Unibroue,11.0,American-Style Pale Ale,North American Ale,Canada
+16,39,Unibroue,10.0,NA,NA,Canada
+Sapporo Premium Beer,237,Sleeman Brewing & Malting,0.0,American-Style Lager,North American Lager,Canada
+Extra Special Bitter,608,Big River Brewing,0.0,NA,NA,Canada
+Pale Ale,610,Big River Brewing,0.0,American-Style Pale Ale,North American Ale,Canada
+Cream Ale,614,Russell Brewing,0.0,English-Style Pale Mild Ale,British Ale,Canada
+Beacon India Pale Ale,619,Lighthouse Brewing,0.0,American-Style Pale Ale,North American Ale,Canada
+Two Lions Pale Ale,623,Taylor's Crossing Brewing,0.0,American-Style Pale Ale,North American Ale,Canada
+Marina Light Lager,646,Dockside Brewing,4.6999998093,NA,NA,Canada
+Labatt Ice,3854,Labatt Ontario Breweries,5.5999999046,American-Style Lager,North American Lager,Canada
+The Great Pumpkin Ale,4441,Steamworks,0.0,Pumpkin Beer,Other Style,Canada
+Black Plague Stout,4447,Storm Brewing,0.0,American-Style Stout,North American Ale,Canada
+Chambly Noire,4456,Unibroue,6.1999998093,Dark American-Belgo-Style Ale,North American Ale,Canada
+Golden,1989,Molson Breweries of Canada,0.0,American-Style Lager,North American Lager,Canada
+Trois Pistoles,4045,Unibroue,9.0,Dark American-Belgo-Style Ale,North American Ale,Canada
+St-Ambroise Oatmeal Stout,4262,Brasserie McAuslan,5.0,Oatmeal Stout,British Ale,Canada
+St-Ambroise Apricot Wheat Ale,4263,Brasserie McAuslan,5.0,Light American Wheat Ale or Lager,Other Style,Canada
+Little Scrapper IPA,5855,Half Pints Brewing Company,6.0,American-Style India Pale Ale,North American Ale,Canada
+Killer Beer Dark Honey Ale,3113,Tin Whistle Brewing,0.0,Porter,Irish Ale,Canada
+Buzzard Breath (discontinued),3251,Big Rock Brewery,5.0,American-Style Pale Ale,North American Ale,Canada
+Cream Ale,2620,Shaftebury Brewing,0.0,English-Style Pale Mild Ale,British Ale,Canada
+Premium Lager,2670,Lwenbru Munich,0.0,NA,NA,Canada
+Rickard's Red Ale,4899,Molson Breweries of Canada,0.0,Irish-Style Red Ale,Irish Ale,Canada
+Steamwhistle Lager,4359,Steam Whistle Brewery,5.0,American-Style Lager,North American Lager,Canada
+Signature Pale Ale,4434,Steamworks,0.0,American-Style Amber/Red Ale,North American Ale,Canada
+Precipitation Pilsner,4449,Storm Brewing,0.0,German-Style Pilsener,German Lager,Canada
+Seigneuriale,4455,Unibroue,7.5,American-Style Amber/Red Ale,North American Ale,Canada
+Rickard's White Ale,4898,Molson Breweries of Canada,0.0,Belgian-Style White,Belgian and French Ale,Canada
+Paddywhack IPA,3094,Nelson Brewing,6.5,American-Style India Pale Ale,North American Ale,Canada
+Albino Rhino (discontinued),3247,Big Rock Brewery,0.0,American-Style Pale Ale,North American Ale,Canada
+Eisbock,3379,Niagara Falls Brewing,0.0,Traditional German-Style Bock,German Lager,Canada
+Apple Ale,3381,Niagara Falls Brewing,0.0,Light American Wheat Ale or Lager,Other Style,Canada
+Labatt Extra Dry,3858,Labatt Ontario Breweries,5.5,American-Style Lager,North American Lager,Canada
+Labatt 50,3859,Labatt Ontario Breweries,5.0,American-Style Pale Ale,North American Ale,Canada
+Nirvana Nut Brown Ale,4435,Steamworks,0.0,NA,NA,Canada
+Moosehead Lager,5440,Moosehead Breweries,5.0,American-Style Lager,North American Lager,Canada
+Labatt Bleue Dry,3856,Labatt Ontario Breweries,6.0999999046,German-Style Pilsener,German Lager,Canada
+Pilsner,4438,Steamworks,0.0,German-Style Pilsener,German Lager,Canada
+Canadian Ale,1992,Labatt Ontario Breweries,0.0,American-Style Lager,North American Lager,Canada
+Grasshopper,4315,Big Rock Brewery,0.0,Light American Wheat Ale or Lager,Other Style,Canada
+Lions Gate Lager,4432,Steamworks,0.0,American-Style Lager,North American Lager,Canada
+Empress India Pale Ale,4436,Steamworks,0.0,Imperial or Double India Pale Ale,North American Ale,Canada
+Raftman,2181,Unibroue,5.5,American-Style Amber/Red Ale,North American Ale,Canada
+St-Ambroise Pale Ale,2765,Brasserie McAuslan,5.0,NA,NA,Canada
+Weisse Beer,3382,Niagara Falls Brewing,0.0,American-Style Lager,North American Lager,Canada
+Labatt Blue Light,3855,Labatt Ontario Breweries,4.0,American-Style Light Lager,North American Lager,Canada
+Apocalypse Buckwheat Ale / Coup de Grisou,2741,Le Cheval Blanc,0.0,NA,NA,Canada
+Traditional India Pale Ale,620,Taylor's Crossing Brewing,0.0,American-Style Pale Ale,North American Ale,Canada
+Hefeweizen,640,Granville Island Brewing Company,0.0,South German-Style Hefeweizen,German Ale,Canada
+Pelican Bay Brown,645,Dockside Brewing,0.0,American-Style Brown Ale,North American Ale,Canada
+Johnston Pilsener,649,Dockside Brewing,4.9000000954,NA,NA,Canada
+Sour Cherry Ale,4442,Steamworks,0.0,Fruit Beer,Other Style,Canada
+Fruit Lambics,4450,Storm Brewing,0.0,Fruit Beer,Other Style,Canada
+Waterloo Dark,4901,Brick Brewing,0.0,American-Style Lager,North American Lager,Canada
+Old Jack,3386,Niagara Falls Brewing,0.0,Old Ale,British Ale,Canada
+Red Racer India Pale Ale,596,Central City Brewing Company,6.5,American-Style India Pale Ale,North American Ale,Canada
+Brotherhood Black & Tan,603,Big Ridge Brewing,0.0,American-Style Brown Ale,North American Ale,Canada
+Special Lager,616,Russell Brewing,0.0,American-Style Lager,North American Lager,Canada
+Red Truck Lager,633,Dix Barbecue & Brewery,0.0,NA,NA,Canada
+Premium Gold,635,Marine Pub & Brewhouse,0.0,American-Style Lager,North American Lager,Canada
+English Bay Pale Ale,642,Granville Island Brewing Company,5.0,American-Style Pale Ale,North American Ale,Canada
+Cartwright Pale Ale,650,Dockside Brewing,4.3000001907,American-Style Pale Ale,North American Ale,Canada
+15,651,Unibroue,10.0,NA,NA,Canada
+Saaz Pilsner,3383,Niagara Falls Brewing,0.0,NA,NA,Canada
+Genuine Lager,3860,Labatt Ontario Breweries,5.0,American-Style Lager,North American Lager,Canada
+Labatt Wildcat,3862,Labatt Ontario Breweries,4.9000000954,American-Style Lager,North American Lager,Canada
+Canadian Lager Beer,1990,Moosehead Breweries,5.0,American-Style Lager,North American Lager,Canada
+Catfish Cream Ale,2610,Agassiz Brewing,5.0,American-Style Lager,North American Lager,Canada
+Red Jack,3704,Molson Breweries of Canada,5.0,American-Style Amber/Red Ale,North American Ale,Canada
+Genuine Honey Lager,3861,Labatt Ontario Breweries,5.0,American-Style Lager,North American Lager,Canada
+Traditional Ale,3133,Big Rock Brewery,5.0,American-Style Brown Ale,North American Ale,Canada
+Special Amber Lager,2786,Brasal-Brasserie Allemande,0.0,American-Style Lager,North American Lager,Canada
+Skinny Tire Hefeweizen,4439,Steamworks,0.0,South German-Style Hefeweizen,German Ale,Canada
+Dry Pear Hard Cider,3556,Wyder's Cider,0.0,NA,NA,Canada
+Premium Lager,3134,Gold Crown Brewing,5.3000001907,American-Style Lager,North American Lager,Canada
+Ice,3576,Molson Breweries of Canada,0.0,American-Style Lager,North American Lager,Canada
+Griffon Brown Ale,1988,Brasserie McAuslan,0.0,American-Style Brown Ale,North American Ale,Canada
+Premium Lager,2625,Okanagan Spring Brewery,5.0,NA,NA,Canada
+Ã‰dition 2005,921,Unibroue,0.0,NA,NA,Canada
+Kriek,3380,Niagara Falls Brewing,0.0,Light American Wheat Ale or Lager,Other Style,Canada
+Best Bitter,3385,Niagara Falls Brewing,0.0,NA,NA,Canada
+Ipanema Summer White,4443,Steamworks,0.0,Belgian-Style White,Belgian and French Ale,Canada
+Kings Pilsener,3135,Gold Crown Brewing,5.0,NA,NA,Canada
+Cascadia Cream Ale,4433,Steamworks,0.0,American-Style Lager,North American Lager,Canada
+Frambozen,4444,Steamworks,0.0,Fruit Beer,Other Style,Canada
+Blanche de Chambly,4453,Unibroue,5.0,Belgian-Style White,Belgian and French Ale,Canada
+Coal Porter,4440,Steamworks,0.0,Porter,Irish Ale,Canada
+HURRICANE I.P.A.,4446,Storm Brewing,0.0,American-Style India Pale Ale,North American Ale,Canada

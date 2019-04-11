@@ -1,25 +1,23 @@
 ---
 title: "Programmation fonctionelle avec R"
-subtitle: "R à Québec 2019"
+# subtitle: "R à Québec 2019"
 author: "Philippe Massicotte"
 date: "2019-05-14"
 output:
   xaringan::moon_reader:
     yolo: false
     lib_dir: libs
-    css: [default, default, robot-fonts]
+    css: [default, default, robot-fonts, styles.css]
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-      beforeInit: "https://platform.twitter.com/widgets.js"
+      # beforeInit: "https://platform.twitter.com/widgets.js"
+      ratio: '16:9'
 ---
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, dev = "svg")
+knitr::opts_chunk$set(echo = TRUE, dev = "svg", message = FALSE)
 options(htmltools.dir.version = FALSE)
 # names(xaringan:::list_css())
 
@@ -31,20 +29,19 @@ library(extrafont)
 loadfonts(quiet = TRUE)
 theme_set(theme_bw(base_size = 12, base_family = "IBM Plex Sans"))
 
-
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 ```
-
-<!-- class: center top -->
-<img src="images/myname.png" alt="drawing" width="400"/>
+<center><img src="images/myname.png" alt="drawing" width="400"/></center>
 
 <p align="left">
 
-- <b>Assistant de recherche à Takuvik</b><br>
+- <b>Assistant de recherche à Takuvik (télédétection, modélisation, data science)</b><br>
 - Utilise R depuis plus de 6 ans<br>
 - Auteur de 3 libraries sur CRAN<br>
 - Blog R: www.pmassicotte.com<br>
 
 <br>
+
 <i class="fab fa-github"></i> https://github.com/PMassicotte <br>
 <i class="far fa-envelope"></i> philippe.massicotte@takuvik.ulaval.ca <br>
 <i class="fab fa-twitter"></i> @philmassicotte
@@ -62,28 +59,55 @@ class: inverse, center, middle
 ## Plan de la formation
 
 1. Introduction et mise en contexte
-2. xxx
-3. yyy
+2. Opérations sur des vecteurs
+3. Opérations sur des *data frame*
+4. zzz
 
-Présentation disponible à cette adresse: 
+Présentation disponible à cette adresse: **http://www.pmassicotte.com/rquebec2019/**
 
-**http://www.pmassicotte.com/rquebec2019/**
-
----
-
-## TEST
-
-80% du temps utilisé pour nettoyer les données.
-
-- La manipulation de données est une tâche répétitive:
-  - Ouvrir et nettoyer plusieurs fichiers
-  - Autres exemples
+Théorie + exerices après chaque concept.
 
 ---
 
-## Exemple 1
+## *Data science*
 
-Lire plusieurs fichiers ayant le même format.
+Dans plusieurs domaines, les données sont produites très rapidement à des échelles spatiales et temporelles élevées:
+
+- Télédétection, marquage / suivi d'animaux
+- Capteurs in situ automatisés (salinité, chla, ...)
+
+<figure>
+<center>
+<img src="http://i2.wp.com/sciencereview.berkeley.edu/wp-content/uploads/2014/04/spring_2014_azam_01.jpg" height = "350">
+<figcaption>Source: http://berkeleysciencereview.com/article/first-rule-data-science</figcaption>
+</center>
+</figure>
+
+---
+
+## *Data science*
+
+En tant que scientifiques, vous devez apprendre et mettre en pratique les outils essentiels pour capturer, manipuler et partager des données.
+
+Pourquoi est-ce important?
+
+**Le 80/20 du *data science***
+
+> Most data scientists spend only 20 percent of their time on actual data analysis and 80 percent of their time finding, cleaning, and reorganizing huge amounts of data, which is an inefficient data strategy (https://bit.ly/2wjB8IB).
+
+**La manipulation de données est une tâche répétitive et propice aux erreurs!**
+
+---
+
+class: inverse, center, middle
+
+# Exemples de code répétitif
+
+---
+
+## Lire plusieurs fichiers ayant le même format
+
+Lire trois fichiers ayant la même structure.
 
 ```{r, eval=FALSE}
 data1 <- read.csv("file1.csv")
@@ -99,17 +123,16 @@ data2$date <- as.Date(data2$date)
 data3$date <- as.Date(data3$date)
 ```
 
-
 ---
 
-## Exemple 2
+## Répéter la même opération sur plusieurs colonnes
 
-Répéter la même opération sur plusieurs colonnes.
+On veut normaliser chaque colonne de `df` de manière à ce que les données varient entre 0 et 1.
 
-```{r, echo=-1}
+```{r}
 set.seed(1234)
 
-# Générer des données
+# Générer des données, 4 colonnes avec 10 observations
 df <- data.frame(
   a = rnorm(10),
   b = rnorm(10),
@@ -120,29 +143,64 @@ df <- data.frame(
 df
 
 ```
+
 ---
 
-## Exemple 2
+## Répéter la même opération sur plusieurs colonnes
 
-Normaliser les données entre 0-1.
+On veut normaliser chaque colonne de `df` de manière à ce que les données varient entre 0 et 1.
+
+$$
+\frac{x - \text{min}(x)}{\text{max}(x) - \text{min}(x)}
+$$
 
 ```{r}
-df$a <- (df$a - min(df$a, na.rm = TRUE)) /
-  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
-df$b <- (df$b - min(df$b, na.rm = TRUE)) /
-  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
-df$c <- (df$c - min(df$a, na.rm = TRUE)) /
-  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
-df$d <- (df$d - min(df$d, na.rm = TRUE)) /
-  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+# Générer un vecteur de 10 nombres
+set.seed(1234)
+x <- sample(10)
+x
 
-df
+# Normaliser les données
+(x - min(x)) / (max(x) - min(x))
 
 ```
 
 ---
 
-## Exemple 2
+## Répéter la même opération sur plusieurs colonnes
+
+- On veut normaliser chaque colonne de `df` de manière à ce que les données varient entre 0 et 1.
+
+- On effectu la même opération à toutes les colonnes de `df`.
+
+```{r}
+df$a <- (df$a - min(df$a, na.rm = TRUE)) /
+  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+
+df$b <- (df$b - min(df$b, na.rm = TRUE)) /
+  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+
+df$c <- (df$c - min(df$a, na.rm = TRUE)) /
+  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+
+df$d <- (df$d - min(df$d, na.rm = TRUE)) /
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+
+```
+
+---
+
+## Répéter la même opération sur plusieurs colonnes
+
+Chaque colonne (vecteur) est maintenant entre 0-1.
+
+```{r}
+df
+```
+
+---
+
+## Répéter la même opération sur plusieurs colonnes
 
 Quel est le problème?
 
@@ -166,7 +224,7 @@ df$a <- (df$a - min(df$a, na.rm = TRUE)) /
   (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
 df$b <- (df$b - min(df$b, na.rm = TRUE)) /
   (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
-df$c <- (df$c - min(df$a, na.rm = TRUE)) /
+df$c <- (df$c - min(df$c, na.rm = TRUE)) /
   {{(max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))}}
 df$d <- (df$d - min(df$d, na.rm = TRUE)) /
   (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
@@ -180,15 +238,20 @@ df$d <- (df$d - min(df$d, na.rm = TRUE)) /
 
 - Il est souvent dit que si vous avez 3 copies du même code, **il est temps d'écrire une fonction**.
 
+<br>
+<center>
+<a href="https://imgflip.com/i/2y8ds5"><img src="https://i.imgflip.com/2y8ds5.jpg" height = "300", title="made at imgflip.com"/></a>
+</center>
+
 ---
 
-## Exemple 2
+## Répéter la même opération sur plusieurs colonnes
 
 Une première amélioration: **utiliser une fonction**.
 
 --
 
-- Étudier la formule de base
+Étudier la formule de base
 
 ```{r, eval=FALSE}
 (df$d - min(df$d, na.rm = TRUE)) / 
@@ -197,7 +260,7 @@ Une première amélioration: **utiliser une fonction**.
 
 --
 
-- Paramétriser le code -> remplacer les variables par des arguments
+Paramétriser le code -> remplacer les variables par des arguments
 
 ```{r, eval=FALSE}
 x <- (x - min(x, na.rm = TRUE)) / 
@@ -206,7 +269,7 @@ x <- (x - min(x, na.rm = TRUE)) /
 
 --
 
-- Écrire une fonction
+Écrire une fonction
 
 ```{r}
 scale_vector <- function(x) {
@@ -222,23 +285,26 @@ scale_vector <- function(x) {
 ## Tester notre fonction
 
 ```{r}
-v <- c(0, 1, 45, 98)
+# Vecteur numérique
+v <- c(0, 1, 45, 98, -5)
 v
 
 scale_vector(v)
 ```
---
-
-Ça semble fonctionner!
+<center>
+<image src="https://media.giphy.com/media/8JW82ndaYfmNoYAekM/giphy.gif" height="300" frameBorder="0" class="giphy-embed" allowFullScreen></image>
+</center>
 
 ---
 
 ## Utiliser la fonction sur le *data frame*
 
+Maintenant que la fonction `scale_vector()` fonctionne, utilisons-là sur chaqune des colonnes du *data frame*.
+
 ```{r}
 df$a <- scale_vector(df$a)
 df$b <- scale_vector(df$b)
-df$c <- scale_vector(df$c)
+df$c <- scale_vector(df$b)
 df$d <- scale_vector(df$d)
 
 df
@@ -246,15 +312,96 @@ df
 
 ---
 
-## Exemple 2
+## Deja mieux
 
-Fonctionne très bien, mais il y a 4 répétitions. Toujours la possibilité de faire une faute de frappe.
+```{r, eval=FALSE}
+df$a <- scale_vector(df$a)
+df$b <- scale_vector(df$b)
+df$c <- scale_vector(df$b)
+df$d <- scale_vector(df$d)
+```
+
+VS
+
+```{r, eval=FALSE}
+df$a <- (df$a - min(df$a, na.rm = TRUE)) /
+  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b <- (df$b - min(df$b, na.rm = TRUE)) /
+  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$c <- (df$c - min(df$c, na.rm = TRUE)) /
+  {{(max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))}}
+df$d <- (df$d - min(df$d, na.rm = TRUE)) /
+  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+```
+
+---
+
+## Utiliser la fonction sur le *data frame*
+
+Fonctionne très bien, mais il y a 4 répétitions. Où est le problème?
+
+```{r, eval=FALSE}
+df$a <- scale_vector(df$a)
+df$b <- scale_vector(df$b)
+df$c <- scale_vector(df$b)
+df$d <- scale_vector(df$d)
+```
+
+--
+
+Toujours la possibilité de se tromper!
+
+.pull-left[
 
 ```{r, eval=FALSE}
 df$a <- scale_vector(df$a)
 df$b <- scale_vector(df$b)
 {{df$c <- scale_vector(df$b)}}
 df$d <- scale_vector(df$d)
+```
+]
+
+.pull-right[
+<image src="https://media.giphy.com/media/l1KVaj5UcbHwrBMqI/giphy.gif" height="200"</image>
+]
+
+---
+
+## Répéter la même opération sur plusieurs colonnes
+
+Une deuxième amélioration: pourquoi ne pas **utiliser une boucle** qui permetterait de répéter l'opération plusieurs fois?
+
+<center>
+<image src="https://media.giphy.com/media/7XuPYJXaF1CBAmbwQQ/giphy.gif" width="480" height="360" frameBorder="0" class="giphy-embed" allowFullScreen></image>
+</center>
+
+---
+
+class: inverse
+
+## Exercice
+
+.full-width[.content-box-gray[Écrivez une boucle qui permet de normaliser toutes les colonnes de `df`. Au lieu de `scale_vector()`, vous pouvez utiliser la fonction `scale(x, center = FALSE, scale = TRUE)` fournit avec R.]]
+
+```{r}
+
+scale_vector <- function(x) {
+  res <- (x - min(x, na.rm = TRUE)) / 
+    (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+  
+  return(res)
+}
+
+set.seed(1234)
+
+# Générer des données, 4 colonnes avec 10 observations
+df <- data.frame(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+
 ```
 
 
@@ -274,14 +421,13 @@ for(i in 1:ncol(df)) {
 df2
 
 ```
-
 ---
 
 ## Problèmes potentiels des boucles
 
 --
 
-Il faut bien gérer les index utilisées dans la boucle.
+Il faut bien gérer les index utilisées.
 
 ```{r, eval=FALSE}
 for (i in 1:ncol(df)) {
@@ -289,26 +435,24 @@ for (i in 1:ncol(df)) {
 
   ... # Code super compliqué avec plusieurs lignes
 
-  i <- i / pi
+  {{i <- i / pi}} # Changer sans le vouloir la valeur de l'index
 }
 ```
 
 --
 
-Propice aux erreurs lorsque plusieurs boucles imbriquées.
+Propice aux erreurs lorsque plusieurs boucles sont imbriquées.
 
 ```{r, eval=FALSE}
 
 for(i in 1:ncol(df)) {
+  
   for(j = 1:ncol(df)) {
     {{df2[j, i] <- df[i, j]}}
   }
+  
 }
 ```
-
---
-
-Le boucles c'est bien, mais c'est encore mieux sans!
 
 ---
 
@@ -324,7 +468,7 @@ class: inverse, center, middle
 
 Contraitement à l'idée reçue, les boucles en R ne sont pas nécessairement lentes. La plupart du temps, la lenteur des boucles est liée au fait que la variable qui reçoit le résultat n'est pas initialisée.
 
-Dans l'exemple suivant, on veut créer une boucle qui créer un vecteur **dynamiquement** de 1 à *n*.
+Dans l'exemple suivant, on veut créer une boucle qui créer un vecteur de 1000 éléments avec les valeurs de 1 à 1000.
 
 .pull-left[
 
@@ -366,7 +510,9 @@ f_fast <- function(n) {
 
 ## Rapidité des boucles
 
-```{r, message=FALSE, echo=TRUE, fig.height=4}
+Les boucles ne sont pas foncièrement lentes!
+
+```{r, message=FALSE, echo=TRUE, fig.height=4, fig.align="center"}
 # Calculer le temps d'exécution des deux fonctions/boucles
 timing <- microbenchmark::microbenchmark(f_slow(n), f_fast(n))
 autoplot(timing)
@@ -375,20 +521,693 @@ autoplot(timing)
 
 ---
 
-## La librarie *purrr*
+## Les boucles
+
+Les boucles c'est bien, mais c'est encore mieux sans!
+
+**FIGURE HERE**
+
+---
+
+class: inverse, center, middle
+
+## La programmation fonctionelle
+
+<img src="https://adv-r.hadley.nz/cover.png" height="400">
+
+
+Advanced R (Chapman & Hall/CRC The R Series)
+
+---
+
+## La programmation fonctionnelle
+
+> La programmation fonctionnelle est un paradigme de programmation de type déclaratif qui considère le calcul en tant qu'évaluation de fonctions mathématiques. (Wikipedia)
+
+- La principale characteristique de la programmation fonctionne est **que des fonctions sont passées en paramètre** à d'autres fonctions.
+
+- Il y a de fortes chances que vous ayez déjà utilisé la fonction `lapply()`. La fonction `lapply()` est appelé **un fonctionnel**, car elle utilise une fonction comme paramètre.
+
+---
+
+## Avantages de la programmation fonctionnelle
+
+- Le code est plus compate (plus facile à lire et comprendre).
+
+- Plus facile à gérer et modifier: lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. Ensuite, chaque emplacement de votre code où la même tâche est effectuée est automatiquement mis à jour.
+
+- Modularité: si vous écrivez une fonction pour des tâches individuelles spécifiques, vous pouvez les utiliser plusieurs fois. Une fonction que vous écrivez pour un script peut même être réutilisée dans d'autres scripts!
+
+<small>https://www.earthdatascience.org/courses/earth-analytics/automate-science-workflows/write-efficient-code-for-science-r/</small>
+
+---
+
+## *purrr*
+
+La librairie **purrr** offre plusieurs outils de programmation fonctionnelle.
+
+<center><img src="https://purrr.tidyverse.org/logo.png" width="200"/></center>
+
+**purrr** n'est pas installé par défaut. L'installation de `tidyverse` inclut la librairie `purrr`.
+
+```{r, eval=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+---
+
+class: inverse, center, middle
+
+# Tidyverse
+
+## Une série d'outils pour la manipulation de données
+
+<center>
+<img src="https://tidyverse.tidyverse.org/logo.png" width="200"/>
+</center>
+
+<center>
+<img src="https://dplyr.tidyverse.org/logo.png" width="120"/> <img src="https://tidyr.tidyverse.org/logo.png" width="120"/> <img src="https://readr.tidyverse.org/logo.png" width="120"/> <img src="https://readxl.tidyverse.org/logo.png" width="120"/> <img src="https://ggplot2.tidyverse.org/logo.png" width="120"/><img src="https://stringr.tidyverse.org/logo.png" width="120"/><img src="https://lubridate.tidyverse.org/logo.png" width="120"/><img src="https://purrr.tidyverse.org/logo.png" width="120"/>
+</center>
+
+---
+
+## La fonction `map()`
+
+La fonction `map()` de la librairie `purrr` permet de **d'appliquer** une fonction `f()` à une liste d'éléments.
+
+<br>
+
+<center>
+<img src="https://d33wubrfki0l68.cloudfront.net/f0494d020aa517ae7b1011cea4c4a9f21702df8b/2577b/diagrams/functionals/map.png" height="250"/>
+</center>
+
+<small>https://adv-r.hadley.nz/functionals.html#map</small>
+
+---
+
+## La fonction `map()`
+
+Dans ce premier example, on veux ajouter la valeur de 1 à tous les éléments d'un vecteur numérique.
 
 ```{r}
-df %>% 
-  mutate_all(scale_vector)
+# Créer une fonction "f" qui prend un nombre et lui ajoute la valeur de 1.
+f <- function(x) {
+  x + 1
+}
 
-df %>% 
-  map_dfc(scale_vector)
+# "Appliquer" la fonction "f" au vecteur 1, 2, 3
+map(1:3, f)
+```
+
+<br>
+.content-box-blue[Il est important de prendre note que la fonction `map()` retourne toujours une liste d'éléments.]
+
+---
+
+## La fonction `map()`
+
+On veut connaître la classe de chaque colonne du *data frame* `mtcars`.
+
+```{r}
+head(mtcars)
+```
+
+---
+
+## La fonction `map()`
+
+Il est tentant de faire du copié/collé:
+
+```{r}
+class(mtcars$mpg)
+class(mtcars$cyl)
+class(mtcars$disp)
+```
+
+---
+
+## La fonction `map()`
+
+Ou bien de faire une boucle:
+
+```{r}
+# Vecteur pour le résultat
+res <- vector(mode = "character", length = ncol(mtcars))
+
+# Faire une boucle sur toutes les colonnes de mtcars
+for(i in 1:ncol(mtcars)) {
+  res[i] <- class(mtcars[, i])
+}
+
+res
+```
+
+---
+
+class: inverse, center, middle
+
+## Exercice
+
+.full-width[.content-box-gray[Utilisez la fonction `map()` pour extraire la classe de chacune des colonnes de `mtcars`.]]
+
+---
+
+## Les fonctions anonymes
+Revenons à notre exemple qui ajoute la valeur 1 à un vecteur.
+
+```{r, eval=FALSE}
+# Créer une fonction "f" qui prend un nombre et lui ajoute la valeur de 1.
+f <- function(x) {
+  x + 1
+}
+
+# "Appliquer" la fonction "f" au vecteur 1, 2, 3
+map(1:3, f)
+```
+
+- Création d'une fonction `f()` très simple.
+- Il est possible d'utiliser des **fonctions anonymes** quand ça ne vaut pas la peine de lui donner un nom.
+
+---
+
+## Les fonctions anonymes
+
+L'exemple précédent peut se ré-écire en utilisant une fonction anonyme.
+
+```{r}
+map(1:3, function(x) x + 1)
+```
+
+---
+
+class: inverse
+
+## Exercice
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+df <- read_csv2("https://perso.telecom-paristech.fr/eagan/class/igr204/data/cars.csv")
+
+df <- df[-1, ]
+
+res <- map(df, parse_guess) %>% 
+  as_tibble() %>% 
+  janitor::clean_names()
+
+# One NA in the data
+
+res$mpg[10] <- NA
+
+write_csv(res, "data/clean/cars.csv")
+
+```
+
+.full-width[.content-box-gray[Calculez la moyenne de chacune des colonnes de ce jeux de données en utilisant une fonction anonyme.]]
+
+```{r, message=FALSE}
+df <- read_csv("data/clean/cars.csv")
+head(df, 3)
+
+# Selectionner seulement les colonnes numériques
+df <- select_if(df, is.numeric)
+```
+<small>Données: https://perso.telecom-paristech.fr/eagan/class/igr204</small>
+
+```{r, echo=FALSE, eval=FALSE}
+map(df, function(y) mean(y))
+```
+
+---
+
+## Utilisation des paramètres
+
+- Jusqu'à maintenant, nous avons invoqué l'appel de fonctions sans l'utilisation de paramètres.
+
+- Il est possible de spécifier les valeurs de paramètres à fournir à la fonction en utilisant des paramètres nommées de la manière suivante: 
+```{r, eval=FALSE}
+map(list, function, param1 = xxx, param2 = yyy, param3 = zzz)
+```
+
+---
+
+## Utilisation des paramètres
+
+```{r, message=FALSE}
+df <- read_csv("data/clean/cars.csv")
+df <- select_if(df, is.numeric)
+```
+
+```{r}
+map(df, mean, na.rm = TRUE) # Spécifier que la fonction "mean" doit utiliser na.rm = TRUE
+```
+
+---
+
+## Les variantes de `map()`
+
+Il y a plusieurs variantes de `map_*()` qui permettent **d'être explicite sur la classe retournée par la fonction**.
+
+<br><br>
+
+|   Fonction   |      Description      |
+| ------------ | --------------------- |
+| `map_dbl()`  | Vecteur de doubles    |
+| `map_int()`  | Vecteur d'entiers     |
+| `map_char()` | Vecteur de caracètres |
+| `map_lgl()`  | Vecteur de booléens   |
+| `map_df()`   | Liste de *data frame* |
+
+
+---
+
+## Les variantes de `map()`
+
+Par example, on sait que la fonction `mean()` retourn une valeur numérique. Dans ce cas, on peut utiliser la fonction `map_dbl()` pour extraîre la classe de chacune des colonnes de `mtcars`.
+
+```{r}
+# Appliquer la fonction class à chacune des colonnes de mtcars
+map_dbl(mtcars, mean) 
+```
+
+---
+
+## Les variantes de `map()`
+
+```{r}
+res <- map_dfc(mtcars, as.character)
+head(res)
+
+map_dfr(mtcars, max)
+```
+
+---
+
+```{r}
+summarise_if(iris, is.numeric, mean)
+```
+
+---
+
+class: inverse, center, middle
+
+## Exercice: real case scenario
+
+---
+
+## Lire le contenu d'un répertoire
+
+Une tâche courrante consiste à lire plusieurs fichiers (CSV) dans un répertoire et de les combiner dans un seul *data frame*.
+
+<center>
+<img src="images/purrr_map_read_csv.svg.png" height="350"/>
+</center>
+
+<small>Inspiré de: https://www.gerkelab.com/blog/2018/09/import-directory-csv-purrr-readr/ </small>
+
+---
+
+## Lire le contenu d'un répertoire
+
+<center>
+<img src="images/purrr_map_read_csv2.svg.png" height="200"/>
+</center>
+
+
+---
+
+## Étude de cas: *Capital bikeshare*
+
+https://www.capitalbikeshare.com/
+
+> Capital Bikeshare is metro DC's bikeshare service, with 4,300 bikes and 500+ stations across 6 jurisdictions: Washington, DC.; Arlington, VA; Alexandria, VA; Montgomery, MD; Prince George's County, MD; and Fairfax County, VA. Designed for quick trips with convenience in mind, it’s a fun and affordable way to get around.
+
+Similaire au système Bixi à Montréal.
+
+<center>
+<img src="http://www.parcjeandrapeau.com/medias/images/header/bixi-parc-jean-drapeau-montreal.jpg" height="300"/>
+</center>
+
+---
+
+class: center
+background-image: url("images/capital_bikeshare_map.png")
+
+---
+
+## Les données
+
+Les statistiques sur l'utilisation des vélos pour l'année 2018 sont dans 12 fichiers différents (1 par mois).
+
+https://s3.amazonaws.com/capitalbikeshare-data/index.html
+
+- Plus de 3 500 000 lignes/observations (réduit de 90% pour les exercices suivants).
+
+- Exemple pour le mois de janvier 2018.
+
+```{r, echo=FALSE, message=FALSE}
+read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv") %>% 
+  arrange(start_date) %>% 
+  glimpse()
 
 ```
 
 ---
 
-class: center, middle
+## Les données
 
-<blockquote class="twitter-tweet" data-lang="de"><p lang="en" dir="ltr">You&#39;re doing it right if you get frustrated: if you&#39;re not frustrated, you&#39;re (probably) not stretching yourself mentally</p>&mdash; Hadley Wickham (@hadleywickham) <a href="https://twitter.com/hadleywickham/status/565516733516349441?ref_src=twsrc%5Etfw">11. Februar 2015</a></blockquote>
+Figure pour explorer les données un peu.
+
+---
+
+class: inverse
+
+## Exercice
+
+.full-width[.content-box-gray[Utilisez la fonction `map_df()` pour lire et combiner tous les fichiers *captial bikeshare*.]]
+
+```{r}
+# Utiliser la fonction "list.files" pour lister tous les fichiers d'un répertoire
+files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
+files
+
+# Completez avec votre code pour lire et combiner tous les fichiers
+
+```
+
+---
+
+class: inverse
+
+## Exercice
+
+.full-width[.content-box-gray[Créez une fonction qui **(1)** ouvre chaque fichier et **(2)** qui calcule la moyenne de la variable/colonne `duration`.]]
+
+```{r}
+# Utiliser la fonction "list.files" pour lister tous les fichiers d'un répertoire
+files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
+
+# Completez avec votre code
+```
+
+---
+
+class: inverse, center, middle
+
+# Peut-on aller plus loin?
+
+## Programmation parallelle avec `furrr`
+
+---
+
+## Librairie `furrr`
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+# Installer la librairie
+install.packages("furrr")
+```
+
+- Le but de `furrr` est de simplifier la combinaison de la famille de fonctions de mappage de `purrr` et des capacités de traitement parallèle.
+
+- Les fonctions de `furrr` débutent toutes par `future_*()`.
+
+```{r, echo=FALSE}
+library(furrr)
+ls("package:furrr") %>% 
+  .[grepl("^future_",.)] %>% 
+  head(20)
+```
+
+---
+
+## Parallelisation
+
+```{r, message=FALSE}
+library(furrr)
+{{availableCores()}}
+plan(multicore(workers = availableCores() - 1))
+
+files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
+
+df <- future_map_dfr(files, read_csv, col_types = cols())
+
+glimpse(df)
+
+```
+
+---
+
+class: inverse, center, middle
+
+# Programmation fonctionnelle sur les *data frame*
+
+---
+
+## Programmation fonctionnelle sur les *data frame*
+
+- Jusqu'à maintenant, à l'exception de `map_df()`, nous avons utilisé les fonctions `map_*()` qui retourne des vecteurs.
+
+- Il existe également plusieurs fonctions pour utiliser l'approche fonctionnelle sur des *data frame*.
+
+- La plupart des fonctions que nous verrons aujourd'hui proviennent de la librairie `dplyr`.
+
+<center>
+<img src="https://dplyr.tidyverse.org/logo.png" width="120"/>
 </center>
+
+- `dplyr` est inclut dans la librairie `tidyverse`.
+
+```{r, eval=FALSE}
+library(tidyverse)
+```
+
+---
+
+## Retour sur l'exercice précédent
+
+Dans l'exercice précédent, nous devions calculer la moyenne de la colonne `duration` pour chaque mois de 2018. Disons maintenant que nous voulons calculer la moyenne de toutes les colonnes numériques.
+
+```{r, message=FALSE}
+files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
+
+calculate_mean <- function(file) {
+  df <- read_csv(file) # Ouvrir le fichier
+
+  l <- list(
+    mean_duration = mean(df$duration),
+    mean_start_station_number = mean(df$start_station_number),
+    mean_end_station_number = mean(df$end_station_number)
+  )
+
+  return(l)
+}
+
+```
+
+---
+
+## Retour sur l'exercice précédent
+
+```{r, message=FALSE}
+res <- map(files, calculate_mean)
+head(res, 1)
+```
+
+
+**Cette approche fonctionne bien, mais:**
+
+1. Il est impossible de savoir à quel mois correspond chacune des valeurs du vecteur.
+2. Le code devra être modifié si une nouvelle colonne numérique est ajoutée dans les fichiers csv.
+
+---
+
+## La fonction `summarise()`
+
+- La fonction `summarise()` permet de *compresser* un *data frame* en lui **appliquant une fonction** qui réduit le nombre d'observations.
+- Par exemple, on peut calculer la valeur moyenne de `duration` pour les données de janvier 2018.
+
+```{r, message = FALSE}
+df <- read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv")
+
+{{summarise(df, mean_duration = mean(duration))}}
+```
+
+---
+
+## La fonction `summarise_if()`
+
+- La fonction `summarise_if()` est une variante de `summarise()` qui permet d'appliquer une fonction à un ensemble de colonnes qui répondent à une ou des condition(s).
+
+- La fonction `summarise_if()` s'utilise comme suit:
+
+```{r, eval = FALSE}
+summarise_if(.tbl, .predicate, .funs, ...)
+```
+
+Où:
+
+- `.tbl` est un *data frame*.
+
+- `.predicate` une fonction qui retourne `TRUE/FALSE`.
+
+- `.funs` une liste de fonctions à appliquer.
+
+---
+
+## La fonction `summarise_if()`
+
+On peux maintenant utilise la fonction `summarise_if()` sur nos données.
+
+```{r}
+df <- read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv")
+
+# On applique la fonction "mean" à toutes les colonnes de type "numeric" du data frame "df"
+summarise_if(.tbl = df, .predicate = is.numeric, .funs = mean)
+```
+
+--
+
+Ne célébrons pas trop vite, n'oubliez pas qu'on voulait faire ce calcule pour chacun des mois de l'année 2018.
+
+<center>
+<image src="https://media.giphy.com/media/OWJILXs8QpyiA/giphy.gif" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></image>
+</center>
+
+---
+
+## La fonction `group_by()`
+
+- La fonction `group_by()` peut s'utiliser conjointement avec la fonction `summarise()` pour appliquer un calcule à un ensemble de groupes d'un *data frame*.
+
+- - La fonction `group_by()` **prépare** un *data frame* a être utilisé par la fonction `summarise()`.
+
+- La fonction `group_by()` s'utilise comme suit:
+
+```{r, eval = FALSE}
+group_by(.data, ...)
+```
+
+Où:
+
+- `.data` est un *data frame*.
+
+- `...` est une liste de colonne à utiliser pour effectuer le regroupement.
+
+---
+
+## La fonction `group_by()`
+
+Par exemple, grouper `mtcars` sur la base de la colonne `cyl` (nombre de cylindres).  Le résultat renvoyé nous indique qu'il y a trois groupes de `cyl` dans le *data frame*.
+
+```{r}
+group_by(mtcars, cyl)
+```
+
+---
+
+## Retour sur l'exercice précédent
+
+Calculer **les moyennes mensuelles** de toutes les colonnes numériques, en utilisant toutes les données de *bikeshare*. On peut diviser se problème en trois étapes:
+
+1. Lire tous les fichiers.
+2. Grouper les données par mois.
+3. Calculer la moyenne de chacune des colonnes de type numérique.
+
+---
+
+## Retour sur l'exercice précédent
+
+```{r}
+# Étape 1: Lire tous les fichiers
+files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
+df <- map_df(files, read_csv)
+
+# Ajouter la colonne mois dans le data frame
+df$month <- format(df$start_date, "%b")
+
+# Étape 2: Grouper les données par mois.
+df <- group_by(df, month)
+
+# Étape 3: Calculer la moyenne de chacune des colonnes de type numérique.
+df <- summarise_if(.tbl = df, .predicate = is.numeric, .funs = mean)
+
+head(df) # Afficher les 6 premières lignes
+```
+
+---
+
+## La version compacte
+
+L'opérateur pipe, `%>%`, permet d'enchaîner les opérations en passant le résultat d'un fonction comme premier argument dans la fonction suivante. Ce qui est très utile lorsqu'on a pas besoin des résultats intermédiaires.
+
+```{r}
+files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
+
+files %>% 
+  map_df(read_csv) %>% 
+  group_by(month = lubridate::month(start_date)) %>% 
+  summarise_if(is.numeric, mean)
+```
+
+---
+
+<center>
+<image src="https://media.giphy.com/media/iI6eeGjwScTCM/giphy.gif" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></image>
+</center>
+
+---
+
+class: inverse
+
+## À vous de jouer!
+
+.full-width[.content-box-gray[Utiliser les concepts vu aujourd'hui pour reproduire le graphique suivant. Il s'agit de calculer la moyenne de la variable `duration` par jour et ce pour chaque mois de l'année.]]
+
+```{r, echo=FALSE, fig.width=5, fig.height=3, fig.align='center'}
+files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
+
+df <- files %>% 
+  map_df(read_csv) %>% 
+  group_by(month = lubridate::month(start_date, label = TRUE), hour = lubridate::hour(start_date)) %>% 
+  summarise(mean_duration = mean(duration))
+
+df %>% 
+  ggplot(aes(x = hour, y = mean_duration, color = factor(month))) +
+  geom_line() +
+  xlab("Heure de la journée") +
+  ylab("Emprunt moyen (minutes)") +
+  guides(color = guide_legend(ncol = 2)) +
+  labs(color = NULL)
+
+```
+
+
+---
+
+## Références
+
+- https://bit.ly/2wjB8IB
+- https://adv-r.hadley.nz/functionals.html#map
+
+<!-- --- -->
+
+<!-- class: center, middle -->
+
+<!-- <blockquote class="twitter-tweet" data-lang="de"><p lang="en" dir="ltr">You&#39;re doing it right if you get frustrated: if you&#39;re not frustrated, you&#39;re (probably) not stretching yourself mentally</p>&mdash; Hadley Wickham (@hadleywickham) <a href="https://twitter.com/hadleywickham/status/565516733516349441?ref_src=twsrc%5Etfw">11. Februar 2015</a></blockquote> -->
+<!-- </center> -->
+
+<!-- ## La programmation fonctionnelle -->
+
+<!-- http://adv-r.had.co.nz/Functional-programming.html -->
+
+<!-- La programmation f -->
+
+<!-- lapply() is called a functional, because it takes a function as an argument.  -->
+
+<!-- prend une fonction comme argument -->
+
+<!-- famille apply -> applique une fonction à... -->
+
+<!-- https://www.earthdatascience.org/courses/earth-analytics/automate-science-workflows/write-efficient-code-for-science-r/ -->
+
+<!-- https://nicercode.github.io/intro/repeating-things.html -->
