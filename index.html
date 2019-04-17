@@ -17,6 +17,7 @@
 class: center, middle, inverse, title-slide
 
 # Programmation fonctionelle avec R
+## R à Québec 2019
 ### Philippe Massicotte
 ### 2019-05-14
 
@@ -24,11 +25,15 @@ class: center, middle, inverse, title-slide
 
 
 
+
+&lt;br&gt;
+
 &lt;center&gt;&lt;img src="images/myname.png" alt="drawing" width="400"/&gt;&lt;/center&gt;
 
 &lt;p align="left"&gt;
 
-- &lt;b&gt;Assistant de recherche à Takuvik (télédétection, modélisation, data science)&lt;/b&gt;&lt;br&gt;
+&lt;b&gt;Assistant de recherche à Takuvik (télédétection, modélisation, data science)&lt;/b&gt;&lt;br&gt;
+
 - Utilise R depuis plus de 6 ans&lt;br&gt;
 - Auteur de 3 libraries sur CRAN&lt;br&gt;
 - Blog R: www.pmassicotte.com&lt;br&gt;
@@ -52,13 +57,15 @@ class: inverse, center, middle
 ## Plan de la formation
 
 1. Introduction et mise en contexte
-2. Opérations sur des vecteurs
-3. Opérations sur des *data frame*
-4. zzz
+  * Les dangers de la duplication du code
 
-Présentation disponible à cette adresse: **http://www.pmassicotte.com/rquebec2019/**
+2. La programmation fonctionnelle
+  * Opérations sur des vecteurs
+  * Opérations sur des *data frame*
 
-Théorie + exerices après chaque concept.
+- Présentation disponible à cette adresse: **http://www.pmassicotte.com/rquebec2019/**
+
+- Théorie + exercices après chaque concept.
 
 ---
 
@@ -66,8 +73,17 @@ Théorie + exerices après chaque concept.
 
 Dans plusieurs domaines, les données sont produites très rapidement à des échelles spatiales et temporelles élevées:
 
-- Télédétection, marquage / suivi d'animaux
-- Capteurs in situ automatisés (salinité, chla, ...)
+- Environnement: météo, capteurs automatisés (salinité)
+- Finances:
+- Assurances:
+- Transports: géolocations, 
+- etc.
+
+La manipulation de ces données demande ...
+
+---
+
+## *Data science*
 
 &lt;figure&gt;
 &lt;center&gt;
@@ -80,9 +96,9 @@ Dans plusieurs domaines, les données sont produites très rapidement à des éc
 
 ## *Data science*
 
-En tant que scientifiques, vous devez apprendre et mettre en pratique les outils essentiels pour capturer, manipuler et partager des données.
+Il est important d'apprendre et de mettre en pratique les outils essentiels pour capturer, manipuler et partager des données.
 
-Pourquoi est-ce important?
+- Pourquoi est-ce important?
 
 **Le 80/20 du *data science***
 
@@ -95,28 +111,6 @@ Pourquoi est-ce important?
 class: inverse, center, middle
 
 # Exemples de code répétitif
-
----
-
-## Lire plusieurs fichiers ayant le même format
-
-Lire trois fichiers ayant la même structure.
-
-
-```r
-data1 &lt;- read.csv("file1.csv")
-data2 &lt;- read.csv("file2.csv")
-data3 &lt;- read.csv("file3.csv")
-```
-
-Et effectuer la même conversion sur les 3 *data frame*.
-
-
-```r
-data1$date &lt;- as.Date(data1$date)
-data2$date &lt;- as.Date(data2$date)
-data3$date &lt;- as.Date(data3$date)
-```
 
 ---
 
@@ -195,15 +189,19 @@ x
 
 
 ```r
-df$a &lt;- (df$a - min(df$a, na.rm = TRUE)) /
+# Normaliser la colonne a
+df$a &lt;- (df$a - min(df$a, na.rm = TRUE)) / 
   (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
 
+# Normaliser la colonne b
 df$b &lt;- (df$b - min(df$b, na.rm = TRUE)) /
   (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
 
+# Normaliser la colonne c
 df$c &lt;- (df$c - min(df$a, na.rm = TRUE)) /
   (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
 
+# Normaliser la colonne d
 df$d &lt;- (df$d - min(df$d, na.rm = TRUE)) /
   (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
 ```
@@ -292,8 +290,8 @@ Une première amélioration: **utiliser une fonction**.
 
 
 ```r
-(df$d - min(df$d, na.rm = TRUE)) / 
-  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+(`df$d` - min(`df$d`, na.rm = TRUE)) / 
+  (max(`df$d`, na.rm = TRUE) - min(`df$d`, na.rm = TRUE))
 ```
 
 --
@@ -302,8 +300,8 @@ Paramétriser le code -&gt; remplacer les variables par des arguments
 
 
 ```r
-x &lt;- (x - min(x, na.rm = TRUE)) / 
-  (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+res &lt;- (`x` - min(`x`, na.rm = TRUE)) / 
+  (max(`x`, na.rm = TRUE) - min(`x`, na.rm = TRUE))
 ```
 
 --
@@ -312,6 +310,7 @@ x &lt;- (x - min(x, na.rm = TRUE)) /
 
 
 ```r
+# Fonction qui prend un vecteur numerique "x" et qui scale les valeurs entre 0-1
 scale_vector &lt;- function(x) {
   res &lt;- (x - min(x, na.rm = TRUE)) / 
     (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
@@ -342,6 +341,9 @@ scale_vector(v)
 ```
 ## [1] 0.04854369 0.05825243 0.48543689 1.00000000 0.00000000
 ```
+
+--
+
 &lt;center&gt;
 &lt;image src="https://media.giphy.com/media/8JW82ndaYfmNoYAekM/giphy.gif" height="300" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/image&gt;
 &lt;/center&gt;
@@ -378,7 +380,9 @@ df
 
 ---
 
-## Deja mieux
+## Deja mieux!
+
+L'utilisation de la fonction `scale_vector()` rend le code beaucoup plus simple.
 
 
 ```r
@@ -397,7 +401,7 @@ df$a &lt;- (df$a - min(df$a, na.rm = TRUE)) /
 df$b &lt;- (df$b - min(df$b, na.rm = TRUE)) /
   (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
 df$c &lt;- (df$c - min(df$c, na.rm = TRUE)) /
-*  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
 df$d &lt;- (df$d - min(df$d, na.rm = TRUE)) /
   (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
 ```
@@ -406,7 +410,7 @@ df$d &lt;- (df$d - min(df$d, na.rm = TRUE)) /
 
 ## Utiliser la fonction sur le *data frame*
 
-Fonctionne très bien, mais il y a 4 répétitions. Où est le problème?
+Fonctionne très bien, mais il y a 4 répétitions.
 
 
 ```r
@@ -473,39 +477,11 @@ df &lt;- data.frame(
 )
 ```
 
-
----
-
-## Utilisation des boucles
-
-
-```r
-df2 &lt;- df # Faire une copie du data frame
-
-# Boucle sur chacune des colonnes de df
-for(i in 1:ncol(df)) {
-  df2[, i] &lt;- scale_vector(df[, i])
-}
-
-df2
-```
-
-```
-##            a          b         c         d
-## 1  0.3319492 0.15265375 0.7821670 1.0000000
-## 2  0.7647291 0.00000000 0.4733256 0.5192783
-## 3  1.0000000 0.06506096 0.4981101 0.4480343
-## 4  0.0000000 0.31129943 0.9430704 0.5114592
-## 5  0.8089534 0.57344857 0.3729606 0.1678518
-## 6  0.8313814 0.26011813 0.0000000 0.3084450
-## 7  0.5162933 0.14274906 1.0000000 0.0000000
-## 8  0.5244878 0.02553760 0.2098653 0.2556247
-## 9  0.5192926 0.04721860 0.7084006 0.5745131
-## 10 0.4243735 1.00000000 0.2532211 0.5222322
-```
 ---
 
 ## Problèmes potentiels des boucles
+
+
 
 --
 
@@ -580,7 +556,7 @@ f_slow &lt;- function(n) {
 n &lt;- 1000
 
 f_fast &lt;- function(n) {
-*  v &lt;- rep(NA, n)
+*  v &lt;- vector(mode = "numeric", length = n)
   for (i in 1:n) 
     v[i] &lt;- i
   
@@ -603,7 +579,7 @@ timing &lt;- microbenchmark::microbenchmark(f_slow(n), f_fast(n))
 autoplot(timing)
 ```
 
-&lt;img src="index_files/figure-html/unnamed-chunk-24-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -631,7 +607,11 @@ Advanced R (Chapman &amp; Hall/CRC The R Series)
 
 &gt; La programmation fonctionnelle est un paradigme de programmation de type déclaratif qui considère le calcul en tant qu'évaluation de fonctions mathématiques. (Wikipedia)
 
-- La principale characteristique de la programmation fonctionne est **que des fonctions sont passées en paramètre** à d'autres fonctions.
+- La principale characteristique de la programmation fonctionnelle est **que des fonctions sont passées en paramètre** à d'autres fonctions.
+
+- L'idée de passer d'une fonction à une autre est une idée extrêmement puissante et c'est l'un des comportements qui font de R un langage de programmation fonctionnel.
+
+- Comparé à l'utilisation d'une boucle, l'accent est mis sur l'opération effectuée (*i.e. la fonction à appliquer*) et non sur la mécanique nécessaire pour naviguer au travers des éléments et sur comment stocker le résultat.
 
 - Il y a de fortes chances que vous ayez déjà utilisé la fonction `lapply()`. La fonction `lapply()` est appelé **un fonctionnel**, car elle utilise une fonction comme paramètre.
 
@@ -643,6 +623,16 @@ Advanced R (Chapman &amp; Hall/CRC The R Series)
 
 - Plus facile à gérer et modifier: lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. Ensuite, chaque emplacement de votre code où la même tâche est effectuée est automatiquement mis à jour.
 
+
+```r
+scale_vector &lt;- function(x) {
+  
+  res &lt;- (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+  
+  return(res)
+}
+```
+
 - Modularité: si vous écrivez une fonction pour des tâches individuelles spécifiques, vous pouvez les utiliser plusieurs fois. Une fonction que vous écrivez pour un script peut même être réutilisée dans d'autres scripts!
 
 &lt;small&gt;https://www.earthdatascience.org/courses/earth-analytics/automate-science-workflows/write-efficient-code-for-science-r/&lt;/small&gt;
@@ -651,11 +641,11 @@ Advanced R (Chapman &amp; Hall/CRC The R Series)
 
 ## *purrr*
 
-La librairie **purrr** offre plusieurs outils de programmation fonctionnelle.
+La librairie `purrr` offre plusieurs outils de programmation fonctionnelle.
 
 &lt;center&gt;&lt;img src="https://purrr.tidyverse.org/logo.png" width="200"/&gt;&lt;/center&gt;
 
-**purrr** n'est pas installé par défaut. L'installation de `tidyverse` inclut la librairie `purrr`.
+`purrr` n'est pas installé par défaut. L'installation de `tidyverse` inclut la librairie `purrr`.
 
 
 ```r
@@ -707,7 +697,7 @@ f &lt;- function(x) {
 }
 
 # "Appliquer" la fonction "f" au vecteur 1, 2, 3
-map(1:3, f)
+map(c(1, 2, 3), f)
 ```
 
 ```
@@ -811,6 +801,7 @@ class: inverse, center, middle
 ---
 
 ## Les fonctions anonymes
+
 Revenons à notre exemple qui ajoute la valeur 1 à un vecteur.
 
 
@@ -829,9 +820,9 @@ map(1:3, f)
 
 ---
 
-## Les fonctions anonymes
+## Les fonctions anonymes et formules
 
-L'exemple précédent peut se ré-écire en utilisant une fonction anonyme.
+L'exemple précédent peut se ré-écire en utilisant une fonction anonyme. Avec cette approche, nous n'avons pas besoin de fournir un nom de fonction.
 
 
 ```r
@@ -847,6 +838,55 @@ map(1:3, function(x) x + 1)
 ## 
 ## [[3]]
 ## [1] 4
+```
+
+Nottez que l'utilisations de `map()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant:
+
+
+```r
+(1:3) + 1
+```
+
+```
+## [1] 2 3 4
+```
+
+---
+
+## Les fonctions anonymes et formules
+
+On peut également utiliser l'approche par formule conjointement avec `~`. Ici on fait référence au paramètre en utilisant la notation `~.x`. 
+
+
+```r
+map(1:3, ~.x + 1)
+```
+
+```
+## [[1]]
+## [1] 2
+## 
+## [[2]]
+## [1] 3
+## 
+## [[3]]
+## [1] 4
+```
+
+
+```r
+map(1:3, ~log(.x))
+```
+
+```
+## [[1]]
+## [1] 0
+## 
+## [[2]]
+## [1] 0.6931472
+## 
+## [[3]]
+## [1] 1.098612
 ```
 
 ---
@@ -895,9 +935,7 @@ df &lt;- select_if(df, is.numeric)
 map(list, function, param1 = xxx, param2 = yyy, param3 = zzz)
 ```
 
----
-
-## Utilisation des paramètres
+Exemple avec les données *cars*. On veut calculer la moyenne de chacune des colonnes numériques.
 
 
 ```r
@@ -905,9 +943,47 @@ df &lt;- read_csv("data/clean/cars.csv")
 df &lt;- select_if(df, is.numeric)
 ```
 
+La fonction `mean()` a un paramètre `na.rm = FALSE` qui permet de spécifier si les `NA` doivent être incluent dans le calcul.
+
+---
+
+## Utilisation des paramètres
+
+.pull-left[
+
 
 ```r
-map(df, mean, na.rm = TRUE) # Spécifier que la fonction "mean" doit utiliser na.rm = TRUE
+map(df, mean) 
+```
+
+```
+## $mpg
+## [1] NA
+## 
+## $cylinders
+## [1] 5.475369
+## 
+## $displacement
+## [1] 194.7796
+## 
+## $horsepower
+## [1] 103.5296
+## 
+## $weight
+## [1] 2979.414
+## 
+## $acceleration
+## [1] 15.5197
+## 
+## $model
+## [1] 75.92118
+```
+]
+
+.pull-right[
+
+```r
+*map(df, mean, na.rm = TRUE)
 ```
 
 ```
@@ -932,6 +1008,7 @@ map(df, mean, na.rm = TRUE) # Spécifier que la fonction "mean" doit utiliser na
 ## $model
 ## [1] 75.92118
 ```
+]
 
 ---
 
@@ -954,11 +1031,11 @@ Il y a plusieurs variantes de `map_*()` qui permettent **d'être explicite sur l
 
 ## Les variantes de `map()`
 
-Par example, on sait que la fonction `mean()` retourn une valeur numérique. Dans ce cas, on peut utiliser la fonction `map_dbl()` pour extraîre la classe de chacune des colonnes de `mtcars`.
+Par example, on sait que la fonction `mean()` retourn une valeur numérique. Dans ce cas, on peut utiliser la fonction `map_dbl()` pour calculer la valeur moyenne de chacune des colonnes de `mtcars`.
 
 
 ```r
-# Appliquer la fonction class à chacune des colonnes de mtcars
+# Appliquer la fonction "mean" à chacune des colonnes de mtcars
 map_dbl(mtcars, mean) 
 ```
 
@@ -971,48 +1048,140 @@ map_dbl(mtcars, mean)
 
 ---
 
-## Les variantes de `map()`
+class: inverse
+
+## Exercice (1/2)
+ 
+.full-width[.content-box-gray[Séparez le jeux de données `mtcars` en fonction du nombre de cylindre. Utilisez une variante de la fonction `map_*()` pour connâitre le nombre d'observation de chaque groupe.]]
 
 
 ```r
-res &lt;- map_dfc(mtcars, as.character)
-head(res)
+res &lt;- split(mtcars, mtcars$cyl)
 ```
 
-```
-## # A tibble: 6 x 11
-##   mpg   cyl   disp  hp    drat  wt    qsec  vs    am    gear  carb 
-##   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
-## 1 21    6     160   110   3.9   2.62  16.46 0     1     4     4    
-## 2 21    6     160   110   3.9   2.875 17.02 0     1     4     4    
-## 3 22.8  4     108   93    3.85  2.32  18.61 1     1     4     1    
-## 4 21.4  6     258   110   3.08  3.215 19.44 1     0     3     1    
-## 5 18.7  8     360   175   3.15  3.44  17.02 0     0     3     2    
-## 6 18.1  6     225   105   2.76  3.46  20.22 1     0     3     1
-```
+---
+
+class: inverse
+
+## Exercice (2/2)
+
+.full-width[.content-box-gray[Séparez le jeux de données `mtcars` en fonction du nombre de cylindre. Pour chacun des groupes, faire un modèle linéaire `mpg` en fonction de `wt` (`lm(mpg ~ wt)`). Écrivez une fonction `fit()` pour faire le modèle linéraire.]]
+
 
 ```r
-map_dfr(mtcars, max)
+res &lt;- split(mtcars, mtcars$cyl)
+
+fit &lt;- function(...) {
+  ...
+}
+
+map(..., ...)
+```
+
+
+
+
+
+
+
+---
+
+## Mappage sur plusieurs arguments
+
+Jusqu'ici, nous avons *mappé* avec une seule entrée. Mais souvent, vous avez plusieurs entrées que vous devez parcourir en parallèle. Pour y arriver, nous allons voir les fonctions `map2()` et `pmap()`.
+
+Imaginons que nous voulions générer trois vecteurs de valeurs aléatoires.
+
+
+```r
+mu &lt;- c(4, -1, 10)
+
+map(mu, rnorm, n = 5)
 ```
 
 ```
-## # A tibble: 1 x 11
-##     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1  33.9     8   472   335  4.93  5.42  22.9     1     1     5     8
+## [[1]]
+## [1] 3.665963 5.395148 4.636674 3.891568 4.513763
+## 
+## [[2]]
+## [1] -0.6007282  0.6628564 -0.7241066 -0.4937274 -0.6524480
+## 
+## [[3]]
+## [1]  9.622762 10.097619 11.638745  9.124408 10.121760
 ```
+
+---
+
+## Mappage sur plusieurs arguments
+
+
+```r
+mu &lt;- c(4, -1, 10)
+sigma &lt;- c(1, 4, 7)
+
+res &lt;- map2(mu, sigma, rnorm, n = 5)
+
+map(res, mean)
+```
+
+```
+## [[1]]
+## [1] 3.762843
+## 
+## [[2]]
+## [1] -2.038723
+## 
+## [[3]]
+## [1] 14.73804
+```
+
+---
+
+## Mappage sur plusieurs arguments
+
 
 ---
 
 
 ```r
-summarise_if(iris, is.numeric, mean)
+map2(c(1, 2, 3), c(4, 5, 6), sum)
 ```
 
 ```
-##   Sepal.Length Sepal.Width Petal.Length Petal.Width
-## 1     5.843333    3.057333        3.758    1.199333
+## [[1]]
+## [1] 5
+## 
+## [[2]]
+## [1] 7
+## 
+## [[3]]
+## [1] 9
 ```
+
+```r
+map2_dbl(c(1, 2, 3), c(4, 5, 6), sum)
+```
+
+```
+## [1] 5 7 9
+```
+
+```r
+map2_dbl(c(1, 2, 3), c(4, 5, 6), ~.x + .y)
+```
+
+```
+## [1] 5 7 9
+```
+
+```r
+pmap_dbl(list(c(1, 2, 3), c(4, 5, 6), c(4, 5, 6)), ~..1 + ..2 + ..3)
+```
+
+```
+## [1]  9 12 15
+```
+
 
 ---
 
@@ -1047,7 +1216,7 @@ Une tâche courrante consiste à lire plusieurs fichiers (CSV) dans un répertoi
 
 https://www.capitalbikeshare.com/
 
-&gt; Capital Bikeshare is metro DC's bikeshare service, with 4,300 bikes and 500+ stations across 6 jurisdictions: Washington, DC.; Arlington, VA; Alexandria, VA; Montgomery, MD; Prince George's County, MD; and Fairfax County, VA. Designed for quick trips with convenience in mind, it’s a fun and affordable way to get around.
+&gt; Capital Bikeshare is metro DC's bikeshare service, with 4,300 bikes and 500+ stations across 6 jurisdictions: Washington, DC.; Arlington, VA; Alexandria, VA; Montgomery, MD; Prince George's County, MD; and Fairfax County, VA. Designed for quick trips with convenience in mind, it's a fun and affordable way to get around.
 
 Similaire au système Bixi à Montréal.
 
@@ -1174,9 +1343,9 @@ install.packages("furrr")
 ##  [9] "future_invoke_map_chr" "future_invoke_map_dbl"
 ## [11] "future_invoke_map_dfc" "future_invoke_map_dfr"
 ## [13] "future_invoke_map_int" "future_invoke_map_lgl"
-## [15] "future_map"            "future_map_at"        
-## [17] "future_map_chr"        "future_map_dbl"       
-## [19] "future_map_dfc"        "future_map_dfr"
+## [15] "future_iwalk"          "future_map"           
+## [17] "future_map_at"         "future_map_chr"       
+## [19] "future_map_dbl"        "future_map_dfc"
 ```
 
 ---
@@ -1505,11 +1674,11 @@ files %&gt;%
 
 class: inverse
 
-## À vous maintenant
+## À vous de jouer!
 
 .full-width[.content-box-gray[Utiliser les concepts vu aujourd'hui pour reproduire le graphique suivant. Il s'agit de calculer la moyenne de la variable `duration` par jour et ce pour chaque mois de l'année.]]
 
-&lt;img src="index_files/figure-html/unnamed-chunk-57-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-65-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1547,6 +1716,7 @@ class: inverse
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
+"highlightSpans": true,
 "countIncrementalSlides": false,
 "ratio": "16:9"
 });
