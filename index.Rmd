@@ -70,34 +70,29 @@ class: inverse, center, middle
   * Opérations sur des vecteurs
   * Opérations sur des *data frame*
 
-- Présentation disponible à cette adresse: **http://www.pmassicotte.com/rquebec2019/**
+3. Présentation disponible à cette adresse: **http://www.pmassicotte.com/rquebec2019/**
 
-- Théorie + exercices après chaque concept.
+4. Théorie + exercices après chaque concept
 
-- Votre participation!
+Votre participation est essentielle!
 
 ---
 
 ## *Data science*
 
-Dans plusieurs domaines, les données sont produites très rapidement à des échelles spatiales et temporelles élevées:
+Dans plusieurs domaines, les données sont produites très rapidement:
 
 - Environnement: météo, capteurs automatisés (salinité)
-- Finances:
-- Assurances:
-- Transports: géolocations, 
+- Finances / assurances
+- Transports: géolocalisation 
 - etc.
 
-La manipulation de ces données demande ...
-
----
-
-## *Data science*
+La manipulation de ces données demande beaucoup de temps.
 
 <figure>
 <center>
-<img src="http://i2.wp.com/sciencereview.berkeley.edu/wp-content/uploads/2014/04/spring_2014_azam_01.jpg" height = "350">
-<figcaption>Source: http://berkeleysciencereview.com/article/first-rule-data-science</figcaption>
+<img src="https://d33wubrfki0l68.cloudfront.net/86cc45e87bb755a3bcecce462a6524e68d13a466/90635/images/tidy1.png" height = "200">
+<figcaption>Source: https://moderndive.com/</figcaption>
 </center>
 </figure>
 
@@ -105,21 +100,22 @@ La manipulation de ces données demande ...
 
 ## *Data science*
 
-Il est important d'apprendre et de mettre en pratique les outils essentiels pour capturer, manipuler et partager des données.
+Il est important d'apprendre et de mettre en pratique les outils essentiels pour capturer, manipuler et partager des données de manière efficace.
 
 - Pourquoi est-ce important?
 
-**Le 80/20 du *data science***
+**Le 80%/20% du *data science***
 
 > Most data scientists spend only 20 percent of their time on actual data analysis and 80 percent of their time finding, cleaning, and reorganizing huge amounts of data, which is an inefficient data strategy (https://bit.ly/2wjB8IB).
 
-**La manipulation de données est une tâche répétitive et propice aux erreurs!**
+<br>
+.content-box-blue[La manipulation de données est une tâche répétitive et propice aux erreurs!]
 
 ---
 
 class: inverse, center, middle
 
-# Exemples de code répétitif
+# Un exemple de code répétitif
 
 ---
 
@@ -167,9 +163,7 @@ x
 
 ## Répéter la même opération sur plusieurs colonnes
 
-- On veut normaliser chaque colonne de `df` de manière à ce que les données varient entre 0 et 1.
-
-- On effectu la même opération à toutes les colonnes de `df`.
+On effectue la même opération sur toutes les colonnes de `df`.
 
 ```{r}
 # Normaliser la colonne a
@@ -318,7 +312,7 @@ df
 
 ---
 
-## Deja mieux!
+## Déjà mieux!
 
 L'utilisation de la fonction `scale_vector()` rend le code beaucoup plus simple.
 
@@ -416,8 +410,6 @@ df <- data.frame(
 
 ## Problèmes potentiels des boucles
 
-
-
 --
 
 Il faut bien gérer les index utilisées.
@@ -514,17 +506,11 @@ autoplot(timing)
 
 ---
 
-## Les boucles
-
-Les boucles c'est bien, mais c'est encore mieux sans!
-
-**FIGURE HERE**
-
----
-
 class: inverse, center, middle
 
 ## La programmation fonctionnelle
+
+#### Les boucles c'est bien, mais c'est encore mieux sans!
 
 <img src="https://adv-r.hadley.nz/cover.png" height="400">
 
@@ -601,7 +587,8 @@ class: inverse, center, middle
 
 ## La fonction `map()`
 
-La fonction `map()` de la librairie `purrr` permet de **d'appliquer** une fonction `f()` à une liste d'éléments.
+- La fonction `map()` de la librairie `purrr` est une version *pimpée* de `lapply()`.
+- Elle permet **d'appliquer** une fonction `f()` à une liste d'éléments.
 
 <br>
 
@@ -644,7 +631,7 @@ head(mtcars)
 
 ## La fonction `map()`
 
-Il est tentant de faire du copié/collé:
+Il est tentant de faire du copié/collé en utilisant la fonction `class()`:
 
 ```{r}
 class(mtcars$mpg)
@@ -707,10 +694,11 @@ L'exemple précédent peut se ré-écrie en utilisant une fonction anonyme. Avec
 map(1:3, function(x) x + 1)
 ```
 
-Nottez que l'utilisations de `map()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant:
+Nottez que l'utilisations de `map()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant les capacités de vectorisation de R:
 
 ```{r}
-(1:3) + 1
+x <- 1:3
+x + 1
 ```
 
 ---
