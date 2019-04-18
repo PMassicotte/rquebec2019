@@ -74,8 +74,6 @@ class: inverse, center, middle
 
 - Théorie + exercices après chaque concept.
 
-- Votre participation!
-
 ---
 
 ## *Data science*
@@ -1262,7 +1260,7 @@ library(tidyverse)
 
 ## Retour sur l'exercice précédent
 
-Dans un exercice précédent, nous devions calculer la moyenne de la colonne `duration` pour chaque mois de 2018. Disons maintenant que nous voulons calculer la moyenne de toutes les colonnes numériques.
+Dans l'exercice précédent, nous devions calculer la moyenne de la colonne `duration` pour chaque mois de 2018. Disons maintenant que nous voulons calculer la moyenne de toutes les colonnes numériques.
 
 ```{r, message=FALSE}
 files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
@@ -1344,7 +1342,7 @@ summarise_if(.tbl = df, .predicate = is.numeric, .funs = mean)
 
 --
 
-Ne célébrons pas trop vite! N'oubliez pas qu'on voulait faire ce calcule pour chacun des mois de l'année 2018.
+Ne célébrons pas trop vite, n'oubliez pas qu'on voulait faire ce calcule pour chacun des mois de l'année 2018.
 
 <center>
 <image src="https://media.giphy.com/media/OWJILXs8QpyiA/giphy.gif" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></image>
@@ -1354,7 +1352,7 @@ Ne célébrons pas trop vite! N'oubliez pas qu'on voulait faire ce calcule pour 
 
 ## La fonction `group_by()`
 
-- La fonction `group_by()` peut s'utiliser conjointement avec la fonction `summarise()` pour appliquer un calcule à un ensemble de groupes dans un *data frame*.
+- La fonction `group_by()` peut s'utiliser conjointement avec la fonction `summarise()` pour appliquer un calcule à un ensemble de groupes d'un *data frame*.
 
 - - La fonction `group_by()` **prépare** un *data frame* a être utilisé par la fonction `summarise()`.
 
@@ -1382,9 +1380,9 @@ group_by(mtcars, cyl)
 
 ---
 
-## Calculer les moyennes mensuelles
+## Retour sur l'exercice précédent
 
-Calculer **les moyennes mensuelles** de toutes les colonnes numériques, en utilisant toutes les données de *bikeshare*. On peut diviser ce problème en trois étapes:
+Calculer **les moyennes mensuelles** de toutes les colonnes numériques, en utilisant toutes les données de *bikeshare*. On peut diviser se problème en trois étapes:
 
 1. Lire tous les fichiers.
 2. Grouper les données par mois.
@@ -1392,7 +1390,7 @@ Calculer **les moyennes mensuelles** de toutes les colonnes numériques, en util
 
 ---
 
-## Calculer les moyennes mensuelles
+## Retour sur l'exercice précédent
 
 ```{r}
 # Étape 1: Lire tous les fichiers
@@ -1413,15 +1411,9 @@ head(df) # Afficher les 6 premières lignes
 
 ---
 
-## L'opérateur pipe ` %>% `
+## La version compacte
 
 L'opérateur pipe, `%>%`, permet d'enchaîner les opérations en passant le résultat d'un fonction comme premier argument dans la fonction suivante. Lorsque vous voyez `%>%`, vous devriez vous vous dire **ensuite**. Ce qui est très utile lorsqu'on a pas besoin des résultats intermédiaires.
-
-<center><img src="https://magrittr.tidyverse.org/logo.png" width="200"/></center>
-
----
-
-## L'opérateur pipe ` %>% `
 
 ```{r}
 3 %>% log()
@@ -1448,7 +1440,7 @@ files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
 
 files %>% 
   map_df(read_csv) %>% 
-  group_by(month = lubridate::month(start_date, label = TRUE)) %>% 
+  group_by(month = lubridate::month(start_date)) %>% 
   summarise_if(is.numeric, mean)
 ```
 
@@ -1475,7 +1467,7 @@ df <- files %>%
   summarise(mean_duration = mean(duration))
 
 df %>% 
-  ggplot(aes(x = hour, y = mean_duration / 60, color = factor(month))) +
+  ggplot(aes(x = hour, y = mean_duration, color = factor(month))) +
   geom_line() +
   xlab("Heure de la journée") +
   ylab("Emprunt moyen (minutes)") +
@@ -1484,142 +1476,15 @@ df %>%
 
 ```
 
----
-
-## La fonction `nest()`
-
-La fonction `nest()` permet de créer une liste de *data frame* à l'intérieur d'un *data frame*. Cette fonction est généralement utilisée conjointement avec `group_by()`.
-
-```{r}
-head(mtcars)
-
-mtcars %>% 
-  group_by(cyl) %>% # Grouper selon la variable "cyl"
-  nest() # "Compresser" le data frame, par défault, la nouvelle colonne se nomme "data"
-```
-
----
-
-## La fonction `unnest()`
-
-La fonction `unnest()` de décompresser un *data frame* qui a été compressé avec `nest()`.
-
-```{r}
-mtcars %>% 
-  group_by(cyl) %>% # Grouper selon la variable "cyl"
-  nest() %>% # "Compresser" le data frame, par défault, la nouvelle colonne se nomme "data"
-  unnest()
-```
-
----
-
-## La fonction `nest()`
-
-En combinant les fonctions `nest()` et `map()`, il est possible de rapidement créer un modèle linéraire pour chacun des groupes.
-
-```{r}
-mtcars %>% 
-  group_by(cyl) %>% 
-  nest() %>% 
-  mutate(mod = map(data, ~lm(mpg ~ wt, data = .))) #<<
-```
-
-La *data frame* contient maintenant:
-
-- La ou les variables de regroupement.
-- Les données compressées (colonne `data`).
-- Les modèles linéraires (colonne `mod`).
-
-**Les risques d'erreurs sont de beaucoup diminués, car tout est encapsulé dans un *data frame*.**
-
----
-
-## La librairie `broom`
-
-La librairie `broom` permet de convertir des objets statistiques en *data frame*.
-
-```{r}
-mtcars %>% 
-  group_by(cyl) %>% 
-  nest() %>% 
-  mutate(mod = map(data, ~lm(mpg ~ wt, data = .))) %>% 
-  mutate(coef = map(mod, broom::tidy)) %>% #<<
-  unnest(coef)
-```
-
----
-
-class: inverse
-
-## À vous de jouer!
-
-.full-width[.content-box-gray[En utilisant le jeu de données `cars`, créer un modèle linéraire multiple (`mpg ~ horsepower + weight`) pour les `model` de chaque année. Par la suite, ajouter une colonne dans le *data frame* qui contient le R2 de la régression.]]
-
-```{r}
-cars <- read_csv("data/clean/cars.csv")
-cars
-```
-
----
-
-## Les données
-
-```{r, fig.align="center", echo=FALSE, warning=FALSE, fig.height=5}
-cars %>% 
-  ggplot(aes(x = horsepower, y = mpg)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  facet_wrap(~model, scales = "free")
-```
-
-
-```{r, echo=FALSE, eval=FALSE}
-select_if(cars, is.numeric) %>% 
-  languageR::pairscor.fnc()
-
-cars %>% 
-  group_by(model) %>% 
-  nest() %>% 
-  mutate(mod = map(data, ~lm(mpg ~ horsepower + weight, data = .))) %>% 
-  mutate(summary = map(mod, summary)) %>% 
-  mutate(r2 = map_dbl(r2, "r.squared"))
-```
-
----
-
-## Conclusions
-
-- R est un langage de programmation fonctionnelle qui permet de faire beaucoup de chose rapidement et de manière élégante.
-
-- La programmation fonctionnelle permet de diminuer les chances d'erreurs dans le code.
-  - Si erreur, plus facilement corrigable, car on modifie à un seul endroit.
-  
-- La librairie `purrr` offre un ensemble d'outils qui permet d'appliquer efficacement plusieurs concepts de la programmation fonctionnelle.
-
-- L'utilisation de `nest()` permet d'encapsuler les résultats dans un *data frame* ce qui permet de les faire suivre tout au long du processus d'analyse.
-
----
-
-## Merci!
-
-Merci au comité organisateur de R à Québec 2019!
-
-
-<center>
-<image src="images/comite.bmp" height="300", align="middle"</image><image src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/R_logo.svg/724px-R_logo.svg.png" height="100", align="middle"</image><image src="images/logo_r_a_quebec_2019.png" height="100", align="middle"</image>
-</center>
 
 ---
 
 ## Références
 
-Beaucoup de matériel présenté dans cette classe provient de ressources en ligne. Merci à tout ceux et celles à qui j'ai piqué du code!!!
-
 - https://bit.ly/2wjB8IB
 - https://adv-r.hadley.nz/functionals.html#map
 - https://www.r-exercises.com/2018/01/12/functional-programming-with-purrr-exercises-part-1/
 - https://jennybc.github.io/purrr-tutorial/ls03_map-function-syntax.html
-- https://sebastiansauer.github.io/multiple-lm-purrr2/
 
 <!-- --- -->
 

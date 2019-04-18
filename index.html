@@ -67,6 +67,8 @@ class: inverse, center, middle
 
 - Théorie + exercices après chaque concept.
 
+- Votre participation!
+
 ---
 
 ## *Data science*
@@ -891,6 +893,24 @@ map(1:3, ~log(.x))
 
 ---
 
+## Les fonctions anonymes et formules: un résumé
+
+Il y a trois façons différentes d'utiliser des fonctions anonymes avec `purrr`.
+
+
+```r
+x &lt;- 1:3
+
+map(x, function(x) log(x, base = 2))
+
+map(x, log, base = 2)
+
+map(x, ~log(.x, base = 2))
+```
+
+
+---
+
 class: inverse
 
 ## Exercice
@@ -939,6 +959,7 @@ Exemple avec les données *cars*. On veut calculer la moyenne de chacune des col
 
 
 ```r
+# library(tidyverse)
 df &lt;- read_csv("data/clean/cars.csv")
 df &lt;- select_if(df, is.numeric)
 ```
@@ -1026,7 +1047,6 @@ Il y a plusieurs variantes de `map_*()` qui permettent **d'être explicite sur l
 | `map_lgl()`  | Vecteur de booléens   |
 | `map_df()`   | Liste de *data frame* |
 
-
 ---
 
 ## Les variantes de `map()`
@@ -1051,7 +1071,7 @@ map_dbl(mtcars, mean)
 class: inverse
 
 ## Exercice (1/2)
- 
+
 .full-width[.content-box-gray[Séparez le jeux de données `mtcars` en fonction du nombre de cylindre. Utilisez une variante de la fonction `map_*()` pour connâitre le nombre d'observation de chaque groupe.]]
 
 
@@ -1078,6 +1098,17 @@ fit &lt;- function(...) {
 map(..., ...)
 ```
 
+Interdiction de faire...
+
+
+```r
+mod1 &lt;- lm(mpg ~ wt, data = subset(mtcars, cyl == 4))
+mod2 &lt;- lm(mpg ~ wt, data = subset(mtcars, cyl == 6))
+mod3 &lt;- lm(mpg ~ wt, data = subset(mtcars, cyl == 8))
+```
+
+
+
 
 
 
@@ -1086,61 +1117,97 @@ map(..., ...)
 
 ---
 
-## Mappage sur plusieurs arguments
+## Map sur plusieurs vecteurs/listes
 
-Jusqu'ici, nous avons *mappé* avec une seule entrée. Mais souvent, vous avez plusieurs entrées que vous devez parcourir en parallèle. Pour y arriver, nous allons voir les fonctions `map2()` et `pmap()`.
+Jusqu'ici, nous avons *mappé* avec une seule entrée (un seul vecteur ou une seule liste). Si vous avez plusieurs entrées, vous devez **parcourir en parallèle**. Pour ce faire, nous utiliserons les fonctions `map2()` et `pmap()`.
 
-Imaginons que nous voulions générer trois vecteurs de valeurs aléatoires.
+La fonction `map2()` permet de parcourrir en parallèle deux **vecteurs/listes**. L'utilisation de base de `map2()` est similaire à `map()`.
 
 
 ```r
-mu &lt;- c(4, -1, 10)
+map2(.x, .y, .f, ...)
 
-map(mu, rnorm, n = 5)
+map2(INPUT_ONE, INPUT_TWO, FUNCTION_TO_APPLY, OPTIONAL_ARGUMENTS)
+```
+
+---
+
+## Map sur plusieurs vecteurs/listes
+
+Imaginons que nous voulions générer trois vecteurs de valeurs aléatoires à l'aide de la fonction `rnorm()`. Pour chaque génération, nous voulons spécifier une moyenne différente.
+
+.pull-left[
+
+```r
+# Vecteur de moyennes
+mu &lt;- c(4, -1, 3)
+
+map(mu, rnorm, n = 4)
 ```
 
 ```
 ## [[1]]
-## [1] 3.665963 5.395148 4.636674 3.891568 4.513763
+## [1] 3.665963 5.395148 4.636674 3.891568
 ## 
 ## [[2]]
-## [1] -0.6007282  0.6628564 -0.7241066 -0.4937274 -0.6524480
+## [1] -0.4862372 -0.6007282  0.6628564 -0.7241066
 ## 
 ## [[3]]
-## [1]  9.622762 10.097619 11.638745  9.124408 10.121760
+## [1] 3.506273 3.347552 2.622762 3.097619
 ```
+]
+
+.pull-right[
+
+&lt;center&gt;
+&lt;img src="images/purrr_map.png" height="300"/&gt;
+&lt;/center&gt;
+
+]
 
 ---
 
-## Mappage sur plusieurs arguments
+## Map sur plusieurs vecteurs/listes
 
+Disons maintenant que nous vouilions en plus spécifier une valeur d'écart-type différente pour chaque génération. Il faut spécifier un deuxième vecteur contenant les écart-types. Il faut alors utiliser la fonction `map2()`.
+
+.pull-left[
 
 ```r
-mu &lt;- c(4, -1, 10)
+# Vecteur de moyennes
+mu &lt;- c(4, -1, 3)
+
+# Vecteur d'écart-types
 sigma &lt;- c(1, 4, 7)
 
-res &lt;- map2(mu, sigma, rnorm, n = 5)
-
-map(res, mean)
+map2(mu, sigma, rnorm, n = 4)
 ```
 
 ```
 ## [[1]]
-## [1] 3.762843
+## [1] 5.638745 3.124408 4.121760 5.362131
 ## 
 ## [[2]]
-## [1] -2.038723
+## [1] -1.938484 -5.213531 -4.479134 -2.560508
 ## 
 ## [[3]]
-## [1] 14.73804
+## [1] -2.93145051  1.17552426  0.09906206  1.71864442
 ```
+]
+
+.pull-right[
+
+&lt;center&gt;
+&lt;img src="images/purrr_map2.png" height="300"/&gt;
+&lt;/center&gt;
+
+]
 
 ---
 
-## Mappage sur plusieurs arguments
+## Map sur plusieurs vecteurs/listes
 
-
----
+Comme avec la fonction `map()`, il y a plusieurs variantes de `map2_*()`.
 
 
 ```r
@@ -1159,7 +1226,7 @@ map2(c(1, 2, 3), c(4, 5, 6), sum)
 ```
 
 ```r
-map2_dbl(c(1, 2, 3), c(4, 5, 6), sum)
+map2_dbl(c(1, 2, 3), c(4, 5, 6), sum) # Explicite sur la classe des valeurs de retour
 ```
 
 ```
@@ -1167,27 +1234,51 @@ map2_dbl(c(1, 2, 3), c(4, 5, 6), sum)
 ```
 
 ```r
-map2_dbl(c(1, 2, 3), c(4, 5, 6), ~.x + .y)
+map2_chr(c("a", "b", "c"), c("x", "y", "z"), ~paste(.x, .y, sep = "---"))
 ```
 
 ```
-## [1] 5 7 9
+## [1] "a---x" "b---y" "c---z"
 ```
+
+---
+
+## Map sur plusieurs vecteurs/listes
+
+Maintenant, comment faire pour *mapper* sur plus de deux vecteurs/listes? La fonction `pmap()` (*parallel map*) permet d'itérer simultanément sur plusieurs vecteurs/listes.
+
 
 ```r
-pmap_dbl(list(c(1, 2, 3), c(4, 5, 6), c(4, 5, 6)), ~..1 + ..2 + ..3)
+pmap(.l, .f, ...)
+
+map2(LIST_INPUT, FUNCTION_TO_APPLY, OPTIONAL_ARGUMENTS)
+```
+
+Trouver exemple:
+
+
+```r
+pmap_dbl(
+  .l =
+    list(
+      c(1, 2, 3),
+      c(4, 5, 6),
+      c(7, 8, 9),
+      c(10, 11, 12)
+    ),
+  .f = ~ ..1 + ..2 + ..3 / ..4 # Ex.: 1 + 7 + 7 / 10
+)
 ```
 
 ```
-## [1]  9 12 15
+## [1] 5.700000 7.727273 9.750000
 ```
-
 
 ---
 
 class: inverse, center, middle
 
-## Exercice: real case scenario
+## Exercice pratique sur un cas réel
 
 ---
 
@@ -1260,7 +1351,14 @@ https://s3.amazonaws.com/capitalbikeshare-data/index.html
 
 ## Les données
 
-Figure pour explorer les données un peu.
+&lt;img src="index_files/figure-html/unnamed-chunk-55-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Les données
+
+&lt;img src="index_files/figure-html/unnamed-chunk-56-1.svg" style="display: block; margin: auto;" /&gt;
+
 
 ---
 
@@ -1314,6 +1412,29 @@ files &lt;- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
 
 ---
 
+## Note sur la lecture de fichiers
+
+Je vous conseil fortement d'utiliser la fonction `read_csv()` de la librairie `readr` (inclut avec `tidyverse`) pour lire vos fichiers, car beaucoup plus rapide que `read.csv()`.
+
+
+```r
+file &lt;- "data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv"
+
+res &lt;- microbenchmark::microbenchmark(
+  read.csv = read.csv(file),
+  read_csv =read_csv(file, col_type = cols()),
+  fread = data.table::fread(file),
+  times = 50
+)
+
+autoplot(res)
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-59-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+
 class: inverse, center, middle
 
 # Peut-on aller plus loin?
@@ -1332,7 +1453,7 @@ install.packages("furrr")
 
 - Le but de `furrr` est de simplifier la combinaison de la famille de fonctions de mappage de `purrr` et des capacités de traitement parallèle.
 
-- Les fonctions de `furrr` débutent toutes par `future_*()`.
+- Les fonctions de `furrr` débutent toutes par `future_*()` et peuvent remplacer pratiquement les utilisations de `map_*()`.
 
 
 ```
@@ -1364,7 +1485,7 @@ library(furrr)
 ```
 
 ```r
-plan(multicore(workers = availableCores() - 1))
+*plan(multicore(workers = availableCores() - 1)) # Utilise 7 coeurs
 
 files &lt;- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
 
@@ -1418,7 +1539,7 @@ library(tidyverse)
 
 ## Retour sur l'exercice précédent
 
-Dans l'exercice précédent, nous devions calculer la moyenne de la colonne `duration` pour chaque mois de 2018. Disons maintenant que nous voulons calculer la moyenne de toutes les colonnes numériques.
+Dans un exercice précédent, nous devions calculer la moyenne de la colonne `duration` pour chaque mois de 2018. Disons maintenant que nous voulons calculer la moyenne de toutes les colonnes numériques.
 
 
 ```r
@@ -1530,7 +1651,7 @@ summarise_if(.tbl = df, .predicate = is.numeric, .funs = mean)
 
 --
 
-Ne célébrons pas trop vite, n'oubliez pas qu'on voulait faire ce calcule pour chacun des mois de l'année 2018.
+Ne célébrons pas trop vite! N'oubliez pas qu'on voulait faire ce calcule pour chacun des mois de l'année 2018.
 
 &lt;center&gt;
 &lt;image src="https://media.giphy.com/media/OWJILXs8QpyiA/giphy.gif" height="200" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/image&gt;
@@ -1540,7 +1661,7 @@ Ne célébrons pas trop vite, n'oubliez pas qu'on voulait faire ce calcule pour 
 
 ## La fonction `group_by()`
 
-- La fonction `group_by()` peut s'utiliser conjointement avec la fonction `summarise()` pour appliquer un calcule à un ensemble de groupes d'un *data frame*.
+- La fonction `group_by()` peut s'utiliser conjointement avec la fonction `summarise()` pour appliquer un calcule à un ensemble de groupes dans un *data frame*.
 
 - - La fonction `group_by()` **prépare** un *data frame* a être utilisé par la fonction `summarise()`.
 
@@ -1588,9 +1709,9 @@ group_by(mtcars, cyl)
 
 ---
 
-## Retour sur l'exercice précédent
+## Calculer les moyennes mensuelles
 
-Calculer **les moyennes mensuelles** de toutes les colonnes numériques, en utilisant toutes les données de *bikeshare*. On peut diviser se problème en trois étapes:
+Calculer **les moyennes mensuelles** de toutes les colonnes numériques, en utilisant toutes les données de *bikeshare*. On peut diviser ce problème en trois étapes:
 
 1. Lire tous les fichiers.
 2. Grouper les données par mois.
@@ -1598,7 +1719,7 @@ Calculer **les moyennes mensuelles** de toutes les colonnes numériques, en util
 
 ---
 
-## Retour sur l'exercice précédent
+## Calculer les moyennes mensuelles
 
 
 ```r
@@ -1632,9 +1753,60 @@ head(df) # Afficher les 6 premières lignes
 
 ---
 
-## La version compacte
+## L'opérateur pipe ` %&gt;% `
 
-L'opérateur pipe, `%&gt;%`, permet d'enchaîner les opérations en passant le résultat d'un fonction comme premier argument dans la fonction suivante. Ce qui est très utile lorsqu'on a pas besoin des résultats intermédiaires.
+L'opérateur pipe, `%&gt;%`, permet d'enchaîner les opérations en passant le résultat d'un fonction comme premier argument dans la fonction suivante. Lorsque vous voyez `%&gt;%`, vous devriez vous vous dire **ensuite**. Ce qui est très utile lorsqu'on a pas besoin des résultats intermédiaires.
+
+&lt;center&gt;&lt;img src="https://magrittr.tidyverse.org/logo.png" width="200"/&gt;&lt;/center&gt;
+
+---
+
+## L'opérateur pipe ` %&gt;% `
+
+
+```r
+3 %&gt;% log()
+```
+
+```
+## [1] 1.098612
+```
+
+```r
+log(3)
+```
+
+```
+## [1] 1.098612
+```
+
+Par défaut, ` %&gt;% ` passe le paramètre à la première position de la fonction suivante. On peut cependant contrôler ce comportement en utilisant le point `.` pour explicitement spécifier où doit aller le paramètre.
+
+
+```r
+set.seed(1234)
+
+2 %&gt;% rnorm(n = 10, mean = .)
+```
+
+```
+##  [1]  0.7929343  2.2774292  3.0844412 -0.3456977  2.4291247  2.5060559
+##  [7]  1.4252600  1.4533681  1.4355480  1.1099622
+```
+
+```r
+rnorm(n = 10, mean = 2)
+```
+
+```
+##  [1] 1.522807 1.001614 1.223746 2.064459 2.959494 1.889715 1.488990
+##  [8] 1.088805 1.162828 4.415835
+```
+
+
+---
+
+## La version compacte
 
 
 ```r
@@ -1642,26 +1814,26 @@ files &lt;- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
 
 files %&gt;% 
   map_df(read_csv) %&gt;% 
-  group_by(month = lubridate::month(start_date)) %&gt;% 
+  group_by(month = lubridate::month(start_date, label = TRUE)) %&gt;% 
   summarise_if(is.numeric, mean)
 ```
 
 ```
 ## # A tibble: 12 x 4
 ##    month duration start_station_number end_station_number
-##    &lt;dbl&gt;    &lt;dbl&gt;                &lt;dbl&gt;              &lt;dbl&gt;
-##  1     1     802.               31326.             31328.
-##  2     2     865.               31322.             31322.
-##  3     3    1092.               31321.             31322.
-##  4     4    1234.               31319.             31322.
-##  5     5    1276.               31321.             31322.
-##  6     6    1235.               31325.             31327.
-##  7     7    1352.               31323.             31321.
-##  8     8    1225.               31324.             31325.
-##  9     9    1134.               31328.             31330.
-## 10    10    1051.               31332.             31334.
-## 11    11     929.               31334.             31334.
-## 12    12     883.               31334.             31332.
+##    &lt;ord&gt;    &lt;dbl&gt;                &lt;dbl&gt;              &lt;dbl&gt;
+##  1 Jan       802.               31326.             31328.
+##  2 Feb       865.               31322.             31322.
+##  3 Mar      1092.               31321.             31322.
+##  4 Apr      1234.               31319.             31322.
+##  5 May      1276.               31321.             31322.
+##  6 Jun      1235.               31325.             31327.
+##  7 Jul      1352.               31323.             31321.
+##  8 Aug      1225.               31324.             31325.
+##  9 Sep      1134.               31328.             31330.
+## 10 Oct      1051.               31332.             31334.
+## 11 Nov       929.               31334.             31334.
+## 12 Dec       883.               31334.             31332.
 ```
 
 ---
@@ -1678,15 +1850,213 @@ class: inverse
 
 .full-width[.content-box-gray[Utiliser les concepts vu aujourd'hui pour reproduire le graphique suivant. Il s'agit de calculer la moyenne de la variable `duration` par jour et ce pour chaque mois de l'année.]]
 
-&lt;img src="index_files/figure-html/unnamed-chunk-65-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-75-1.svg" style="display: block; margin: auto;" /&gt;
 
+---
+
+## La fonction `nest()`
+
+La fonction `nest()` permet de créer une liste de *data frame* à l'intérieur d'un *data frame*. Cette fonction est généralement utilisée conjointement avec `group_by()`.
+
+
+```r
+head(mtcars)
+```
+
+```
+##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+```r
+mtcars %&gt;% 
+  group_by(cyl) %&gt;% # Grouper selon la variable "cyl"
+  nest() # "Compresser" le data frame, par défault, la nouvelle colonne se nomme "data"
+```
+
+```
+## # A tibble: 3 x 2
+##     cyl data              
+##   &lt;dbl&gt; &lt;list&gt;            
+## 1     6 &lt;tibble [7 × 10]&gt; 
+## 2     4 &lt;tibble [11 × 10]&gt;
+## 3     8 &lt;tibble [14 × 10]&gt;
+```
+
+---
+
+## La fonction `unnest()`
+
+La fonction `unnest()` de décompresser un *data frame* qui a été compressé avec `nest()`.
+
+
+```r
+mtcars %&gt;% 
+  group_by(cyl) %&gt;% # Grouper selon la variable "cyl"
+  nest() %&gt;% # "Compresser" le data frame, par défault, la nouvelle colonne se nomme "data"
+  unnest()
+```
+
+```
+## # A tibble: 32 x 11
+##      cyl   mpg  disp    hp  drat    wt  qsec    vs    am  gear  carb
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1     6  21    160    110  3.9   2.62  16.5     0     1     4     4
+##  2     6  21    160    110  3.9   2.88  17.0     0     1     4     4
+##  3     6  21.4  258    110  3.08  3.22  19.4     1     0     3     1
+##  4     6  18.1  225    105  2.76  3.46  20.2     1     0     3     1
+##  5     6  19.2  168.   123  3.92  3.44  18.3     1     0     4     4
+##  6     6  17.8  168.   123  3.92  3.44  18.9     1     0     4     4
+##  7     6  19.7  145    175  3.62  2.77  15.5     0     1     5     6
+##  8     4  22.8  108     93  3.85  2.32  18.6     1     1     4     1
+##  9     4  24.4  147.    62  3.69  3.19  20       1     0     4     2
+## 10     4  22.8  141.    95  3.92  3.15  22.9     1     0     4     2
+## # … with 22 more rows
+```
+
+---
+
+## La fonction `nest()`
+
+En combinant les fonctions `nest()` et `map()`, il est possible de rapidement créer un modèle linéraire pour chacun des groupes.
+
+
+```r
+mtcars %&gt;% 
+  group_by(cyl) %&gt;% 
+  nest() %&gt;% 
+* mutate(mod = map(data, ~lm(mpg ~ wt, data = .)))
+```
+
+```
+## # A tibble: 3 x 3
+##     cyl data               mod     
+##   &lt;dbl&gt; &lt;list&gt;             &lt;list&gt;  
+## 1     6 &lt;tibble [7 × 10]&gt;  &lt;S3: lm&gt;
+## 2     4 &lt;tibble [11 × 10]&gt; &lt;S3: lm&gt;
+## 3     8 &lt;tibble [14 × 10]&gt; &lt;S3: lm&gt;
+```
+
+La *data frame* contient maintenant:
+
+- La ou les variables de regroupement.
+- Les données compressées (colonne `data`).
+- Les modèles linéraires (colonne `mod`).
+
+**Les risques d'erreurs sont de beaucoup diminués, car tout est encapsulé dans un *data frame*.**
+
+---
+
+## La librairie `broom`
+
+La librairie `broom` permet de convertir des objets statistiques en *data frame*.
+
+
+```r
+mtcars %&gt;% 
+  group_by(cyl) %&gt;% 
+  nest() %&gt;% 
+  mutate(mod = map(data, ~lm(mpg ~ wt, data = .))) %&gt;% 
+* mutate(coef = map(mod, broom::tidy)) %&gt;%
+  unnest(coef)
+```
+
+```
+## # A tibble: 6 x 6
+##     cyl term        estimate std.error statistic    p.value
+##   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1     6 (Intercept)    28.4      4.18       6.79 0.00105   
+## 2     6 wt             -2.78     1.33      -2.08 0.0918    
+## 3     4 (Intercept)    39.6      4.35       9.10 0.00000777
+## 4     4 wt             -5.65     1.85      -3.05 0.0137    
+## 5     8 (Intercept)    23.9      3.01       7.94 0.00000405
+## 6     8 wt             -2.19     0.739     -2.97 0.0118
+```
+
+---
+
+class: inverse
+
+## À vous de jouer!
+
+.full-width[.content-box-gray[En utilisant le jeu de données `cars`, créer un modèle linéraire multiple (`mpg ~ horsepower + weight`) pour les `model` de chaque année. Par la suite, ajouter une colonne dans le *data frame* qui contient le R2 de la régression.]]
+
+
+```r
+cars &lt;- read_csv("data/clean/cars.csv")
+cars
+```
+
+```
+## # A tibble: 406 x 9
+##    car     mpg cylinders displacement horsepower weight acceleration model
+##    &lt;chr&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
+##  1 Chev…    18         8          307        130   3504         12      70
+##  2 Buic…    15         8          350        165   3693         11.5    70
+##  3 Plym…    18         8          318        150   3436         11      70
+##  4 AMC …    16         8          304        150   3433         12      70
+##  5 Ford…    17         8          302        140   3449         10.5    70
+##  6 Ford…    15         8          429        198   4341         10      70
+##  7 Chev…    14         8          454        220   4354          9      70
+##  8 Plym…    14         8          440        215   4312          8.5    70
+##  9 Pont…    14         8          455        225   4425         10      70
+## 10 AMC …    NA         8          390        190   3850          8.5    70
+## # … with 396 more rows, and 1 more variable: origin &lt;chr&gt;
+```
+
+---
+
+## Les données
+
+&lt;img src="index_files/figure-html/unnamed-chunk-81-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+
+
+---
+
+## Conclusions
+
+- R est un langage de programmation fonctionnelle qui permet de faire beaucoup de chose rapidement et de manière élégante.
+
+- La programmation fonctionnelle permet de diminuer les chances d'erreurs dans le code.
+  - Si erreur, plus facilement corrigable, car on modifie à un seul endroit.
+  
+- La librairie `purrr` offre un ensemble d'outils qui permet d'appliquer efficacement plusieurs concepts de la programmation fonctionnelle.
+
+- L'utilisation de `nest()` permet d'encapsuler les résultats dans un *data frame* ce qui permet de les faire suivre tout au long du processus d'analyse.
+
+---
+
+## Merci!
+
+Merci à toute l'équipe de R à Québec 2019 pour l'organisation.
+
+&lt;center&gt;
+&lt;image src="images/comite.bmp" height="200"
+&lt;/center&gt;
+
+
+&lt;center&gt;
+&lt;image src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/R_logo.svg/724px-R_logo.svg.png" height="100"&lt;/image&gt;&lt;image src="images/logo_r_a_quebec_2019.png" height="100"&lt;/image&gt;
+&lt;/center&gt;
 
 ---
 
 ## Références
 
+Beaucoup de matériel présenté dans cette classe provient de ressources en ligne. Merci à tout ceux et celles à qui j'ai piqué du code!!!
+
 - https://bit.ly/2wjB8IB
 - https://adv-r.hadley.nz/functionals.html#map
+- https://www.r-exercises.com/2018/01/12/functional-programming-with-purrr-exercises-part-1/
+- https://jennybc.github.io/purrr-tutorial/ls03_map-function-syntax.html
+- https://sebastiansauer.github.io/multiple-lm-purrr2/
 
 &lt;!-- --- --&gt;
 
