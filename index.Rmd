@@ -1,5 +1,5 @@
 ---
-title: "Programmation fonctionelle avec R"
+title: "Programmation fonctionnelle avec R"
 subtitle: "R à Québec 2019"
 author: "Philippe Massicotte"
 date: "2019-05-14"
@@ -42,7 +42,7 @@ htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 <b>Assistant de recherche à Takuvik (télédétection, modélisation, data science)</b><br>
 
 - Utilise R depuis plus de 6 ans<br>
-- Auteur de 3 libraries sur CRAN<br>
+- Auteur de 3 librairies sur CRAN<br>
 - Blog R: www.pmassicotte.com<br>
 
 <br>
@@ -228,7 +228,7 @@ df$d <- (df$d - min(df$d, na.rm = TRUE)) /
 
 ---
 
-## Nombre raisonable de répétitions
+## Nombre raisonnable de répétitions
 
 - DRY: **D**on't **R**epeate **Y**ourself
 
@@ -256,7 +256,7 @@ Une première amélioration: **utiliser une fonction**.
 
 --
 
-Paramétriser le code -> remplacer les variables par des arguments
+Paramétrer le code -> remplacer les variables par des arguments
 
 ```{r, eval=FALSE}
 res <- (`x` - min(`x`, na.rm = TRUE)) / 
@@ -602,7 +602,7 @@ class: inverse, center, middle
 
 ## La fonction `map()`
 
-Dans ce premier example, on veux ajouter la valeur de 1 à tous les éléments d'un vecteur numérique.
+Dans ce premier examole, on veux ajouter la valeur de 1 à tous les éléments d'un vecteur numérique.
 
 ```{r}
 # Créer une fonction "f" qui prend un nombre et lui ajoute la valeur de 1.
@@ -694,7 +694,7 @@ L'exemple précédent peut se ré-écrie en utilisant une fonction anonyme. Avec
 map(1:3, function(x) x + 1)
 ```
 
-Nottez que l'utilisations de `map()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant les capacités de vectorisation de R:
+Notez que l’utilisation de `map()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant les capacités de vectorisation de R:
 
 ```{r}
 x <- 1:3
@@ -828,11 +828,17 @@ Il y a plusieurs variantes de `map_*()` qui permettent **d'être explicite sur l
 
 ## Les variantes de `map()`
 
-Par example, on sait que la fonction `mean()` retourne une valeur numérique. Dans ce cas, on peut utiliser la fonction `map_dbl()` pour calculer la valeur moyenne de chacune des colonnes de `mtcars`.
+Par exemple, on sait que la fonction `mean()` retourne une valeur numérique. Dans ce cas, on peut utiliser la fonction `map_dbl()` pour calculer la valeur moyenne de chacune des colonnes de `mtcars`.
 
 ```{r}
 # Appliquer la fonction "mean" à chacune des colonnes de mtcars
 map_dbl(mtcars, mean) 
+```
+
+On peut également avoir le résultat sous forme de data frame.
+
+```{r}
+map_df(mtcars, mean)
 ```
 
 ---
@@ -841,7 +847,7 @@ class: inverse
 
 ## Exercice (1/2)
 
-.full-width[.content-box-gray[Séparez le jeux de données `mtcars` en fonction du nombre de cylindre. Utilisez une variante de la fonction `map_*()` pour connâitre le nombre d'observation de chaque groupe.]]
+.full-width[.content-box-gray[Séparez le jeux de données `mtcars` en fonction du nombre de cylindre. Utilisez une variante de la fonction `map_*()` pour connaitre le nombre d'observation de chaque groupe.]]
 
 ```{r}
 res <- split(mtcars, mtcars$cyl)
@@ -904,7 +910,7 @@ map(res, ~lm(mpg ~ wt, data = .))
 
 Jusqu'ici, nous avons *mappé* avec une seule entrée (un seul vecteur ou une seule liste). Si vous avez plusieurs entrées, vous devez **parcourir en parallèle**. Pour ce faire, nous utiliserons les fonctions `map2()` et `pmap()`.
 
-La fonction `map2()` permet de parcourrir en parallèle deux **vecteurs/listes**. L'utilisation de base de `map2()` est similaire à `map()`.
+La fonction `map2()` permet de parcourir en parallèle deux **vecteurs/listes**. L'utilisation de base de `map2()` est similaire à `map()`.
 
 ```{r, eval=FALSE}
 map2(.x, .y, .f, ...)
@@ -988,20 +994,99 @@ pmap(.l, .f, ...)
 map2(LIST_INPUT, FUNCTION_TO_APPLY, OPTIONAL_ARGUMENTS)
 ```
 
-Trouver exemple:
+---
+
+## Map sur plusieurs vecteurs/listes
+
+Par exemple, générer aléatoirement plusieurs des vecteurs de nombres aléatoires.
 
 ```{r}
-pmap_dbl(
+pmap(
   .l =
-    list(
-      c(1, 2, 3),
-      c(4, 5, 6),
-      c(7, 8, 9),
-      c(10, 11, 12)
-    ),
-  .f = ~ ..1 + ..2 + ..3 / ..4 # Ex.: 1 + 7 + 7 / 10
+    {{list(
+       mean = c(1, -200, 3),
+       sd = c(1, 2, 3),
+       n = c(1, 3, 6)
+     )}},
+  .f = rnorm
 )
 ```
+
+---
+
+## Map sur plusieurs vecteurs/listes
+
+Regardons la structure de la fonction `rnorm()`.
+
+```{r, eval=FALSE}
+rnorm(n, mean = 0, sd = 1)
+```
+
+Mais pourquoi cela fonctionne t'il?
+
+```{r, eval = FALSE}
+pmap(
+  .l =
+    {{list(
+       mean = c(1, -200, 3),
+       sd = c(1, 2, 3),
+       n = c(1, 3, 6)
+     )}},
+  .f = rnorm
+)
+```
+
+---
+
+## Toujours utiliser une liste nommée
+
+.pull-left[
+
+```{r}
+set.seed(1234)
+pmap(
+  .l =
+    list(
+      mean = c(1, 5, 3),
+      sd = c(1, 2, 3),
+      n = c(1, 3, 2)
+    ),
+  .f = rnorm
+)
+```
+
+Equivalent à:
+
+```{r, eval = FALSE}
+rnorm(n = 1, mean = 1, sd = 1)
+rnorm(n = 3, mean = 5, sd = 2)
+rnorm(n = 2, mean = 3, sd = 3)
+```
+]
+
+.pull-right[
+
+```{r}
+set.seed(1234)
+pmap(
+  .l =
+    list(
+      c(1, 5, 3),
+      c(1, 2, 3),
+      c(1, 3, 2)
+    ),
+  .f = rnorm
+)
+```
+
+Equivalent à:
+
+```{r, eval = FALSE}
+rnorm(n = 1, mean = 1, sd = 1)
+rnorm(n = 5, mean = 2, sd = 3)
+rnorm(n = 3, mean = 3, sd = 2)
+```
+]
 
 ---
 
@@ -1164,7 +1249,7 @@ file <- "data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv"
 
 res <- microbenchmark::microbenchmark(
   read.csv = read.csv(file),
-  read_csv =read_csv(file, col_type = cols()),
+  read_csv =read_csv(file, col_types = cols()),
   fread = data.table::fread(file),
   times = 50
 )
@@ -1180,7 +1265,7 @@ class: inverse, center, middle
 
 # Peut-on aller plus loin?
 
-## Programmation parallelle avec `furrr`
+## Programmation parallèle avec `furrr`
 
 ---
 
@@ -1204,7 +1289,7 @@ ls("package:furrr") %>%
 
 ---
 
-## Parallelisation
+## Parallélisation
 
 ```{r, message=FALSE}
 library(furrr)
@@ -1403,7 +1488,9 @@ head(df) # Afficher les 6 premières lignes
 
 ## L'opérateur pipe ` %>% `
 
-L'opérateur pipe, `%>%`, permet d'enchaîner les opérations en passant le résultat d'un fonction comme premier argument dans la fonction suivante. Lorsque vous voyez `%>%`, vous devriez vous vous dire **ensuite**. Ce qui est très utile lorsqu'on a pas besoin des résultats intermédiaires.
+- L'opérateur pipe, `%>%`, permet d'enchaîner les opérations en passant le résultat d'un fonction comme premier argument dans la fonction suivante. Ce qui est très utile lorsqu'on a pas besoin des résultats intermédiaires.
+
+- Lorsque vous voyez `%>%`, vous devriez vous dire **ensuite**.
 
 <center><img src="https://magrittr.tidyverse.org/logo.png" width="200"/></center>
 
@@ -1419,32 +1506,61 @@ log(3)
 
 Par défaut, ` %>% ` passe le paramètre à la première position de la fonction suivante. On peut cependant contrôler ce comportement en utilisant le point `.` pour explicitement spécifier où doit aller le paramètre.
 
-```{r}
-set.seed(1234)
+Ces deux lignes sont équivalentes:
 
+```{r, eval = FALSE}
 2 %>% rnorm(n = 10, mean = .)
+
 rnorm(n = 10, mean = 2)
 ```
-
-
 ---
 
 ## La version compacte
 
-```{r}
-files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
+.pull-left[
 
-files %>% 
-  map_df(read_csv) %>% 
-  group_by(month = lubridate::month(start_date, label = TRUE)) %>% 
+```{r}
+files <- list.files(
+  "data/clean/capitale_bikeshare/",
+  full.names = TRUE
+)
+
+files %>%
+  map_df(read_csv) %>%
+  group_by(
+    month = lubridate::month(start_date)
+  ) %>%
   summarise_if(is.numeric, mean)
 ```
+]
+
+--
+
+.pull-right[
+
+<center>
+<image src="https://media.giphy.com/media/iI6eeGjwScTCM/giphy.gif" height="300" frameBorder="0" class="giphy-embed" allowFullScreen></image>
+</center>
+
+]
 
 ---
 
-<center>
-<image src="https://media.giphy.com/media/iI6eeGjwScTCM/giphy.gif" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></image>
-</center>
+## Appliquer plusieurs fonctions
+
+Il est possible d'appliquer plus d'une fonction en utilisant le paramètre `.funs`.
+
+```{r}
+files %>%
+  map_df(read_csv) %>%
+  group_by(
+    month = lubridate::month(start_date, label = TRUE)
+  ) %>%
+  summarise_if(is.numeric, .funs = list(mymean = mean, mysd = sd)) %>% #<<
+  glimpse() # La fonction glimpse() est une version pimpée de str()
+```
+
+
 
 ---
 
@@ -1503,7 +1619,7 @@ mtcars %>%
 
 ## La fonction `nest()`
 
-En combinant les fonctions `nest()` et `map()`, il est possible de rapidement créer un modèle linéraire pour chacun des groupes.
+En combinant les fonctions `nest()` et `map()`, il est possible de rapidement créer un modèle linéaire pour chacun des groupes.
 
 ```{r}
 mtcars %>% 
@@ -1516,7 +1632,7 @@ La *data frame* contient maintenant:
 
 - La ou les variables de regroupement.
 - Les données compressées (colonne `data`).
-- Les modèles linéraires (colonne `mod`).
+- Les modèles linéaires (colonne `mod`).
 
 **Les risques d'erreurs sont de beaucoup diminués, car tout est encapsulé dans un *data frame*.**
 
@@ -1541,7 +1657,7 @@ class: inverse
 
 ## À vous de jouer!
 
-.full-width[.content-box-gray[En utilisant le jeu de données `cars`, créer un modèle linéraire multiple (`mpg ~ horsepower + weight`) pour les `model` de chaque année. Par la suite, ajouter une colonne dans le *data frame* qui contient le R2 de la régression.]]
+.full-width[.content-box-gray[En utilisant le jeu de données `cars`, créer un modèle linéaire multiple (`mpg ~ horsepower + weight`) pour les `model` de chaque année. Par la suite, ajouter une colonne dans le *data frame* qui contient le R2 de la régression.]]
 
 ```{r}
 cars <- read_csv("data/clean/cars.csv")
@@ -1580,7 +1696,7 @@ cars %>%
 - R est un langage de programmation fonctionnelle qui permet de faire beaucoup de chose rapidement et de manière élégante.
 
 - La programmation fonctionnelle permet de diminuer les chances d'erreurs dans le code.
-  - Si erreur, plus facilement corrigable, car on modifie à un seul endroit.
+  - Si erreur, plus facilement corrigeable, car on modifie à un seul endroit.
   
 - La librairie `purrr` offre un ensemble d'outils qui permet d'appliquer efficacement plusieurs concepts de la programmation fonctionnelle.
 

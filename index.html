@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Programmation fonctionelle avec R</title>
+    <title>Programmation fonctionnelle avec R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Philippe Massicotte" />
     <meta name="date" content="2019-05-14" />
@@ -16,7 +16,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Programmation fonctionelle avec R
+# Programmation fonctionnelle avec R
 ## R à Québec 2019
 ### Philippe Massicotte
 ### 2019-05-14
@@ -35,7 +35,7 @@ class: center, middle, inverse, title-slide
 &lt;b&gt;Assistant de recherche à Takuvik (télédétection, modélisation, data science)&lt;/b&gt;&lt;br&gt;
 
 - Utilise R depuis plus de 6 ans&lt;br&gt;
-- Auteur de 3 libraries sur CRAN&lt;br&gt;
+- Auteur de 3 librairies sur CRAN&lt;br&gt;
 - Blog R: www.pmassicotte.com&lt;br&gt;
 
 &lt;br&gt;
@@ -263,7 +263,7 @@ df$d &lt;- (df$d - min(df$d, na.rm = TRUE)) /
 
 ---
 
-## Nombre raisonable de répétitions
+## Nombre raisonnable de répétitions
 
 - DRY: **D**on't **R**epeate **Y**ourself
 
@@ -292,7 +292,7 @@ Une première amélioration: **utiliser une fonction**.
 
 --
 
-Paramétriser le code -&gt; remplacer les variables par des arguments
+Paramétrer le code -&gt; remplacer les variables par des arguments
 
 
 ```r
@@ -676,7 +676,7 @@ class: inverse, center, middle
 
 ## La fonction `map()`
 
-Dans ce premier example, on veux ajouter la valeur de 1 à tous les éléments d'un vecteur numérique.
+Dans ce premier examole, on veux ajouter la valeur de 1 à tous les éléments d'un vecteur numérique.
 
 
 ```r
@@ -829,7 +829,7 @@ map(1:3, function(x) x + 1)
 ## [1] 4
 ```
 
-Nottez que l'utilisations de `map()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant les capacités de vectorisation de R:
+Notez que l’utilisation de `map()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant les capacités de vectorisation de R:
 
 
 ```r
@@ -917,10 +917,10 @@ head(df, 3)
 ## # A tibble: 3 x 9
 ##   car     mpg cylinders displacement horsepower weight acceleration model
 ##   &lt;chr&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
-## 1 Chev…    18         8          307        130   3504         12      70
-## 2 Buic…    15         8          350        165   3693         11.5    70
-## 3 Plym…    18         8          318        150   3436         11      70
-## # … with 1 more variable: origin &lt;chr&gt;
+## 1 Chev~    18         8          307        130   3504         12      70
+## 2 Buic~    15         8          350        165   3693         11.5    70
+## 3 Plym~    18         8          318        150   3436         11      70
+## # ... with 1 more variable: origin &lt;chr&gt;
 ```
 
 ```r
@@ -1039,7 +1039,7 @@ Il y a plusieurs variantes de `map_*()` qui permettent **d'être explicite sur l
 
 ## Les variantes de `map()`
 
-Par example, on sait que la fonction `mean()` retourne une valeur numérique. Dans ce cas, on peut utiliser la fonction `map_dbl()` pour calculer la valeur moyenne de chacune des colonnes de `mtcars`.
+Par exemple, on sait que la fonction `mean()` retourne une valeur numérique. Dans ce cas, on peut utiliser la fonction `map_dbl()` pour calculer la valeur moyenne de chacune des colonnes de `mtcars`.
 
 
 ```r
@@ -1054,13 +1054,27 @@ map_dbl(mtcars, mean)
 ##  17.848750   0.437500   0.406250   3.687500   2.812500
 ```
 
+On peut également avoir le résultat sous forme de data frame.
+
+
+```r
+map_df(mtcars, mean)
+```
+
+```
+## # A tibble: 1 x 11
+##     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  20.1  6.19  231.  147.  3.60  3.22  17.8 0.438 0.406  3.69  2.81
+```
+
 ---
 
 class: inverse
 
 ## Exercice (1/2)
 
-.full-width[.content-box-gray[Séparez le jeux de données `mtcars` en fonction du nombre de cylindre. Utilisez une variante de la fonction `map_*()` pour connâitre le nombre d'observation de chaque groupe.]]
+.full-width[.content-box-gray[Séparez le jeux de données `mtcars` en fonction du nombre de cylindre. Utilisez une variante de la fonction `map_*()` pour connaitre le nombre d'observation de chaque groupe.]]
 
 
 ```r
@@ -1109,7 +1123,7 @@ mod3 &lt;- lm(mpg ~ wt, data = subset(mtcars, cyl == 8))
 
 Jusqu'ici, nous avons *mappé* avec une seule entrée (un seul vecteur ou une seule liste). Si vous avez plusieurs entrées, vous devez **parcourir en parallèle**. Pour ce faire, nous utiliserons les fonctions `map2()` et `pmap()`.
 
-La fonction `map2()` permet de parcourrir en parallèle deux **vecteurs/listes**. L'utilisation de base de `map2()` est similaire à `map()`.
+La fonction `map2()` permet de parcourir en parallèle deux **vecteurs/listes**. L'utilisation de base de `map2()` est similaire à `map()`.
 
 
 ```r
@@ -1242,25 +1256,139 @@ pmap(.l, .f, ...)
 map2(LIST_INPUT, FUNCTION_TO_APPLY, OPTIONAL_ARGUMENTS)
 ```
 
-Trouver exemple:
+---
+
+## Map sur plusieurs vecteurs/listes
+
+Par exemple, générer aléatoirement plusieurs des vecteurs de nombres aléatoires.
 
 
 ```r
-pmap_dbl(
+pmap(
   .l =
-    list(
-      c(1, 2, 3),
-      c(4, 5, 6),
-      c(7, 8, 9),
-      c(10, 11, 12)
-    ),
-  .f = ~ ..1 + ..2 + ..3 / ..4 # Ex.: 1 + 7 + 7 / 10
+*    list(
+*       mean = c(1, -200, 3),
+*       sd = c(1, 2, 3),
+*       n = c(1, 3, 6)
+*     ),
+  .f = rnorm
 )
 ```
 
 ```
-## [1] 5.700000 7.727273 9.750000
+## [[1]]
+## [1] 1.407056
+## 
+## [[2]]
+## [1] -198.7507 -196.6436 -200.1374
+## 
+## [[3]]
+## [1]  2.037480  7.413017  8.112988  3.129732  2.002028 -2.466706
 ```
+
+---
+
+## Map sur plusieurs vecteurs/listes
+
+Regardons la structure de la fonction `rnorm()`.
+
+
+```r
+rnorm(n, mean = 0, sd = 1)
+```
+
+Mais pourquoi cela fonctionne t'il?
+
+
+```r
+pmap(
+  .l =
+*    list(
+*       mean = c(1, -200, 3),
+*       sd = c(1, 2, 3),
+*       n = c(1, 3, 6)
+*     ),
+  .f = rnorm
+)
+```
+
+---
+
+## Toujours utiliser une liste nommée
+
+.pull-left[
+
+
+```r
+set.seed(1234)
+pmap(
+  .l =
+    list(
+      mean = c(1, 5, 3),
+      sd = c(1, 2, 3),
+      n = c(1, 3, 2)
+    ),
+  .f = rnorm
+)
+```
+
+```
+## [[1]]
+## [1] -0.2070657
+## 
+## [[2]]
+## [1] 5.5548585 7.1688824 0.3086046
+## 
+## [[3]]
+## [1] 4.287374 4.518168
+```
+
+Equivalent à:
+
+
+```r
+rnorm(n = 1, mean = 1, sd = 1)
+rnorm(n = 3, mean = 5, sd = 2)
+rnorm(n = 2, mean = 3, sd = 3)
+```
+]
+
+.pull-right[
+
+
+```r
+set.seed(1234)
+pmap(
+  .l =
+    list(
+      c(1, 5, 3),
+      c(1, 2, 3),
+      c(1, 3, 2)
+    ),
+  .f = rnorm
+)
+```
+
+```
+## [[1]]
+## [1] -0.2070657
+## 
+## [[2]]
+## [1]  2.832288  5.253324 -5.037093  3.287374  3.518168
+## 
+## [[3]]
+## [1] 1.850520 1.906736 1.871096
+```
+
+Equivalent à:
+
+
+```r
+rnorm(n = 1, mean = 1, sd = 1)
+rnorm(n = 5, mean = 2, sd = 3)
+rnorm(n = 3, mean = 3, sd = 2)
+```
+]
 
 ---
 
@@ -1324,28 +1452,28 @@ https://s3.amazonaws.com/capitalbikeshare-data/index.html
 ```
 ## Observations: 16,859
 ## Variables: 9
-## $ duration             &lt;dbl&gt; 369, 293, 717, 407, 383, 327, 167, 214, 463…
-## $ start_date           &lt;dttm&gt; 2018-01-01 00:18:07, 2018-01-01 00:23:41, …
-## $ end_date             &lt;dttm&gt; 2018-01-01 00:24:17, 2018-01-01 00:28:35, …
-## $ start_station_number &lt;dbl&gt; 31618, 31646, 31111, 31116, 31101, 31601, 3…
-## $ start_station        &lt;chr&gt; "4th &amp; East Capitol St NE", "Maine Ave &amp; 9t…
-## $ end_station_number   &lt;dbl&gt; 31619, 31108, 31285, 31203, 31114, 31630, 3…
-## $ end_station          &lt;chr&gt; "Lincoln Park / 13th &amp; East Capitol St NE",…
-## $ bike_number          &lt;chr&gt; "W21076", "W00800", "W22760", "W23304", "W2…
-## $ member_type          &lt;chr&gt; "Member", "Member", "Member", "Member", "Me…
+## $ duration             &lt;dbl&gt; 369, 293, 717, 407, 383, 327, 167, 214, 4...
+## $ start_date           &lt;dttm&gt; 2018-01-01 00:18:07, 2018-01-01 00:23:41...
+## $ end_date             &lt;dttm&gt; 2018-01-01 00:24:17, 2018-01-01 00:28:35...
+## $ start_station_number &lt;dbl&gt; 31618, 31646, 31111, 31116, 31101, 31601,...
+## $ start_station        &lt;chr&gt; "4th &amp; East Capitol St NE", "Maine Ave &amp; ...
+## $ end_station_number   &lt;dbl&gt; 31619, 31108, 31285, 31203, 31114, 31630,...
+## $ end_station          &lt;chr&gt; "Lincoln Park / 13th &amp; East Capitol St NE...
+## $ bike_number          &lt;chr&gt; "W21076", "W00800", "W22760", "W23304", "...
+## $ member_type          &lt;chr&gt; "Member", "Member", "Member", "Member", "...
 ```
 
 ---
 
 ## Les données
 
-&lt;img src="index_files/figure-html/unnamed-chunk-55-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-62-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ## Les données
 
-&lt;img src="index_files/figure-html/unnamed-chunk-56-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-63-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1364,18 +1492,18 @@ files
 ```
 
 ```
-##  [1] "data/clean/capitale_bikeshare//201801_capitalbikeshare_tripdata.csv"
-##  [2] "data/clean/capitale_bikeshare//201802-capitalbikeshare-tripdata.csv"
-##  [3] "data/clean/capitale_bikeshare//201803-capitalbikeshare-tripdata.csv"
-##  [4] "data/clean/capitale_bikeshare//201804-capitalbikeshare-tripdata.csv"
-##  [5] "data/clean/capitale_bikeshare//201805-capitalbikeshare-tripdata.csv"
-##  [6] "data/clean/capitale_bikeshare//201806-capitalbikeshare-tripdata.csv"
-##  [7] "data/clean/capitale_bikeshare//201807-capitalbikeshare-tripdata.csv"
-##  [8] "data/clean/capitale_bikeshare//201808-capitalbikeshare-tripdata.csv"
-##  [9] "data/clean/capitale_bikeshare//201809-capitalbikeshare-tripdata.csv"
-## [10] "data/clean/capitale_bikeshare//201810-capitalbikeshare-tripdata.csv"
-## [11] "data/clean/capitale_bikeshare//201811-capitalbikeshare-tripdata.csv"
-## [12] "data/clean/capitale_bikeshare//201812-capitalbikeshare-tripdata.csv"
+##  [1] "data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv"
+##  [2] "data/clean/capitale_bikeshare/201802-capitalbikeshare-tripdata.csv"
+##  [3] "data/clean/capitale_bikeshare/201803-capitalbikeshare-tripdata.csv"
+##  [4] "data/clean/capitale_bikeshare/201804-capitalbikeshare-tripdata.csv"
+##  [5] "data/clean/capitale_bikeshare/201805-capitalbikeshare-tripdata.csv"
+##  [6] "data/clean/capitale_bikeshare/201806-capitalbikeshare-tripdata.csv"
+##  [7] "data/clean/capitale_bikeshare/201807-capitalbikeshare-tripdata.csv"
+##  [8] "data/clean/capitale_bikeshare/201808-capitalbikeshare-tripdata.csv"
+##  [9] "data/clean/capitale_bikeshare/201809-capitalbikeshare-tripdata.csv"
+## [10] "data/clean/capitale_bikeshare/201810-capitalbikeshare-tripdata.csv"
+## [11] "data/clean/capitale_bikeshare/201811-capitalbikeshare-tripdata.csv"
+## [12] "data/clean/capitale_bikeshare/201812-capitalbikeshare-tripdata.csv"
 ```
 
 ```r
@@ -1410,7 +1538,7 @@ file &lt;- "data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv"
 
 res &lt;- microbenchmark::microbenchmark(
   read.csv = read.csv(file),
-  read_csv =read_csv(file, col_type = cols()),
+  read_csv =read_csv(file, col_types = cols()),
   fread = data.table::fread(file),
   times = 50
 )
@@ -1418,7 +1546,7 @@ res &lt;- microbenchmark::microbenchmark(
 autoplot(res)
 ```
 
-&lt;img src="index_files/figure-html/unnamed-chunk-59-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-66-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1427,7 +1555,7 @@ class: inverse, center, middle
 
 # Peut-on aller plus loin?
 
-## Programmation parallelle avec `furrr`
+## Programmation parallèle avec `furrr`
 
 ---
 
@@ -1452,14 +1580,14 @@ install.packages("furrr")
 ##  [9] "future_invoke_map_chr" "future_invoke_map_dbl"
 ## [11] "future_invoke_map_dfc" "future_invoke_map_dfr"
 ## [13] "future_invoke_map_int" "future_invoke_map_lgl"
-## [15] "future_iwalk"          "future_map"           
-## [17] "future_map_at"         "future_map_chr"       
-## [19] "future_map_dbl"        "future_map_dfc"
+## [15] "future_map"            "future_map_at"        
+## [17] "future_map_chr"        "future_map_dbl"       
+## [19] "future_map_dfc"        "future_map_dfr"
 ```
 
 ---
 
-## Parallelisation
+## Parallélisation
 
 
 ```r
@@ -1485,15 +1613,15 @@ glimpse(df)
 ```
 ## Observations: 354,270
 ## Variables: 9
-## $ duration             &lt;dbl&gt; 776, 477, 152, 281, 251, 746, 1005, 287, 98…
-## $ start_date           &lt;dttm&gt; 2018-01-19 08:26:27, 2018-01-18 20:24:13, …
-## $ end_date             &lt;dttm&gt; 2018-01-19 08:39:23, 2018-01-18 20:32:11, …
-## $ start_station_number &lt;dbl&gt; 31031, 31604, 31267, 31286, 31203, 31213, 3…
-## $ start_station        &lt;chr&gt; "15th &amp; N Scott St", "3rd &amp; H St NW", "17th…
-## $ end_station_number   &lt;dbl&gt; 31225, 31109, 31213, 31519, 31254, 31110, 3…
-## $ end_station          &lt;chr&gt; "C &amp; O Canal &amp; Wisconsin Ave NW", "7th &amp; T …
-## $ bike_number          &lt;chr&gt; "W01382", "W21574", "W00341", "W00273", "W2…
-## $ member_type          &lt;chr&gt; "Member", "Member", "Member", "Member", "Me…
+## $ duration             &lt;dbl&gt; 776, 477, 152, 281, 251, 746, 1005, 287, ...
+## $ start_date           &lt;dttm&gt; 2018-01-19 08:26:27, 2018-01-18 20:24:13...
+## $ end_date             &lt;dttm&gt; 2018-01-19 08:39:23, 2018-01-18 20:32:11...
+## $ start_station_number &lt;dbl&gt; 31031, 31604, 31267, 31286, 31203, 31213,...
+## $ start_station        &lt;chr&gt; "15th &amp; N Scott St", "3rd &amp; H St NW", "17...
+## $ end_station_number   &lt;dbl&gt; 31225, 31109, 31213, 31519, 31254, 31110,...
+## $ end_station          &lt;chr&gt; "C &amp; O Canal &amp; Wisconsin Ave NW", "7th &amp; ...
+## $ bike_number          &lt;chr&gt; "W01382", "W21574", "W00341", "W00273", "...
+## $ member_type          &lt;chr&gt; "Member", "Member", "Member", "Member", "...
 ```
 
 ---
@@ -1692,7 +1820,7 @@ group_by(mtcars, cyl)
 ##  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
 ##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
 ## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
-## # … with 22 more rows
+## # ... with 22 more rows
 ```
 
 ---
@@ -1743,7 +1871,9 @@ head(df) # Afficher les 6 premières lignes
 
 ## L'opérateur pipe ` %&gt;% `
 
-L'opérateur pipe, `%&gt;%`, permet d'enchaîner les opérations en passant le résultat d'un fonction comme premier argument dans la fonction suivante. Lorsque vous voyez `%&gt;%`, vous devriez vous vous dire **ensuite**. Ce qui est très utile lorsqu'on a pas besoin des résultats intermédiaires.
+- L'opérateur pipe, `%&gt;%`, permet d'enchaîner les opérations en passant le résultat d'un fonction comme premier argument dans la fonction suivante. Ce qui est très utile lorsqu'on a pas besoin des résultats intermédiaires.
+
+- Lorsque vous voyez `%&gt;%`, vous devriez vous dire **ensuite**.
 
 &lt;center&gt;&lt;img src="https://magrittr.tidyverse.org/logo.png" width="200"/&gt;&lt;/center&gt;
 
@@ -1770,65 +1900,93 @@ log(3)
 
 Par défaut, ` %&gt;% ` passe le paramètre à la première position de la fonction suivante. On peut cependant contrôler ce comportement en utilisant le point `.` pour explicitement spécifier où doit aller le paramètre.
 
+Ces deux lignes sont équivalentes:
+
 
 ```r
-set.seed(1234)
-
 2 %&gt;% rnorm(n = 10, mean = .)
-```
-
-```
-##  [1]  0.7929343  2.2774292  3.0844412 -0.3456977  2.4291247  2.5060559
-##  [7]  1.4252600  1.4533681  1.4355480  1.1099622
-```
-
-```r
 rnorm(n = 10, mean = 2)
 ```
-
-```
-##  [1] 1.522807 1.001614 1.223746 2.064459 2.959494 1.889715 1.488990
-##  [8] 1.088805 1.162828 4.415835
-```
-
-
 ---
 
 ## La version compacte
 
+.pull-left[
+
 
 ```r
-files &lt;- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
+files &lt;- list.files(
+  "data/clean/capitale_bikeshare/",
+  full.names = TRUE
+)
 
-files %&gt;% 
-  map_df(read_csv) %&gt;% 
-  group_by(month = lubridate::month(start_date, label = TRUE)) %&gt;% 
+files %&gt;%
+  map_df(read_csv) %&gt;%
+  group_by(
+    month = lubridate::month(start_date)
+  ) %&gt;%
   summarise_if(is.numeric, mean)
 ```
 
 ```
 ## # A tibble: 12 x 4
 ##    month duration start_station_number end_station_number
-##    &lt;ord&gt;    &lt;dbl&gt;                &lt;dbl&gt;              &lt;dbl&gt;
-##  1 Jan       802.               31326.             31328.
-##  2 Feb       865.               31322.             31322.
-##  3 Mar      1092.               31321.             31322.
-##  4 Apr      1234.               31319.             31322.
-##  5 May      1276.               31321.             31322.
-##  6 Jun      1235.               31325.             31327.
-##  7 Jul      1352.               31323.             31321.
-##  8 Aug      1225.               31324.             31325.
-##  9 Sep      1134.               31328.             31330.
-## 10 Oct      1051.               31332.             31334.
-## 11 Nov       929.               31334.             31334.
-## 12 Dec       883.               31334.             31332.
+##    &lt;dbl&gt;    &lt;dbl&gt;                &lt;dbl&gt;              &lt;dbl&gt;
+##  1     1     802.               31326.             31328.
+##  2     2     865.               31322.             31322.
+##  3     3    1092.               31321.             31322.
+##  4     4    1234.               31319.             31322.
+##  5     5    1276.               31321.             31322.
+##  6     6    1235.               31325.             31327.
+##  7     7    1352.               31323.             31321.
+##  8     8    1225.               31324.             31325.
+##  9     9    1134.               31328.             31330.
+## 10    10    1051.               31332.             31334.
+## 11    11     929.               31334.             31334.
+## 12    12     883.               31334.             31332.
 ```
+]
+
+--
+
+.pull-right[
+
+&lt;center&gt;
+&lt;image src="https://media.giphy.com/media/iI6eeGjwScTCM/giphy.gif" height="300" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/image&gt;
+&lt;/center&gt;
+
+]
 
 ---
 
-&lt;center&gt;
-&lt;image src="https://media.giphy.com/media/iI6eeGjwScTCM/giphy.gif" height="200" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/image&gt;
-&lt;/center&gt;
+## Appliquer plusieurs fonctions
+
+Il est possible d'appliquer plus d'une fonction en utilisant le paramètre `.funs`.
+
+
+```r
+files %&gt;%
+  map_df(read_csv) %&gt;%
+  group_by(
+    month = lubridate::month(start_date, label = TRUE)
+  ) %&gt;%
+* summarise_if(is.numeric, .funs = list(mymean = mean, mysd = sd)) %&gt;%
+  glimpse() # La fonction glimpse() est une version pimpée de str()
+```
+
+```
+## Observations: 12
+## Variables: 7
+## $ month                       &lt;ord&gt; Jan, Feb, Mar, Apr, May, Jun, Jul,...
+## $ duration_mymean             &lt;dbl&gt; 801.5229, 865.4528, 1092.4281, 123...
+## $ start_station_number_mymean &lt;dbl&gt; 31325.86, 31322.42, 31320.56, 3131...
+## $ end_station_number_mymean   &lt;dbl&gt; 31328.16, 31322.27, 31321.56, 3132...
+## $ duration_mysd               &lt;dbl&gt; 1456.249, 1725.301, 2061.086, 2069...
+## $ start_station_number_mysd   &lt;dbl&gt; 227.3051, 223.2809, 217.6609, 216....
+## $ end_station_number_mysd     &lt;dbl&gt; 225.8574, 220.9612, 213.6642, 215....
+```
+
+
 
 ---
 
@@ -1838,7 +1996,7 @@ class: inverse
 
 .full-width[.content-box-gray[Utiliser les concepts vu aujourd'hui pour reproduire le graphique suivant. Il s'agit de calculer la moyenne de la variable `duration` par jour et ce pour chaque mois de l'année.]]
 
-&lt;img src="index_files/figure-html/unnamed-chunk-75-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-83-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -1871,9 +2029,9 @@ mtcars %&gt;%
 ## # A tibble: 3 x 2
 ##     cyl data              
 ##   &lt;dbl&gt; &lt;list&gt;            
-## 1     6 &lt;tibble [7 × 10]&gt; 
-## 2     4 &lt;tibble [11 × 10]&gt;
-## 3     8 &lt;tibble [14 × 10]&gt;
+## 1     6 &lt;tibble [7 x 10]&gt; 
+## 2     4 &lt;tibble [11 x 10]&gt;
+## 3     8 &lt;tibble [14 x 10]&gt;
 ```
 
 ---
@@ -1904,14 +2062,14 @@ mtcars %&gt;%
 ##  8     4  22.8  108     93  3.85  2.32  18.6     1     1     4     1
 ##  9     4  24.4  147.    62  3.69  3.19  20       1     0     4     2
 ## 10     4  22.8  141.    95  3.92  3.15  22.9     1     0     4     2
-## # … with 22 more rows
+## # ... with 22 more rows
 ```
 
 ---
 
 ## La fonction `nest()`
 
-En combinant les fonctions `nest()` et `map()`, il est possible de rapidement créer un modèle linéraire pour chacun des groupes.
+En combinant les fonctions `nest()` et `map()`, il est possible de rapidement créer un modèle linéaire pour chacun des groupes.
 
 
 ```r
@@ -1925,16 +2083,16 @@ mtcars %&gt;%
 ## # A tibble: 3 x 3
 ##     cyl data               mod     
 ##   &lt;dbl&gt; &lt;list&gt;             &lt;list&gt;  
-## 1     6 &lt;tibble [7 × 10]&gt;  &lt;S3: lm&gt;
-## 2     4 &lt;tibble [11 × 10]&gt; &lt;S3: lm&gt;
-## 3     8 &lt;tibble [14 × 10]&gt; &lt;S3: lm&gt;
+## 1     6 &lt;tibble [7 x 10]&gt;  &lt;S3: lm&gt;
+## 2     4 &lt;tibble [11 x 10]&gt; &lt;S3: lm&gt;
+## 3     8 &lt;tibble [14 x 10]&gt; &lt;S3: lm&gt;
 ```
 
 La *data frame* contient maintenant:
 
 - La ou les variables de regroupement.
 - Les données compressées (colonne `data`).
-- Les modèles linéraires (colonne `mod`).
+- Les modèles linéaires (colonne `mod`).
 
 **Les risques d'erreurs sont de beaucoup diminués, car tout est encapsulé dans un *data frame*.**
 
@@ -1972,7 +2130,7 @@ class: inverse
 
 ## À vous de jouer!
 
-.full-width[.content-box-gray[En utilisant le jeu de données `cars`, créer un modèle linéraire multiple (`mpg ~ horsepower + weight`) pour les `model` de chaque année. Par la suite, ajouter une colonne dans le *data frame* qui contient le R2 de la régression.]]
+.full-width[.content-box-gray[En utilisant le jeu de données `cars`, créer un modèle linéaire multiple (`mpg ~ horsepower + weight`) pour les `model` de chaque année. Par la suite, ajouter une colonne dans le *data frame* qui contient le R2 de la régression.]]
 
 
 ```r
@@ -1984,24 +2142,24 @@ cars
 ## # A tibble: 406 x 9
 ##    car     mpg cylinders displacement horsepower weight acceleration model
 ##    &lt;chr&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
-##  1 Chev…    18         8          307        130   3504         12      70
-##  2 Buic…    15         8          350        165   3693         11.5    70
-##  3 Plym…    18         8          318        150   3436         11      70
-##  4 AMC …    16         8          304        150   3433         12      70
-##  5 Ford…    17         8          302        140   3449         10.5    70
-##  6 Ford…    15         8          429        198   4341         10      70
-##  7 Chev…    14         8          454        220   4354          9      70
-##  8 Plym…    14         8          440        215   4312          8.5    70
-##  9 Pont…    14         8          455        225   4425         10      70
-## 10 AMC …    NA         8          390        190   3850          8.5    70
-## # … with 396 more rows, and 1 more variable: origin &lt;chr&gt;
+##  1 Chev~    18         8          307        130   3504         12      70
+##  2 Buic~    15         8          350        165   3693         11.5    70
+##  3 Plym~    18         8          318        150   3436         11      70
+##  4 AMC ~    16         8          304        150   3433         12      70
+##  5 Ford~    17         8          302        140   3449         10.5    70
+##  6 Ford~    15         8          429        198   4341         10      70
+##  7 Chev~    14         8          454        220   4354          9      70
+##  8 Plym~    14         8          440        215   4312          8.5    70
+##  9 Pont~    14         8          455        225   4425         10      70
+## 10 AMC ~    NA         8          390        190   3850          8.5    70
+## # ... with 396 more rows, and 1 more variable: origin &lt;chr&gt;
 ```
 
 ---
 
 ## Les données
 
-&lt;img src="index_files/figure-html/unnamed-chunk-81-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-89-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -2013,7 +2171,7 @@ cars
 - R est un langage de programmation fonctionnelle qui permet de faire beaucoup de chose rapidement et de manière élégante.
 
 - La programmation fonctionnelle permet de diminuer les chances d'erreurs dans le code.
-  - Si erreur, plus facilement corrigable, car on modifie à un seul endroit.
+  - Si erreur, plus facilement corrigeable, car on modifie à un seul endroit.
   
 - La librairie `purrr` offre un ensemble d'outils qui permet d'appliquer efficacement plusieurs concepts de la programmation fonctionnelle.
 
