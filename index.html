@@ -599,7 +599,7 @@ Advanced R (Chapman &amp; Hall/CRC The R Series)
 
 - L'idée de passer d'une fonction à une autre est une idée extrêmement puissante et c'est l'un des comportements qui font de R un langage de programmation fonctionnel.
 
-- Comparé à l'utilisation d'une boucle, l'accent est mis sur l'opération effectuée (*i.e. la fonction à appliquer*) et non sur la mécanique nécessaire pour naviguer au travers des éléments et sur comment stocker le résultat.
+- Comparé à l'utilisation d'une boucle, l'accent est mis sur l'opération effectuée (*i.e. la fonction à appliquer*) et non sur la mécanique nécessaire pour naviguer au travers des éléments et sur comment enregistrer le résultat.
 
 - Il y a de fortes chances que vous ayez déjà utilisé la fonction `lapply()`. La fonction `lapply()` est appelé **un fonctionnel**, car elle utilise une fonction comme paramètre.
 
@@ -1905,6 +1905,7 @@ Ces deux lignes sont équivalentes:
 
 ```r
 2 %&gt;% rnorm(n = 10, mean = .)
+
 rnorm(n = 10, mean = 2)
 ```
 ---
