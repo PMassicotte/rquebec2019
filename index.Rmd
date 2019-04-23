@@ -717,23 +717,6 @@ map(1:3, ~log(.x))
 
 ---
 
-## Les fonctions anonymes et formules: un résumé
-
-Il y a trois façons différentes d'utiliser des fonctions anonymes avec `purrr`.
-
-```{r, eval=FALSE}
-x <- 1:3
-
-map(x, function(x) log(x, base = 2))
-
-map(x, log, base = 2)
-
-map(x, ~log(.x, base = 2))
-```
-
-
----
-
 class: inverse
 
 ## Exercice
@@ -807,6 +790,23 @@ map(df, mean)
 {{map(df, mean, na.rm = TRUE)}}
 ```
 ]
+
+---
+
+## Les fonctions anonymes et formules: un résumé
+
+Il y a trois façons différentes d'utiliser des fonctions avec `purrr`.
+
+```{r, eval=FALSE}
+y <- 1:3
+
+map(y, function(x) log(x, base = 2)) # Avec fonction anonyme
+
+map(y, ~log(.x, base = 2)) # Avec formule
+
+map(, log, base = 2)
+
+```
 
 ---
 
@@ -1131,8 +1131,31 @@ Similaire au système Bixi à Montréal.
 
 ---
 
-class: center
-background-image: url("images/capital_bikeshare_map.png")
+```{r, cache=TRUE, echo=FALSE, warning=FALSE, fig.align='center', fig.width=10, fig.height=9, dev='Cairo_png', dpi=300}
+files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
+
+df <- files %>% 
+  map_df(read_csv)
+
+coords <- read_csv("/home/pmassicotte/Downloads/Capital_Bike_Share_Locations.csv") %>% 
+  janitor::clean_names() %>% 
+  select(terminal_number, longitude, latitude)
+
+df <- coords %>% 
+  rename(longitude_start = longitude, latitude_start = latitude) %>% 
+  right_join(df, by = c("terminal_number" = "start_station_number"))
+
+df <- coords %>% 
+  rename(longitude_end = longitude, latitude_end = latitude) %>% 
+  right_join(df, by = c("terminal_number" = "end_station_number"))
+
+library(ggmap)
+
+qmplot(longitude, latitude, data = coords, maptype = "toner-lite", color = I("red"), size = I(0.5)) +
+  geom_segment(data = df %>% sample_frac(0.1), aes(x = longitude_start, y = latitude_start, xend = longitude_end, yend = latitude_end), size = 0.5, alpha = 0.1, inherit.aes = FALSE) +
+  geom_point(data = coords, aes(x = longitude, y = latitude), color = "red", inherit.aes = FALSE, size = 0.5)
+```
+
 
 ---
 

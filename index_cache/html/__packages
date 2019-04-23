@@ -9,7 +9,5 @@ dplyr
 stringr
 forcats
 extrafont
+ggmap
 ggthemes
-future
-furrr
-magick

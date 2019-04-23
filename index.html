@@ -881,24 +881,6 @@ map(1:3, ~log(.x))
 
 ---
 
-## Les fonctions anonymes et formules: un résumé
-
-Il y a trois façons différentes d'utiliser des fonctions anonymes avec `purrr`.
-
-
-```r
-x &lt;- 1:3
-
-map(x, function(x) log(x, base = 2))
-
-map(x, log, base = 2)
-
-map(x, ~log(.x, base = 2))
-```
-
-
----
-
 class: inverse
 
 ## Exercice
@@ -917,10 +899,10 @@ head(df, 3)
 ## # A tibble: 3 x 9
 ##   car     mpg cylinders displacement horsepower weight acceleration model
 ##   &lt;chr&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
-## 1 Chev~    18         8          307        130   3504         12      70
-## 2 Buic~    15         8          350        165   3693         11.5    70
-## 3 Plym~    18         8          318        150   3436         11      70
-## # ... with 1 more variable: origin &lt;chr&gt;
+## 1 Chev…    18         8          307        130   3504         12      70
+## 2 Buic…    15         8          350        165   3693         11.5    70
+## 3 Plym…    18         8          318        150   3436         11      70
+## # … with 1 more variable: origin &lt;chr&gt;
 ```
 
 ```r
@@ -1018,6 +1000,23 @@ map(df, mean)
 ## [1] 75.92118
 ```
 ]
+
+---
+
+## Les fonctions anonymes et formules: un résumé
+
+Il y a trois façons différentes d'utiliser des fonctions avec `purrr`.
+
+
+```r
+y &lt;- 1:3
+
+map(y, function(x) log(x, base = 2)) # Avec fonction anonyme
+
+map(y, ~log(.x, base = 2)) # Avec formule
+
+map(, log, base = 2)
+```
 
 ---
 
@@ -1433,8 +1432,8 @@ Similaire au système Bixi à Montréal.
 
 ---
 
-class: center
-background-image: url("images/capital_bikeshare_map.png")
+&lt;img src="index_files/figure-html/unnamed-chunk-61-1.png" style="display: block; margin: auto;" /&gt;
+
 
 ---
 
@@ -1452,28 +1451,28 @@ https://s3.amazonaws.com/capitalbikeshare-data/index.html
 ```
 ## Observations: 16,859
 ## Variables: 9
-## $ duration             &lt;dbl&gt; 369, 293, 717, 407, 383, 327, 167, 214, 4...
-## $ start_date           &lt;dttm&gt; 2018-01-01 00:18:07, 2018-01-01 00:23:41...
-## $ end_date             &lt;dttm&gt; 2018-01-01 00:24:17, 2018-01-01 00:28:35...
-## $ start_station_number &lt;dbl&gt; 31618, 31646, 31111, 31116, 31101, 31601,...
-## $ start_station        &lt;chr&gt; "4th &amp; East Capitol St NE", "Maine Ave &amp; ...
-## $ end_station_number   &lt;dbl&gt; 31619, 31108, 31285, 31203, 31114, 31630,...
-## $ end_station          &lt;chr&gt; "Lincoln Park / 13th &amp; East Capitol St NE...
-## $ bike_number          &lt;chr&gt; "W21076", "W00800", "W22760", "W23304", "...
-## $ member_type          &lt;chr&gt; "Member", "Member", "Member", "Member", "...
+## $ duration             &lt;dbl&gt; 369, 293, 717, 407, 383, 327, 167, 214, 463…
+## $ start_date           &lt;dttm&gt; 2018-01-01 00:18:07, 2018-01-01 00:23:41, …
+## $ end_date             &lt;dttm&gt; 2018-01-01 00:24:17, 2018-01-01 00:28:35, …
+## $ start_station_number &lt;dbl&gt; 31618, 31646, 31111, 31116, 31101, 31601, 3…
+## $ start_station        &lt;chr&gt; "4th &amp; East Capitol St NE", "Maine Ave &amp; 9t…
+## $ end_station_number   &lt;dbl&gt; 31619, 31108, 31285, 31203, 31114, 31630, 3…
+## $ end_station          &lt;chr&gt; "Lincoln Park / 13th &amp; East Capitol St NE",…
+## $ bike_number          &lt;chr&gt; "W21076", "W00800", "W22760", "W23304", "W2…
+## $ member_type          &lt;chr&gt; "Member", "Member", "Member", "Member", "Me…
 ```
 
 ---
 
 ## Les données
 
-&lt;img src="index_files/figure-html/unnamed-chunk-62-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-63-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ## Les données
 
-&lt;img src="index_files/figure-html/unnamed-chunk-63-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-64-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1492,18 +1491,18 @@ files
 ```
 
 ```
-##  [1] "data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv"
-##  [2] "data/clean/capitale_bikeshare/201802-capitalbikeshare-tripdata.csv"
-##  [3] "data/clean/capitale_bikeshare/201803-capitalbikeshare-tripdata.csv"
-##  [4] "data/clean/capitale_bikeshare/201804-capitalbikeshare-tripdata.csv"
-##  [5] "data/clean/capitale_bikeshare/201805-capitalbikeshare-tripdata.csv"
-##  [6] "data/clean/capitale_bikeshare/201806-capitalbikeshare-tripdata.csv"
-##  [7] "data/clean/capitale_bikeshare/201807-capitalbikeshare-tripdata.csv"
-##  [8] "data/clean/capitale_bikeshare/201808-capitalbikeshare-tripdata.csv"
-##  [9] "data/clean/capitale_bikeshare/201809-capitalbikeshare-tripdata.csv"
-## [10] "data/clean/capitale_bikeshare/201810-capitalbikeshare-tripdata.csv"
-## [11] "data/clean/capitale_bikeshare/201811-capitalbikeshare-tripdata.csv"
-## [12] "data/clean/capitale_bikeshare/201812-capitalbikeshare-tripdata.csv"
+##  [1] "data/clean/capitale_bikeshare//201801_capitalbikeshare_tripdata.csv"
+##  [2] "data/clean/capitale_bikeshare//201802-capitalbikeshare-tripdata.csv"
+##  [3] "data/clean/capitale_bikeshare//201803-capitalbikeshare-tripdata.csv"
+##  [4] "data/clean/capitale_bikeshare//201804-capitalbikeshare-tripdata.csv"
+##  [5] "data/clean/capitale_bikeshare//201805-capitalbikeshare-tripdata.csv"
+##  [6] "data/clean/capitale_bikeshare//201806-capitalbikeshare-tripdata.csv"
+##  [7] "data/clean/capitale_bikeshare//201807-capitalbikeshare-tripdata.csv"
+##  [8] "data/clean/capitale_bikeshare//201808-capitalbikeshare-tripdata.csv"
+##  [9] "data/clean/capitale_bikeshare//201809-capitalbikeshare-tripdata.csv"
+## [10] "data/clean/capitale_bikeshare//201810-capitalbikeshare-tripdata.csv"
+## [11] "data/clean/capitale_bikeshare//201811-capitalbikeshare-tripdata.csv"
+## [12] "data/clean/capitale_bikeshare//201812-capitalbikeshare-tripdata.csv"
 ```
 
 ```r
@@ -1546,7 +1545,7 @@ res &lt;- microbenchmark::microbenchmark(
 autoplot(res)
 ```
 
-&lt;img src="index_files/figure-html/unnamed-chunk-66-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-67-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1580,9 +1579,9 @@ install.packages("furrr")
 ##  [9] "future_invoke_map_chr" "future_invoke_map_dbl"
 ## [11] "future_invoke_map_dfc" "future_invoke_map_dfr"
 ## [13] "future_invoke_map_int" "future_invoke_map_lgl"
-## [15] "future_map"            "future_map_at"        
-## [17] "future_map_chr"        "future_map_dbl"       
-## [19] "future_map_dfc"        "future_map_dfr"
+## [15] "future_iwalk"          "future_map"           
+## [17] "future_map_at"         "future_map_chr"       
+## [19] "future_map_dbl"        "future_map_dfc"
 ```
 
 ---
@@ -1613,15 +1612,15 @@ glimpse(df)
 ```
 ## Observations: 354,270
 ## Variables: 9
-## $ duration             &lt;dbl&gt; 776, 477, 152, 281, 251, 746, 1005, 287, ...
-## $ start_date           &lt;dttm&gt; 2018-01-19 08:26:27, 2018-01-18 20:24:13...
-## $ end_date             &lt;dttm&gt; 2018-01-19 08:39:23, 2018-01-18 20:32:11...
-## $ start_station_number &lt;dbl&gt; 31031, 31604, 31267, 31286, 31203, 31213,...
-## $ start_station        &lt;chr&gt; "15th &amp; N Scott St", "3rd &amp; H St NW", "17...
-## $ end_station_number   &lt;dbl&gt; 31225, 31109, 31213, 31519, 31254, 31110,...
-## $ end_station          &lt;chr&gt; "C &amp; O Canal &amp; Wisconsin Ave NW", "7th &amp; ...
-## $ bike_number          &lt;chr&gt; "W01382", "W21574", "W00341", "W00273", "...
-## $ member_type          &lt;chr&gt; "Member", "Member", "Member", "Member", "...
+## $ duration             &lt;dbl&gt; 776, 477, 152, 281, 251, 746, 1005, 287, 98…
+## $ start_date           &lt;dttm&gt; 2018-01-19 08:26:27, 2018-01-18 20:24:13, …
+## $ end_date             &lt;dttm&gt; 2018-01-19 08:39:23, 2018-01-18 20:32:11, …
+## $ start_station_number &lt;dbl&gt; 31031, 31604, 31267, 31286, 31203, 31213, 3…
+## $ start_station        &lt;chr&gt; "15th &amp; N Scott St", "3rd &amp; H St NW", "17th…
+## $ end_station_number   &lt;dbl&gt; 31225, 31109, 31213, 31519, 31254, 31110, 3…
+## $ end_station          &lt;chr&gt; "C &amp; O Canal &amp; Wisconsin Ave NW", "7th &amp; T …
+## $ bike_number          &lt;chr&gt; "W01382", "W21574", "W00341", "W00273", "W2…
+## $ member_type          &lt;chr&gt; "Member", "Member", "Member", "Member", "Me…
 ```
 
 ---
@@ -1820,7 +1819,7 @@ group_by(mtcars, cyl)
 ##  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
 ##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
 ## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
 ---
@@ -1978,13 +1977,13 @@ files %&gt;%
 ```
 ## Observations: 12
 ## Variables: 7
-## $ month                       &lt;ord&gt; Jan, Feb, Mar, Apr, May, Jun, Jul,...
-## $ duration_mymean             &lt;dbl&gt; 801.5229, 865.4528, 1092.4281, 123...
-## $ start_station_number_mymean &lt;dbl&gt; 31325.86, 31322.42, 31320.56, 3131...
-## $ end_station_number_mymean   &lt;dbl&gt; 31328.16, 31322.27, 31321.56, 3132...
-## $ duration_mysd               &lt;dbl&gt; 1456.249, 1725.301, 2061.086, 2069...
-## $ start_station_number_mysd   &lt;dbl&gt; 227.3051, 223.2809, 217.6609, 216....
-## $ end_station_number_mysd     &lt;dbl&gt; 225.8574, 220.9612, 213.6642, 215....
+## $ month                       &lt;ord&gt; Jan, Feb, Mar, Apr, May, Jun, Jul, A…
+## $ duration_mymean             &lt;dbl&gt; 801.5229, 865.4528, 1092.4281, 1233.…
+## $ start_station_number_mymean &lt;dbl&gt; 31325.86, 31322.42, 31320.56, 31318.…
+## $ end_station_number_mymean   &lt;dbl&gt; 31328.16, 31322.27, 31321.56, 31322.…
+## $ duration_mysd               &lt;dbl&gt; 1456.249, 1725.301, 2061.086, 2069.9…
+## $ start_station_number_mysd   &lt;dbl&gt; 227.3051, 223.2809, 217.6609, 216.72…
+## $ end_station_number_mysd     &lt;dbl&gt; 225.8574, 220.9612, 213.6642, 215.49…
 ```
 
 
@@ -1997,7 +1996,7 @@ class: inverse
 
 .full-width[.content-box-gray[Utiliser les concepts vu aujourd'hui pour reproduire le graphique suivant. Il s'agit de calculer la moyenne de la variable `duration` par jour et ce pour chaque mois de l'année.]]
 
-&lt;img src="index_files/figure-html/unnamed-chunk-83-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-84-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -2030,9 +2029,9 @@ mtcars %&gt;%
 ## # A tibble: 3 x 2
 ##     cyl data              
 ##   &lt;dbl&gt; &lt;list&gt;            
-## 1     6 &lt;tibble [7 x 10]&gt; 
-## 2     4 &lt;tibble [11 x 10]&gt;
-## 3     8 &lt;tibble [14 x 10]&gt;
+## 1     6 &lt;tibble [7 × 10]&gt; 
+## 2     4 &lt;tibble [11 × 10]&gt;
+## 3     8 &lt;tibble [14 × 10]&gt;
 ```
 
 ---
@@ -2063,7 +2062,7 @@ mtcars %&gt;%
 ##  8     4  22.8  108     93  3.85  2.32  18.6     1     1     4     1
 ##  9     4  24.4  147.    62  3.69  3.19  20       1     0     4     2
 ## 10     4  22.8  141.    95  3.92  3.15  22.9     1     0     4     2
-## # ... with 22 more rows
+## # … with 22 more rows
 ```
 
 ---
@@ -2084,9 +2083,9 @@ mtcars %&gt;%
 ## # A tibble: 3 x 3
 ##     cyl data               mod     
 ##   &lt;dbl&gt; &lt;list&gt;             &lt;list&gt;  
-## 1     6 &lt;tibble [7 x 10]&gt;  &lt;S3: lm&gt;
-## 2     4 &lt;tibble [11 x 10]&gt; &lt;S3: lm&gt;
-## 3     8 &lt;tibble [14 x 10]&gt; &lt;S3: lm&gt;
+## 1     6 &lt;tibble [7 × 10]&gt;  &lt;S3: lm&gt;
+## 2     4 &lt;tibble [11 × 10]&gt; &lt;S3: lm&gt;
+## 3     8 &lt;tibble [14 × 10]&gt; &lt;S3: lm&gt;
 ```
 
 La *data frame* contient maintenant:
@@ -2143,24 +2142,24 @@ cars
 ## # A tibble: 406 x 9
 ##    car     mpg cylinders displacement horsepower weight acceleration model
 ##    &lt;chr&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
-##  1 Chev~    18         8          307        130   3504         12      70
-##  2 Buic~    15         8          350        165   3693         11.5    70
-##  3 Plym~    18         8          318        150   3436         11      70
-##  4 AMC ~    16         8          304        150   3433         12      70
-##  5 Ford~    17         8          302        140   3449         10.5    70
-##  6 Ford~    15         8          429        198   4341         10      70
-##  7 Chev~    14         8          454        220   4354          9      70
-##  8 Plym~    14         8          440        215   4312          8.5    70
-##  9 Pont~    14         8          455        225   4425         10      70
-## 10 AMC ~    NA         8          390        190   3850          8.5    70
-## # ... with 396 more rows, and 1 more variable: origin &lt;chr&gt;
+##  1 Chev…    18         8          307        130   3504         12      70
+##  2 Buic…    15         8          350        165   3693         11.5    70
+##  3 Plym…    18         8          318        150   3436         11      70
+##  4 AMC …    16         8          304        150   3433         12      70
+##  5 Ford…    17         8          302        140   3449         10.5    70
+##  6 Ford…    15         8          429        198   4341         10      70
+##  7 Chev…    14         8          454        220   4354          9      70
+##  8 Plym…    14         8          440        215   4312          8.5    70
+##  9 Pont…    14         8          455        225   4425         10      70
+## 10 AMC …    NA         8          390        190   3850          8.5    70
+## # … with 396 more rows, and 1 more variable: origin &lt;chr&gt;
 ```
 
 ---
 
 ## Les données
 
-&lt;img src="index_files/figure-html/unnamed-chunk-89-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-90-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 
