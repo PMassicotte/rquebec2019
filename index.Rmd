@@ -1169,7 +1169,7 @@ https://s3.amazonaws.com/capitalbikeshare-data/index.html
 
 - Exemple pour le mois de janvier 2018.
 
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, cache=TRUE, cache.extra = file.info("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv")}
 read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv") %>% 
   arrange(start_date) %>% 
   glimpse()
@@ -1180,7 +1180,7 @@ read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv") %
 
 ## Les données
 
-```{r, echo=FALSE, fig.height=4, fig.align='center'}
+```{r, echo=FALSE, fig.height=4, fig.align='center', cache=TRUE, cache.extra = file.info("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv")}
 
 library(ggthemes)
 
@@ -1210,7 +1210,7 @@ df %>%
 
 ## Les données
 
-```{r, echo=FALSE, fig.height=4, fig.align='center'}
+```{r, echo=FALSE, fig.height=4, fig.align='center', cache=TRUE}
 df <- read_csv("data/clean/capitale_bikeshare/201809-capitalbikeshare-tripdata.csv")
 
 files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
@@ -1314,7 +1314,7 @@ ls("package:furrr") %>%
 
 ## Parallélisation
 
-```{r, message=FALSE}
+```{r, message=FALSE, cache=TRUE}
 library(furrr)
 {{availableCores()}}
 
@@ -1360,7 +1360,7 @@ library(tidyverse)
 
 Dans un exercice précédent, nous devions calculer la moyenne de la colonne `duration` pour chaque mois de 2018. Disons maintenant que nous voulons calculer la moyenne de toutes les colonnes numériques.
 
-```{r, message=FALSE}
+```{r, message=FALSE, cache=TRUE}
 files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
 
 calculate_mean <- function(file) {
@@ -1381,7 +1381,7 @@ calculate_mean <- function(file) {
 
 ## Retour sur l'exercice précédent
 
-```{r, message=FALSE}
+```{r, message=FALSE, cache=TRUE}
 res <- map(files, calculate_mean)
 head(res, 1)
 ```
@@ -1490,7 +1490,7 @@ Calculer **les moyennes mensuelles** de toutes les colonnes numériques, en util
 
 ## Calculer les moyennes mensuelles
 
-```{r}
+```{r, cache=TRUE}
 # Étape 1: Lire tous les fichiers
 files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
 df <- map_df(files, read_csv)
@@ -1542,7 +1542,7 @@ rnorm(n = 10, mean = 2)
 
 .pull-left[
 
-```{r}
+```{r, cache = TRUE}
 files <- list.files(
   "data/clean/capitale_bikeshare/",
   full.names = TRUE
@@ -1573,7 +1573,7 @@ files %>%
 
 Il est possible d'appliquer plus d'une fonction en utilisant le paramètre `.funs`.
 
-```{r}
+```{r, cache=TRUE}
 files %>%
   map_df(read_csv) %>%
   group_by(
@@ -1593,7 +1593,7 @@ class: inverse
 
 .full-width[.content-box-gray[Utiliser les concepts vu aujourd'hui pour reproduire le graphique suivant. Il s'agit de calculer la moyenne de la variable `duration` par jour et ce pour chaque mois de l'année.]]
 
-```{r, echo=FALSE, fig.width=5, fig.height=3, fig.align='center'}
+```{r, echo=FALSE, fig.width=5, fig.height=3, fig.align='center', cache=TRUE}
 files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
 
 df <- files %>% 
