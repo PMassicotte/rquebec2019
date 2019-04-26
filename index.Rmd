@@ -41,7 +41,7 @@ htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 
 <b>Assistant de recherche à Takuvik (télédétection, modélisation, data science)</b><br>
 
-- Utilise R depuis plus de 6 ans<br>
+- Utilise R depuis plus de 8 ans<br>
 - Auteur de 3 librairies sur CRAN<br>
 - Blog R: www.pmassicotte.com<br>
 
@@ -74,20 +74,19 @@ class: inverse, center, middle
 
 4. Données pour les exercices: **https://bit.ly/2W3KJjw**
   * Théorie + exercices après chaque concept
-  * Votre participation est essentielle!
+  * **Votre participation est essentielle!**
 
 ---
 
-## *Data science*
+## La manipulation de données
 
 Dans plusieurs domaines, les données sont produites très rapidement:
 
-- Environnement: météo, capteurs automatisés (salinité)
+- Environnement: capteurs automatisés (température, précipitation, etc.)
 - Finances / assurances
-- Transports: géolocalisation 
-- etc.
+- Transports: géolocalisation
 
-La manipulation de ces données demande beaucoup de temps.
+La manipulation de ces données demande beaucoup de temps et le cycle doit souvent être répété.
 
 <figure>
 <center>
@@ -98,7 +97,7 @@ La manipulation de ces données demande beaucoup de temps.
 
 ---
 
-## *Data science*
+## La manipulation de données
 
 Il est important d'apprendre et de mettre en pratique les outils essentiels pour capturer, manipuler et partager des données de manière efficace.
 
@@ -163,7 +162,7 @@ x
 
 ## Répéter la même opération sur plusieurs colonnes
 
-On effectue la même opération sur toutes les colonnes de `df`.
+Lorsque nous avez commencé à programmer, il y a de forte chance qu'on ayons procédé de la manière suivante: **on répète la même opération sur toutes les colonnes de `df`**.
 
 ```{r}
 # Normaliser la colonne a
@@ -175,8 +174,8 @@ df$b <- (df$b - min(df$b, na.rm = TRUE)) /
   (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
 
 # Normaliser la colonne c
-df$c <- (df$c - min(df$a, na.rm = TRUE)) /
-  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$c <- (df$c - min(df$c, na.rm = TRUE)) /
+  (max(df$c, na.rm = TRUE) - min(df$b, na.rm = TRUE))
 
 # Normaliser la colonne d
 df$d <- (df$d - min(df$d, na.rm = TRUE)) /
@@ -205,8 +204,8 @@ df$a <- (df$a - min(df$a, na.rm = TRUE)) /
   (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
 df$b <- (df$b - min(df$b, na.rm = TRUE)) /
   (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
-df$c <- (df$c - min(df$a, na.rm = TRUE)) /
-  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$c <- (df$c - min(df$c, na.rm = TRUE)) /
+  (max(df$c, na.rm = TRUE) - min(df$b, na.rm = TRUE))
 df$d <- (df$d - min(df$d, na.rm = TRUE)) /
   (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
 ```
@@ -221,7 +220,7 @@ df$a <- (df$a - min(df$a, na.rm = TRUE)) /
 df$b <- (df$b - min(df$b, na.rm = TRUE)) /
   (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
 df$c <- (df$c - min(df$c, na.rm = TRUE)) /
-  {{(max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))}}
+  {{(max(df$c, na.rm = TRUE) - min(df$b, na.rm = TRUE))}}
 df$d <- (df$d - min(df$d, na.rm = TRUE)) /
   (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
 ```
@@ -453,7 +452,12 @@ class: inverse, center, middle
 
 Contrairement à l'idée reçue, les boucles en R ne sont pas nécessairement lentes. La plupart du temps, la lenteur des boucles est liée au fait que la variable qui reçoit le résultat n'est pas initialisée.
 
-Dans l'exemple suivant, on veut créer une boucle qui créer un vecteur de 1000 éléments avec les valeurs de 1 à 1000.
+Dans l'exemple suivant, on veut créer une boucle qui créer un vecteur de 1000 éléments avec les valeurs de 1 à 1000. Evidemment, on aurait du utiliser:
+
+```{r, eval=FALSE}
+v <- 1:1000
+```
+
 
 .pull-left[
 
@@ -503,7 +507,6 @@ timing <- microbenchmark::microbenchmark(f_slow(n), f_fast(n))
 autoplot(timing)
 ```
 
-
 ---
 
 class: inverse, center, middle
@@ -537,7 +540,7 @@ Advanced R (Chapman & Hall/CRC The R Series)
 
 - Le code est plus compacte (plus facile à lire et comprendre).
 
-- Plus facile à gérer et modifier: lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. Ensuite, chaque emplacement de votre code où la même tâche est effectuée est automatiquement mis à jour.
+- Plus facile à maintenir: lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. Ensuite, chaque emplacement de votre code où la même tâche est effectuée est automatiquement mis à jour.
 
 ```{r, eval=FALSE}
 scale_vector <- function(x) {
@@ -602,7 +605,7 @@ class: inverse, center, middle
 
 ## La fonction `map()`
 
-Dans ce premier examole, on veux ajouter la valeur de 1 à tous les éléments d'un vecteur numérique.
+Dans ce premier exemple, on veux ajouter la valeur de 1 à tous les éléments d'un vecteur numérique.
 
 ```{r}
 # Créer une fonction "f" qui prend un nombre et lui ajoute la valeur de 1.
@@ -611,7 +614,7 @@ f <- function(x) {
 }
 
 # "Appliquer" la fonction "f" au vecteur 1, 2, 3
-map(c(1, 2, 3), f)
+map(.x = c(1, 2, 3), .f = f)
 ```
 
 <br>
@@ -621,7 +624,18 @@ map(c(1, 2, 3), f)
 
 ## La fonction `map()`
 
-On veut connaître la classe de chaque colonne du *data frame* `mtcars`.
+Notez que l’utilisation de `map()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant les capacités de vectorisation de R:
+
+```{r}
+x <- 1:3
+x + 1
+```
+
+---
+
+## La fonction `map()`
+
+Dans ce deuxième exemple, on veut connaître la classe de chaque colonne du *data frame* `mtcars`.
 
 ```{r}
 head(mtcars)
@@ -678,10 +692,11 @@ f <- function(x) {
 }
 
 # "Appliquer" la fonction "f" au vecteur 1, 2, 3
-map(1:3, f)
+map(.x = c(1, 2, 3), .f = f)
 ```
 
-- Création d'une fonction `f()` très simple.
+- La fonction `f()` est très simple, on pourrait éviter de créer explicitement une fonction.
+
 - Il est possible d'utiliser des **fonctions anonymes** quand ça ne vaut pas la peine de lui donner un nom.
 
 ---
@@ -694,13 +709,6 @@ L'exemple précédent peut se ré-écrie en utilisant une fonction anonyme. Avec
 map(1:3, function(x) x + 1)
 ```
 
-Notez que l’utilisation de `map()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant les capacités de vectorisation de R:
-
-```{r}
-x <- 1:3
-x + 1
-```
-
 ---
 
 ## Les fonctions anonymes et formules
@@ -708,11 +716,11 @@ x + 1
 On peut également utiliser l'approche par formule conjointement avec `~`. Ici on fait référence au paramètre en utilisant la notation `~.x`. 
 
 ```{r}
-map(1:3, ~.x + 1)
+map(1:3, ~.x + 1) # 1 + 1, 2 + 1, 3 + 1
 ```
 
 ```{r}
-map(1:3, ~log(.x))
+map(1:3, ~log(.x)) # log(1), log(2), log(3)
 ```
 
 ---
@@ -835,7 +843,7 @@ Par exemple, on sait que la fonction `mean()` retourne une valeur numérique. Da
 map_dbl(mtcars, mean) 
 ```
 
-On peut également avoir le résultat sous forme de data frame.
+On peut également avoir le résultat sous forme de *data frame*.
 
 ```{r}
 map_df(mtcars, mean)
@@ -974,9 +982,9 @@ map2(mu, sigma, rnorm, n = 4)
 Comme avec la fonction `map()`, il y a plusieurs variantes de `map2_*()`.
 
 ```{r}
-map2(c(1, 2, 3), c(4, 5, 6), sum)
+map2(c(1, 2, 3), c(4, 5, 6), sum) # 1 + 4, 2 + 5, 3 + 6
 
-map2_dbl(c(1, 2, 3), c(4, 5, 6), sum) # Explicite sur la classe des valeurs de retour
+map2_dbl(c(1, 2, 3), c(4, 5, 6), sum) # Être explicite sur la classe des valeurs de retour
 
 map2_chr(c("a", "b", "c"), c("x", "y", "z"), ~paste(.x, .y, sep = "---"))
 
@@ -1090,6 +1098,26 @@ rnorm(n = 3, mean = 3, sd = 2)
 
 ---
 
+## Map sur plusieurs vecteurs/listes
+
+Avec les fonctions `map()` et `map2()` on pouvait utiliser l'approche par *formule* en faisant référence aux paramètres en utilisant `.x` et `.y`.
+
+```{r, eval=FALSE}
+map2_chr(c("a", "b", "c"), c("x", "y", "z"), ~paste(.x, .y, sep = "---"))
+```
+
+Comment pouvons nous faire lorsqu'il y a plus de deux paramètres? Il s'uffit d'utiliser la notation `..1`, `..2`, `...n`.
+
+```{r}
+pmap_chr(
+  list(c("a", "b", "c"), c("x", "y", "z"), c(1, 2, 3)),
+  ~ paste(..1, ..2, ..3, sep = "---")
+)
+```
+
+
+---
+
 class: inverse, center, middle
 
 ## Exercice pratique sur un cas réel
@@ -1137,7 +1165,7 @@ files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
 df <- files %>% 
   map_df(read_csv)
 
-coords <- read_csv("/home/pmassicotte/Downloads/Capital_Bike_Share_Locations.csv") %>% 
+coords <- read_csv("data/raw/Capital_Bike_Share_Locations.csv") %>% 
   janitor::clean_names() %>% 
   select(terminal_number, longitude, latitude)
 
