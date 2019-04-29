@@ -63,8 +63,8 @@ class: inverse, center, middle
 
 ## Plan de la formation
 
-1. Introduction et mise en contexte
-  * Les dangers de la duplication du code
+1. Mise en contexte
+  * Les dangers de la duplication du code: une étude de cas
 
 2. La programmation fonctionnelle
   * Opérations sur des vecteurs
@@ -84,7 +84,7 @@ Dans plusieurs domaines, les données sont produites très rapidement:
 
 - Environnement: capteurs automatisés (température, précipitation, etc.)
 - Finances / assurances
-- Transports: géolocalisation
+- Transport: géolocalisation
 
 La manipulation de ces données demande beaucoup de temps et le cycle doit souvent être répété.
 
@@ -99,7 +99,7 @@ La manipulation de ces données demande beaucoup de temps et le cycle doit souve
 
 ## La manipulation de données
 
-Il est important d'apprendre et de mettre en pratique les outils essentiels pour capturer, manipuler et partager des données de manière efficace.
+Il est important d'apprendre et de mettre en pratique les outils essentiels pour **capturer**, **manipuler** et **partager** des données de manière efficace.
 
 - Pourquoi est-ce important?
 
@@ -114,7 +114,9 @@ Il est important d'apprendre et de mettre en pratique les outils essentiels pour
 
 class: inverse, center, middle
 
-# Un exemple de code répétitif
+# Exemple de code répétitif
+
+## Une étude de cas
 
 ---
 
@@ -162,24 +164,20 @@ x
 
 ## Répéter la même opération sur plusieurs colonnes
 
-Lorsque nous avez commencé à programmer, il y a de forte chance qu'on ayons procédé de la manière suivante: **on répète la même opération sur toutes les colonnes de `df`**.
+Lorsque nous avez commencé à programmer, il y a de fortes chances qu'on ayons procédé de la manière suivante: **on répète la même opération sur toutes les colonnes de `df`**.
 
 ```{r}
 # Normaliser la colonne a
-df$a <- (df$a - min(df$a, na.rm = TRUE)) / 
-  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$a <- (df$a - min(df$a, na.rm = TRUE)) / (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
 
 # Normaliser la colonne b
-df$b <- (df$b - min(df$b, na.rm = TRUE)) /
-  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$b <- (df$b - min(df$b, na.rm = TRUE)) / (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
 
 # Normaliser la colonne c
-df$c <- (df$c - min(df$c, na.rm = TRUE)) /
-  (max(df$c, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$c <- (df$c - min(df$c, na.rm = TRUE)) / (max(df$c, na.rm = TRUE) - min(df$b, na.rm = TRUE))
 
 # Normaliser la colonne d
-df$d <- (df$d - min(df$d, na.rm = TRUE)) /
-  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+df$d <- (df$d - min(df$d, na.rm = TRUE)) / (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
 
 ```
 
@@ -200,14 +198,10 @@ df
 Quel est le problème?
 
 ```{r, eval=FALSE}
-df$a <- (df$a - min(df$a, na.rm = TRUE)) /
-  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
-df$b <- (df$b - min(df$b, na.rm = TRUE)) /
-  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
-df$c <- (df$c - min(df$c, na.rm = TRUE)) /
-  (max(df$c, na.rm = TRUE) - min(df$b, na.rm = TRUE))
-df$d <- (df$d - min(df$d, na.rm = TRUE)) /
-  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+df$a <- (df$a - min(df$a, na.rm = TRUE)) / (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b <- (df$b - min(df$b, na.rm = TRUE)) / (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$c <- (df$c - min(df$c, na.rm = TRUE)) / (max(df$c, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$d <- (df$d - min(df$d, na.rm = TRUE)) / (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
 ```
 
 --
@@ -215,14 +209,10 @@ df$d <- (df$d - min(df$d, na.rm = TRUE)) /
 Erreur de copié/collé!!!
 
 ```{r, eval=FALSE}
-df$a <- (df$a - min(df$a, na.rm = TRUE)) /
-  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
-df$b <- (df$b - min(df$b, na.rm = TRUE)) /
-  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
-df$c <- (df$c - min(df$c, na.rm = TRUE)) /
-  {{(max(df$c, na.rm = TRUE) - min(df$b, na.rm = TRUE))}}
-df$d <- (df$d - min(df$d, na.rm = TRUE)) /
-  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+df$a <- (df$a - min(df$a, na.rm = TRUE)) / (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b <- (df$b - min(df$b, na.rm = TRUE)) / (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+{{df$c <- (df$c - min(df$c, na.rm = TRUE)) / (max(df$c, na.rm = TRUE) - min(df$b, na.rm = TRUE))}}
+df$d <- (df$d - min(df$d, na.rm = TRUE)) / (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
 ```
 
 ---
@@ -246,31 +236,29 @@ Une première amélioration: **utiliser une fonction**.
 
 --
 
-Étudier la formule de base
+Étudier la formule de base:
 
 ```{r, eval=FALSE}
-(`df$d` - min(`df$d`, na.rm = TRUE)) / 
-  (max(`df$d`, na.rm = TRUE) - min(`df$d`, na.rm = TRUE))
+(`df$d` - min(`df$d`, na.rm = TRUE)) / (max(`df$d`, na.rm = TRUE) - min(`df$d`, na.rm = TRUE))
 ```
 
 --
 
-Paramétrer le code -> remplacer les variables par des arguments
+Paramétrer le code -> remplacer les variables par des arguments:
 
 ```{r, eval=FALSE}
-res <- (`x` - min(`x`, na.rm = TRUE)) / 
-  (max(`x`, na.rm = TRUE) - min(`x`, na.rm = TRUE))
+(`x` - min(`x`, na.rm = TRUE)) / (max(`x`, na.rm = TRUE) - min(`x`, na.rm = TRUE))
 ```
 
 --
 
-Écrire une fonction
+Écrire une fonction :
 
 ```{r}
 # Fonction qui prend un vecteur numerique "x" et qui scale les valeurs entre 0-1
 scale_vector <- function(x) {
-  res <- (x - min(x, na.rm = TRUE)) / 
-    (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+  
+  res <- (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
   
   return(res)
 }
@@ -325,14 +313,10 @@ df$d <- scale_vector(df$d)
 VS
 
 ```{r, eval=FALSE}
-df$a <- (df$a - min(df$a, na.rm = TRUE)) /
-  (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
-df$b <- (df$b - min(df$b, na.rm = TRUE)) /
-  (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
-df$c <- (df$c - min(df$c, na.rm = TRUE)) /
-  (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
-df$d <- (df$d - min(df$d, na.rm = TRUE)) /
-  (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
+df$a <- (df$a - min(df$a, na.rm = TRUE)) / (max(df$a, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$b <- (df$b - min(df$b, na.rm = TRUE)) / (max(df$b, na.rm = TRUE) - min(df$b, na.rm = TRUE))
+df$c <- (df$c - min(df$c, na.rm = TRUE)) / (max(df$c, na.rm = TRUE) - min(df$a, na.rm = TRUE))
+df$d <- (df$d - min(df$d, na.rm = TRUE)) / (max(df$d, na.rm = TRUE) - min(df$d, na.rm = TRUE))
 ```
 
 ---
@@ -455,7 +439,7 @@ Contrairement à l'idée reçue, les boucles en R ne sont pas nécessairement le
 Dans l'exemple suivant, on veut créer une boucle qui créer un vecteur de 1000 éléments avec les valeurs de 1 à 1000. Evidemment, on aurait du utiliser:
 
 ```{r, eval=FALSE}
-v <- 1:1000
+v <- 1:1000 # Méthode la plus rapide pour initialiser un vecteur
 ```
 
 
@@ -538,9 +522,13 @@ Advanced R (Chapman & Hall/CRC The R Series)
 
 ## Avantages de la programmation fonctionnelle
 
-- Le code est plus compacte (plus facile à lire et comprendre).
+1. Le code est plus compacte (plus facile à lire et comprendre).
 
-- Plus facile à maintenir: lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. Ensuite, chaque emplacement de votre code où la même tâche est effectuée est automatiquement mis à jour.
+2. Plus facile à maintenir: 
+  * Lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. 
+  * Chaque emplacement de votre code où la même tâche est effectuée est automatiquement mise à jour.
+
+3. Modularité: si vous écrivez une fonction pour des tâches individuelles spécifiques, vous pouvez les utiliser plusieurs fois. Une fonction que vous écrivez pour un script peut même être réutilisée dans d'autres scripts!
 
 ```{r, eval=FALSE}
 scale_vector <- function(x) {
@@ -550,10 +538,6 @@ scale_vector <- function(x) {
   return(res)
 }
 ```
-
-- Modularité: si vous écrivez une fonction pour des tâches individuelles spécifiques, vous pouvez les utiliser plusieurs fois. Une fonction que vous écrivez pour un script peut même être réutilisée dans d'autres scripts!
-
-<small>https://www.earthdatascience.org/courses/earth-analytics/automate-science-workflows/write-efficient-code-for-science-r/</small>
 
 ---
 
@@ -591,6 +575,7 @@ class: inverse, center, middle
 ## La fonction `map()`
 
 - La fonction `map()` de la librairie `purrr` est une version *pimpée* de `lapply()`.
+
 - Elle permet **d'appliquer** une fonction `f()` à une liste d'éléments.
 
 <br>
@@ -599,7 +584,7 @@ class: inverse, center, middle
 <img src="https://d33wubrfki0l68.cloudfront.net/f0494d020aa517ae7b1011cea4c4a9f21702df8b/2577b/diagrams/functionals/map.png" height="250"/>
 </center>
 
-<small>https://adv-r.hadley.nz/functionals.html#map</small>
+<small>Figure: https://adv-r.hadley.nz/functionals.html#map</small>
 
 ---
 
@@ -614,7 +599,7 @@ f <- function(x) {
 }
 
 # "Appliquer" la fonction "f" au vecteur 1, 2, 3
-map(.x = c(1, 2, 3), .f = f)
+map(.x = c(1, 2, 3), .f = f) # 1 + 1, 2 + 1, 3 + 1
 ```
 
 <br>
@@ -767,7 +752,8 @@ map(df, function(y) mean(y))
 
 - Jusqu'à maintenant, nous avons invoqué l'appel de fonctions sans l'utilisation de paramètres.
 
-- Il est possible de spécifier les valeurs de paramètres à fournir à la fonction en utilisant des paramètres nommées de la manière suivante: 
+- Il est possible de spécifier les valeurs de paramètres à fournir à la fonction en utilisant des **paramètres nommés** de la manière suivante: 
+
 ```{r, eval=FALSE}
 map(list, function, param1 = xxx, param2 = yyy, param3 = zzz)
 ```
@@ -812,7 +798,7 @@ map(y, function(x) log(x, base = 2)) # Avec fonction anonyme
 
 map(y, ~log(.x, base = 2)) # Avec formule
 
-map(, log, base = 2)
+map(y, log, base = 2)
 
 ```
 
@@ -820,7 +806,7 @@ map(, log, base = 2)
 
 ## Les variantes de `map()`
 
-Il y a plusieurs variantes de `map_*()` qui permettent **d'être explicite sur la classe retournée par la fonction**.
+Il existe plusieurs variantes de `map_*()` qui permettent **d'être explicite sur la classe retournée par la fonction**.
 
 <br><br>
 
@@ -843,7 +829,7 @@ Par exemple, on sait que la fonction `mean()` retourne une valeur numérique. Da
 map_dbl(mtcars, mean) 
 ```
 
-On peut également avoir le résultat sous forme de *data frame*.
+On peut également avoir le résultat sous forme d'un *data frame*.
 
 ```{r}
 map_df(mtcars, mean)
@@ -1103,6 +1089,7 @@ rnorm(n = 3, mean = 3, sd = 2)
 Avec les fonctions `map()` et `map2()` on pouvait utiliser l'approche par *formule* en faisant référence aux paramètres en utilisant `.x` et `.y`.
 
 ```{r, eval=FALSE}
+# Avec 1 ou 2 entrés, on peut utiliser .x et .y
 map2_chr(c("a", "b", "c"), c("x", "y", "z"), ~paste(.x, .y, sep = "---"))
 ```
 
@@ -1115,7 +1102,7 @@ pmap_chr(
     c("x", "y", "z"), # ..2
     c(1, 2, 3)        # ..3
   ),
-  ~ paste(..3, ..1, ..2, sep = "---")
+  {{~ paste(..3, ..1, ..2, sep = "---")}}
 )
 ```
 
@@ -1311,7 +1298,6 @@ autoplot(res)
 
 ```
 
-
 ---
 
 class: inverse, center, middle
@@ -1352,7 +1338,7 @@ library(furrr)
 
 files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
 
-df <- future_map_dfr(files, read_csv, col_types = cols())
+df <- future_map_dfr(files, read_csv)
 
 glimpse(df)
 
@@ -1420,6 +1406,7 @@ head(res, 1)
 **Cette approche fonctionne bien, mais:**
 
 1. Il est impossible de savoir à quel mois correspond chacune des valeurs du vecteur.
+
 2. Le code devra être modifié si une nouvelle colonne numérique est ajoutée dans les fichiers csv.
 
 ---
@@ -1427,12 +1414,15 @@ head(res, 1)
 ## La fonction `summarise()`
 
 - La fonction `summarise()` permet de *compresser* un *data frame* en lui **appliquant une fonction** qui réduit le nombre d'observations.
+
 - Par exemple, on peut calculer la valeur moyenne de `duration` pour les données de janvier 2018.
 
 ```{r, message = FALSE}
 df <- read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv")
 
-{{summarise(df, mean_duration = mean(duration))}}
+summarise(df, mean(duration))
+
+{{summarise(df, mean_duration = mean(duration))}} # Permet de spécifier le nom de la nouvelle colonne à créer
 ```
 
 ---
@@ -1523,13 +1513,13 @@ Calculer **les moyennes mensuelles** de toutes les colonnes numériques, en util
 ```{r, cache=TRUE}
 # Étape 1: Lire tous les fichiers
 files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
-df <- map_df(files, read_csv)
+df <- map_df(.x = files, .f = read_csv)
 
 # Ajouter la colonne mois dans le data frame
-df$month <- format(df$start_date, "%b")
+df$month <- format(x = df$start_date, "%b")
 
 # Étape 2: Grouper les données par mois.
-df <- group_by(df, month)
+df <- group_by(.data = df, month)
 
 # Étape 3: Calculer la moyenne de chacune des colonnes de type numérique.
 df <- summarise_if(.tbl = df, .predicate = is.numeric, .funs = mean)
@@ -1544,6 +1534,8 @@ head(df) # Afficher les 6 premières lignes
 - L'opérateur pipe, `%>%`, permet d'enchaîner les opérations en passant le résultat d'un fonction comme premier argument dans la fonction suivante. Ce qui est très utile lorsqu'on a pas besoin des résultats intermédiaires.
 
 - Lorsque vous voyez `%>%`, vous devriez vous dire **ensuite**.
+
+- Implémenté dans la librairie `magrittr` (https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) et inclut avec `tidyverse`.
 
 <center><img src="https://magrittr.tidyverse.org/logo.png" width="200"/></center>
 
@@ -1619,7 +1611,7 @@ class: inverse
 
 ## À vous de jouer!
 
-.full-width[.content-box-gray[Utiliser les concepts vu aujourd'hui pour reproduire le graphique suivant. Il s'agit de calculer la moyenne de la variable `duration` par jour et ce pour chaque mois de l'année.]]
+.full-width[.content-box-gray[Utiliser les concepts vu aujourd'hui pour reproduire le graphique suivant. Il s'agit de calculer la moyenne de la variable `duration` par heure et ce pour chaque mois de l'année.]]
 
 ```{r, echo=FALSE, fig.width=5, fig.height=3, fig.align='center', cache=TRUE}
 files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
@@ -1663,7 +1655,7 @@ La fonction `unnest()` de décompresser un *data frame* qui a été compressé a
 mtcars %>% 
   group_by(cyl) %>% # Grouper selon la variable "cyl"
   nest() %>% # "Compresser" le data frame, par défault, la nouvelle colonne se nomme "data"
-  unnest()
+  unnest() # "Décompresser" le data frame
 ```
 
 ---
@@ -1760,7 +1752,7 @@ cars %>%
 Merci au comité organisateur de R à Québec 2019!
 
 <center>
-<image src="images/comite.bmp" height="300", align="middle"</image><image src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/R_logo.svg/724px-R_logo.svg.png" height="100", align="middle"</image><image src="images/logo_r_a_quebec_2019.png" height="100", align="middle"</image>
+<image src="images/comite.bmp" height="400", align="middle"</image><image src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/R_logo.svg/724px-R_logo.svg.png" height="100", align="middle"</image><image src="images/logo_r_a_quebec_2019.png" height="100", align="middle"</image>
 </center>
 
 ---
