@@ -1110,8 +1110,12 @@ Comment pouvons nous faire lorsqu'il y a plus de deux paramètres? Il s'uffit d'
 
 ```{r}
 pmap_chr(
-  list(c("a", "b", "c"), c("x", "y", "z"), c(1, 2, 3)),
-  ~ paste(..1, ..2, ..3, sep = "---")
+  list(
+    c("a", "b", "c"), # ..1
+    c("x", "y", "z"), # ..2
+    c(1, 2, 3)        # ..3
+  ),
+  ~ paste(..3, ..1, ..2, sep = "---")
 )
 ```
 
@@ -1189,9 +1193,9 @@ qmplot(longitude, latitude, data = coords, maptype = "toner-lite", color = I("re
 
 ## Les données
 
-Les statistiques sur l'utilisation des vélos pour l'année 2018 sont dans 12 fichiers différents (1 par mois).
+- Les statistiques sur l'utilisation des vélos pour l'année 2018 sont dans 12 fichiers différents (1 par mois).
 
-https://s3.amazonaws.com/capitalbikeshare-data/index.html
+- Données: https://s3.amazonaws.com/capitalbikeshare-data/index.html
 
 - Plus de 3 500 000 lignes/observations (réduit de 90% pour les exercices suivants).
 
@@ -1209,8 +1213,6 @@ read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv") %
 ## Les données
 
 ```{r, echo=FALSE, fig.height=4, fig.align='center', cache=TRUE, cache.extra = file.info("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv")}
-
-library(ggthemes)
 
 # df <- read_csv("data/clean/capitale_bikeshare/201809-capitalbikeshare-tripdata.csv")
 
@@ -1610,8 +1612,6 @@ files %>%
   summarise_if(is.numeric, .funs = list(mymean = mean, mysd = sd)) %>% #<<
   glimpse() # La fonction glimpse() est une version pimpée de str()
 ```
-
-
 
 ---
 
