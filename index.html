@@ -155,6 +155,7 @@ On veut normaliser chaque colonne de `df` de manière à ce que les données var
 $$
 \frac{x - \text{min}(x)}{\text{max}(x) - \text{min}(x)}
 $$
+On peut valider en générant un vecteur de 10 nombres et en appliquant l'opération mathématique:
 
 
 ```r
@@ -502,15 +503,9 @@ class: inverse, center, middle
 
 ## Rapidité des boucles
 
-Contrairement à l'idée reçue, les boucles en R ne sont pas nécessairement lentes. La plupart du temps, la lenteur des boucles est liée au fait que la variable qui reçoit le résultat n'est pas initialisée.
+**Contrairement à l'idée reçue, les boucles en R ne sont pas nécessairement lentes.** La plupart du temps, la lenteur des boucles est liée au fait que la variable qui reçoit le résultat n'est pas initialisée.
 
-Dans l'exemple suivant, on veut créer une boucle qui créer un vecteur de 1000 éléments avec les valeurs de 1 à 1000. Evidemment, on aurait du utiliser:
-
-
-```r
-v &lt;- 1:1000 # Méthode la plus rapide pour initialiser un vecteur
-```
-
+Dans l'exemple suivant, on veut créer une boucle qui créer un vecteur de 1000 éléments avec les valeurs de 1 à 1000.
 
 .pull-left[
 
@@ -518,8 +513,6 @@ v &lt;- 1:1000 # Méthode la plus rapide pour initialiser un vecteur
 
 
 ```r
-n &lt;- 1000
-
 f_slow &lt;- function(n) {
 *  v &lt;- NULL
   for (i in 1:n) 
@@ -536,8 +529,6 @@ f_slow &lt;- function(n) {
 
 
 ```r
-n &lt;- 1000
-
 f_fast &lt;- function(n) {
 *  v &lt;- vector(mode = "numeric", length = n)
   for (i in 1:n) 
@@ -558,11 +549,33 @@ Les boucles ne sont pas foncièrement lentes!
 
 ```r
 # Calculer le temps d'exécution des deux fonctions/boucles
+n &lt;- 1000
 timing &lt;- microbenchmark::microbenchmark(f_slow(n), f_fast(n))
 autoplot(timing)
 ```
 
-&lt;img src="index_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Rapidité des boucles
+
+Les boucles ne sont pas foncièrement lentes! Evidemment, on aurait du utiliser:
+
+
+```r
+v &lt;- 1:1000 # Méthode la plus rapide pour initialiser un vecteur
+```
+
+
+```r
+# Calculer le temps d'exécution des deux fonctions/boucles
+n &lt;- 1000
+timing &lt;- microbenchmark::microbenchmark(f_slow(n), f_fast(n), 1:n)
+autoplot(timing)
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -585,9 +598,7 @@ Advanced R (Chapman &amp; Hall/CRC The R Series)
 
 - La principale caractéristique de la programmation fonctionnelle est **que des fonctions sont passées en paramètre** à d'autres fonctions.
 
-- L'idée de passer d'une fonction à une autre est une idée extrêmement puissante et c'est l'un des comportements qui font de R un langage de programmation fonctionnel.
-
-- Comparé à l'utilisation d'une boucle, l'accent est mis sur l'opération effectuée (*i.e. la fonction à appliquer*) et non sur la mécanique nécessaire pour naviguer au travers des éléments et sur comment enregistrer le résultat.
+- Comparé à l'utilisation à l'approche *impérative*, l'accent est mis sur l'opération effectuée (*i.e. la fonction à appliquer*) et non sur la mécanique nécessaire pour naviguer au travers des éléments et sur comment enregistrer le résultat.
 
 - Il y a de fortes chances que vous ayez déjà utilisé la fonction `lapply()`. La fonction `lapply()` est appelé **un fonctionnel**, car elle utilise une fonction comme paramètre.
 
@@ -598,8 +609,7 @@ Advanced R (Chapman &amp; Hall/CRC The R Series)
 1. Le code est plus compacte (plus facile à lire et comprendre).
 
 2. Plus facile à maintenir: 
-  * Lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. 
-  * Chaque emplacement de votre code où la même tâche est effectuée est automatiquement mise à jour.
+  * Lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. Chaque emplacement de votre code où la même tâche est effectuée est automatiquement mise à jour.
 
 3. Modularité: si vous écrivez une fonction pour des tâches individuelles spécifiques, vous pouvez les utiliser plusieurs fois. Une fonction que vous écrivez pour un script peut même être réutilisée dans d'autres scripts!
 
@@ -696,7 +706,25 @@ map(.x = c(1, 2, 3), .f = f) # 1 + 1, 2 + 1, 3 + 1
 
 ## La fonction `map()`
 
-Notez que l’utilisation de `map()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant les capacités de vectorisation de R:
+On aurait pu obtenir le même résultat en utilisant la fonction `lapply()` qui est inclut avec R:
+
+
+```r
+lapply(X = c(1, 2, 3), FUN = f)
+```
+
+```
+## [[1]]
+## [1] 2
+## 
+## [[2]]
+## [1] 3
+## 
+## [[3]]
+## [1] 4
+```
+
+Notez que l’utilisation de `map()` ou de `lapply()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant les capacités de vectorisation de R:
 
 
 ```r
@@ -716,17 +744,31 @@ Dans ce deuxième exemple, on veut connaître la classe de chaque colonne du *da
 
 
 ```r
-head(mtcars)
+head(mtcars, 20) # Afficher les 20 premières lignes
 ```
 
 ```
-##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
-## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
-## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
-## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
-## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
-## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
-## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+##                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+## Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+## Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+## Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+## Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+## Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+## Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+## Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+## Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
 ```
 
 ---
@@ -911,9 +953,7 @@ df &lt;- select_if(df, is.numeric)
 
 ## Utilisation des paramètres
 
-- Jusqu'à maintenant, nous avons invoqué l'appel de fonctions sans l'utilisation de paramètres.
-
-- Il est possible de spécifier les valeurs de paramètres à fournir à la fonction en utilisant des **paramètres nommés** de la manière suivante: 
+Jusqu'à maintenant, nous avons invoqué l'appel de fonctions sans l'utilisation de paramètres. Il est possible de spécifier les valeurs de paramètres à fournir à la fonction en utilisant des **paramètres nommés** de la manière suivante: 
 
 
 ```r
@@ -1000,7 +1040,7 @@ map(df, mean)
 
 ## Les fonctions anonymes et formules: un résumé
 
-Il y a trois façons différentes d'utiliser des fonctions avec `purrr`.
+Il y a trois façons différentes d'utiliser des fonctions anonymes avec `purrr`:
 
 
 ```r
@@ -1047,6 +1087,21 @@ map_dbl(mtcars, mean)
 ##       qsec         vs         am       gear       carb 
 ##  17.848750   0.437500   0.406250   3.687500   2.812500
 ```
+
+Il est intéressant de pouvoir être explicite sur la classe de données attendue. Dans le prochain cas, un erreur est généré, car la fonction `mean()` retourne une valeur de type *double* alors que je spécifie que je devrais reçevoir un *integer*.
+
+
+```r
+map_int(mtcars, mean)
+```
+
+```
+## Error: Can't coerce element 1 from a double to a integer
+```
+
+---
+
+## Les variantes de `map()`
 
 On peut également avoir le résultat sous forme d'un *data frame*.
 
@@ -1143,13 +1198,13 @@ map(mu, rnorm, n = 4)
 
 ```
 ## [[1]]
-## [1] 2.304493 4.654220 4.550126 5.588497
+## [1] 4.026914 3.241738 3.647475 2.415420
 ## 
 ## [[2]]
-## [1] -0.3832638 -0.2672256 -0.8542483 -1.4406999
+## [1] -1.5534406 -0.5081871 -2.8831839 -1.9671185
 ## 
 ## [[3]]
-## [1] 5.008439 2.272876 3.596816 2.372339
+## [1] 1.945614 3.050837 2.370583 3.924317
 ```
 ]
 
@@ -1176,18 +1231,18 @@ mu &lt;- c(4, -1, 3)
 # Vecteur d'écart-types
 sigma &lt;- c(1, 4, 7)
 
-map2(mu, sigma, rnorm, n = 4)
+map2(.x = mu, .y = sigma, .f = rnorm, n = 4)
 ```
 
 ```
 ## [[1]]
-## [1] 3.969638 3.733941 2.723003 4.406369
+## [1] 5.101436 5.133209 3.434006 4.175488
 ## 
 ## [[2]]
-## [1] -4.281706 -5.952331 -5.798270 -4.463604
+## [1] -1.6102518 -1.8041091 -4.4294302  0.7992169
 ## 
 ## [[3]]
-## [1] 14.317516  7.501086  5.746417 12.987582
+## [1] 0.8043237 9.0238669 1.9688712 0.7424697
 ```
 ]
 
@@ -1229,12 +1284,34 @@ map2_dbl(c(1, 2, 3), c(4, 5, 6), sum) # Être explicite sur la classe des valeur
 ## [1] 5 7 9
 ```
 
+---
+
+## Map sur plusieurs vecteurs/listes
+
+Lorsqu'on utilise une fonction anonyme, on peut utiliser la notation `.x` et `.y` pour faire référence aux paramètres utilisés dans la fonction. Dans l'exemple suivant on veut concatener deux vecteurs de caractères.
+
+
 ```r
-map2_chr(c("a", "b", "c"), c("x", "y", "z"), ~paste(.x, .y, sep = "---"))
+map2_chr(.x = c("a", "b", "c"), .y = c("x", "y", "z"), .f = ~paste(.x, .y, sep = "---"))
 ```
 
 ```
 ## [1] "a---x" "b---y" "c---z"
+```
+
+Dans ce cas, il y a eux trois itérations:
+
+1. `.x = "a"` et `.y = "x"`
+2. `.x = "b"` et `.y = "y"`
+3. `.x = "c"` et `.y = "z"`
+
+Ce qui est équivalent à:
+
+
+```r
+paste("a", "x", sep = "---")
+paste("b", "y", sep = "---")
+paste("c", "z", sep = "---")
 ```
 
 ---
@@ -1271,13 +1348,13 @@ pmap(
 
 ```
 ## [[1]]
-## [1] 1.091609
+## [1] 0.7214487
 ## 
 ## [[2]]
-## [1] -200.6828 -200.4211 -198.4839
+## [1] -198.3900 -200.5131 -200.2121
 ## 
 ## [[3]]
-## [1]  0.3518956 -0.9732365  2.3629208  5.6094841  0.6416877  2.3706472
+## [1] 5.5597270 7.7831691 4.3649485 0.4928501 3.9441637 3.6428748
 ```
 
 ---
@@ -1318,9 +1395,9 @@ set.seed(1234)
 pmap(
   .l =
     list(
-      mean = c(1, 5, 3),
-      sd = c(1, 2, 3),
-      n = c(1, 3, 2)
+*     mean = c(1, 5, 3),
+*     sd = c(1, 2, 3),
+*     n = c(1, 3, 2)
     ),
   .f = rnorm
 )
@@ -1355,9 +1432,9 @@ set.seed(1234)
 pmap(
   .l =
     list(
-      c(1, 5, 3),
-      c(1, 2, 3),
-      c(1, 3, 2)
+*     c(1, 5, 3),
+*     c(1, 2, 3),
+*     c(1, 3, 2)
     ),
   .f = rnorm
 )
@@ -1437,6 +1514,8 @@ Une tâche courante consiste à lire plusieurs fichiers (CSV) dans un répertoir
 
 ## Lire le contenu d'un répertoire
 
+&lt;/br&gt;
+
 &lt;center&gt;
 &lt;img src="images/purrr_map_read_csv2.svg.png" height="200"/&gt;
 &lt;/center&gt;
@@ -1455,11 +1534,6 @@ Similaire au système Bixi à Montréal.
 &lt;center&gt;
 &lt;img src="http://www.parcjeandrapeau.com/medias/images/header/bixi-parc-jean-drapeau-montreal.jpg" height="300"/&gt;
 &lt;/center&gt;
-
----
-
-&lt;img src="index_files/figure-html/unnamed-chunk-64-1.png" style="display: block; margin: auto;" /&gt;
-
 
 ---
 
@@ -1490,15 +1564,19 @@ Similaire au système Bixi à Montréal.
 
 ---
 
-## Les données
-
-&lt;img src="index_files/figure-html/unnamed-chunk-66-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-70-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ## Les données
 
-&lt;img src="index_files/figure-html/unnamed-chunk-67-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-71-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Les données
+
+&lt;img src="index_files/figure-html/unnamed-chunk-72-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -1571,7 +1649,7 @@ res &lt;- microbenchmark::microbenchmark(
 autoplot(res)
 ```
 
-&lt;img src="index_files/figure-html/unnamed-chunk-70-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-75-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -1604,9 +1682,9 @@ install.packages("furrr")
 ##  [9] "future_invoke_map_chr" "future_invoke_map_dbl"
 ## [11] "future_invoke_map_dfc" "future_invoke_map_dfr"
 ## [13] "future_invoke_map_int" "future_invoke_map_lgl"
-## [15] "future_map"            "future_map_at"        
-## [17] "future_map_chr"        "future_map_dbl"       
-## [19] "future_map_dfc"        "future_map_dfr"
+## [15] "future_iwalk"          "future_map"           
+## [17] "future_map_at"         "future_map_chr"       
+## [19] "future_map_dbl"        "future_map_dfc"
 ```
 
 ---
@@ -1749,8 +1827,11 @@ summarise(df, mean(duration))
 ## 1             802.
 ```
 
+Il est mieux de spéficier le nom de la nouvelle colonne à créer:
+
+
 ```r
-*summarise(df, mean_duration = mean(duration)) # Permet de spécifier le nom de la nouvelle colonne à créer
+summarise(df, mean_duration = mean(duration))
 ```
 
 ```
@@ -1759,6 +1840,7 @@ summarise(df, mean(duration))
 ##           &lt;dbl&gt;
 ## 1          802.
 ```
+
 
 ---
 
@@ -1867,7 +1949,9 @@ group_by(mtcars, cyl)
 Calculer **les moyennes mensuelles** de toutes les colonnes numériques, en utilisant toutes les données de *bikeshare*. On peut diviser ce problème en trois étapes:
 
 1. Lire tous les fichiers.
+
 2. Grouper les données par mois.
+
 3. Calculer la moyenne de chacune des colonnes de type numérique.
 
 ---
@@ -1904,6 +1988,15 @@ head(df) # Afficher les 6 premières lignes
 ## 6 Jul      1352.               31323.             31321.
 ```
 
+
+---
+
+class: inverse, center, middle
+
+## L'opérateur pipe ` %&gt;% `
+
+&lt;center&gt;&lt;img src="https://magrittr.tidyverse.org/logo.png" width="200"/&gt;&lt;/center&gt;
+
 ---
 
 ## L'opérateur pipe ` %&gt;% `
@@ -1919,6 +2012,8 @@ head(df) # Afficher les 6 premières lignes
 ---
 
 ## L'opérateur pipe ` %&gt;% `
+
+Les deux commandes suivantes sont équivalentes:
 
 
 ```r
@@ -2034,7 +2129,7 @@ class: inverse
 
 .full-width[.content-box-gray[Utiliser les concepts vu aujourd'hui pour reproduire le graphique suivant. Il s'agit de calculer la moyenne de la variable `duration` par heure et ce pour chaque mois de l'année.]]
 
-&lt;img src="index_files/figure-html/unnamed-chunk-87-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-93-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -2065,11 +2160,12 @@ mtcars %&gt;%
 
 ```
 ## # A tibble: 3 x 2
-##     cyl data              
-##   &lt;dbl&gt; &lt;list&gt;            
-## 1     6 &lt;tibble [7 × 10]&gt; 
-## 2     4 &lt;tibble [11 × 10]&gt;
-## 3     8 &lt;tibble [14 × 10]&gt;
+##     cyl
+##   &lt;dbl&gt;
+## 1     6
+## 2     4
+## 3     8
+## # … with 1 more variable: data &lt;list&lt;df[,10]&gt;&gt;
 ```
 
 ---
@@ -2119,11 +2215,12 @@ mtcars %&gt;%
 
 ```
 ## # A tibble: 3 x 3
-##     cyl data               mod     
-##   &lt;dbl&gt; &lt;list&gt;             &lt;list&gt;  
-## 1     6 &lt;tibble [7 × 10]&gt;  &lt;S3: lm&gt;
-## 2     4 &lt;tibble [11 × 10]&gt; &lt;S3: lm&gt;
-## 3     8 &lt;tibble [14 × 10]&gt; &lt;S3: lm&gt;
+##     cyl
+##   &lt;dbl&gt;
+## 1     6
+## 2     4
+## 3     8
+## # … with 2 more variables: data &lt;list&lt;df[,10]&gt;&gt;, mod &lt;list&gt;
 ```
 
 La *data frame* contient maintenant:
@@ -2151,15 +2248,17 @@ mtcars %&gt;%
 ```
 
 ```
-## # A tibble: 6 x 6
-##     cyl term        estimate std.error statistic    p.value
-##   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
-## 1     6 (Intercept)    28.4      4.18       6.79 0.00105   
-## 2     6 wt             -2.78     1.33      -2.08 0.0918    
-## 3     4 (Intercept)    39.6      4.35       9.10 0.00000777
-## 4     4 wt             -5.65     1.85      -3.05 0.0137    
-## 5     8 (Intercept)    23.9      3.01       7.94 0.00000405
-## 6     8 wt             -2.19     0.739     -2.97 0.0118
+## # A tibble: 6 x 8
+##     cyl
+##   &lt;dbl&gt;
+## 1     6
+## 2     6
+## 3     4
+## 4     4
+## 5     8
+## 6     8
+## # … with 7 more variables: data &lt;list&lt;df[,10]&gt;&gt;, mod &lt;list&gt;, term &lt;chr&gt;,
+## #   estimate &lt;dbl&gt;, std.error &lt;dbl&gt;, statistic &lt;dbl&gt;, p.value &lt;dbl&gt;
 ```
 
 ---
@@ -2197,7 +2296,7 @@ cars
 
 ## Les données
 
-&lt;img src="index_files/figure-html/unnamed-chunk-93-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-99-1.svg" style="display: block; margin: auto;" /&gt;
 
 
 

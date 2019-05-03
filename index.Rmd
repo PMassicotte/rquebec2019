@@ -148,6 +148,7 @@ On veut normaliser chaque colonne de `df` de manière à ce que les données var
 $$
 \frac{x - \text{min}(x)}{\text{max}(x) - \text{min}(x)}
 $$
+On peut valider en générant un vecteur de 10 nombres et en appliquant l'opération mathématique:
 
 ```{r}
 # Générer un vecteur de 10 nombres
@@ -434,22 +435,15 @@ class: inverse, center, middle
 
 ## Rapidité des boucles
 
-Contrairement à l'idée reçue, les boucles en R ne sont pas nécessairement lentes. La plupart du temps, la lenteur des boucles est liée au fait que la variable qui reçoit le résultat n'est pas initialisée.
+**Contrairement à l'idée reçue, les boucles en R ne sont pas nécessairement lentes.** La plupart du temps, la lenteur des boucles est liée au fait que la variable qui reçoit le résultat n'est pas initialisée.
 
-Dans l'exemple suivant, on veut créer une boucle qui créer un vecteur de 1000 éléments avec les valeurs de 1 à 1000. Evidemment, on aurait du utiliser:
-
-```{r, eval=FALSE}
-v <- 1:1000 # Méthode la plus rapide pour initialiser un vecteur
-```
-
+Dans l'exemple suivant, on veut créer une boucle qui créer un vecteur de 1000 éléments avec les valeurs de 1 à 1000.
 
 .pull-left[
 
 **Boucle sans initialisation**
 
 ```{r}
-n <- 1000
-
 f_slow <- function(n) {
   {{v <- NULL}}
   for (i in 1:n) 
@@ -466,8 +460,6 @@ f_slow <- function(n) {
 **Boucle avec initialisation**
 
 ```{r}
-n <- 1000
-
 f_fast <- function(n) {
   {{v <- vector(mode = "numeric", length = n)}}
   for (i in 1:n) 
@@ -487,7 +479,25 @@ Les boucles ne sont pas foncièrement lentes!
 
 ```{r, message=FALSE, echo=TRUE, fig.height=4, fig.align="center"}
 # Calculer le temps d'exécution des deux fonctions/boucles
+n <- 1000
 timing <- microbenchmark::microbenchmark(f_slow(n), f_fast(n))
+autoplot(timing)
+```
+
+---
+
+## Rapidité des boucles
+
+Les boucles ne sont pas foncièrement lentes! Evidemment, on aurait du utiliser:
+
+```{r, eval=FALSE}
+v <- 1:1000 # Méthode la plus rapide pour initialiser un vecteur
+```
+
+```{r, message=FALSE, echo=TRUE, fig.height=3, fig.align="center"}
+# Calculer le temps d'exécution des deux fonctions/boucles
+n <- 1000
+timing <- microbenchmark::microbenchmark(f_slow(n), f_fast(n), 1:n)
 autoplot(timing)
 ```
 
@@ -512,9 +522,7 @@ Advanced R (Chapman & Hall/CRC The R Series)
 
 - La principale caractéristique de la programmation fonctionnelle est **que des fonctions sont passées en paramètre** à d'autres fonctions.
 
-- L'idée de passer d'une fonction à une autre est une idée extrêmement puissante et c'est l'un des comportements qui font de R un langage de programmation fonctionnel.
-
-- Comparé à l'utilisation d'une boucle, l'accent est mis sur l'opération effectuée (*i.e. la fonction à appliquer*) et non sur la mécanique nécessaire pour naviguer au travers des éléments et sur comment enregistrer le résultat.
+- Comparé à l'utilisation à l'approche *impérative*, l'accent est mis sur l'opération effectuée (*i.e. la fonction à appliquer*) et non sur la mécanique nécessaire pour naviguer au travers des éléments et sur comment enregistrer le résultat.
 
 - Il y a de fortes chances que vous ayez déjà utilisé la fonction `lapply()`. La fonction `lapply()` est appelé **un fonctionnel**, car elle utilise une fonction comme paramètre.
 
@@ -525,8 +533,7 @@ Advanced R (Chapman & Hall/CRC The R Series)
 1. Le code est plus compacte (plus facile à lire et comprendre).
 
 2. Plus facile à maintenir: 
-  * Lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. 
-  * Chaque emplacement de votre code où la même tâche est effectuée est automatiquement mise à jour.
+  * Lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. Chaque emplacement de votre code où la même tâche est effectuée est automatiquement mise à jour.
 
 3. Modularité: si vous écrivez une fonction pour des tâches individuelles spécifiques, vous pouvez les utiliser plusieurs fois. Une fonction que vous écrivez pour un script peut même être réutilisée dans d'autres scripts!
 
@@ -609,7 +616,13 @@ map(.x = c(1, 2, 3), .f = f) # 1 + 1, 2 + 1, 3 + 1
 
 ## La fonction `map()`
 
-Notez que l’utilisation de `map()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant les capacités de vectorisation de R:
+On aurait pu obtenir le même résultat en utilisant la fonction `lapply()` qui est inclut avec R:
+
+```{r}
+lapply(X = c(1, 2, 3), FUN = f)
+```
+
+Notez que l’utilisation de `map()` ou de `lapply()` dans ce cas-ci n'est pas très utile. On pourrait évidement reproduire le résultat en utilisant les capacités de vectorisation de R:
 
 ```{r}
 x <- 1:3
@@ -623,7 +636,7 @@ x + 1
 Dans ce deuxième exemple, on veut connaître la classe de chaque colonne du *data frame* `mtcars`.
 
 ```{r}
-head(mtcars)
+head(mtcars, 20) # Afficher les 20 premières lignes
 ```
 
 ---
@@ -750,9 +763,7 @@ map(df, function(y) mean(y))
 
 ## Utilisation des paramètres
 
-- Jusqu'à maintenant, nous avons invoqué l'appel de fonctions sans l'utilisation de paramètres.
-
-- Il est possible de spécifier les valeurs de paramètres à fournir à la fonction en utilisant des **paramètres nommés** de la manière suivante: 
+Jusqu'à maintenant, nous avons invoqué l'appel de fonctions sans l'utilisation de paramètres. Il est possible de spécifier les valeurs de paramètres à fournir à la fonction en utilisant des **paramètres nommés** de la manière suivante: 
 
 ```{r, eval=FALSE}
 map(list, function, param1 = xxx, param2 = yyy, param3 = zzz)
@@ -789,7 +800,7 @@ map(df, mean)
 
 ## Les fonctions anonymes et formules: un résumé
 
-Il y a trois façons différentes d'utiliser des fonctions avec `purrr`.
+Il y a trois façons différentes d'utiliser des fonctions anonymes avec `purrr`:
 
 ```{r, eval=FALSE}
 y <- 1:3
@@ -828,6 +839,16 @@ Par exemple, on sait que la fonction `mean()` retourne une valeur numérique. Da
 # Appliquer la fonction "mean" à chacune des colonnes de mtcars
 map_dbl(mtcars, mean) 
 ```
+
+Il est intéressant de pouvoir être explicite sur la classe de données attendue. Dans le prochain cas, un erreur est généré, car la fonction `mean()` retourne une valeur de type *double* alors que je spécifie que je devrais reçevoir un *integer*.
+
+```{r error=TRUE}
+map_int(mtcars, mean)
+```
+
+---
+
+## Les variantes de `map()`
 
 On peut également avoir le résultat sous forme d'un *data frame*.
 
@@ -949,7 +970,7 @@ mu <- c(4, -1, 3)
 # Vecteur d'écart-types
 sigma <- c(1, 4, 7)
 
-map2(mu, sigma, rnorm, n = 4)
+map2(.x = mu, .y = sigma, .f = rnorm, n = 4)
 ```
 ]
 
@@ -971,9 +992,30 @@ Comme avec la fonction `map()`, il y a plusieurs variantes de `map2_*()`.
 map2(c(1, 2, 3), c(4, 5, 6), sum) # 1 + 4, 2 + 5, 3 + 6
 
 map2_dbl(c(1, 2, 3), c(4, 5, 6), sum) # Être explicite sur la classe des valeurs de retour
+```
 
-map2_chr(c("a", "b", "c"), c("x", "y", "z"), ~paste(.x, .y, sep = "---"))
+---
 
+## Map sur plusieurs vecteurs/listes
+
+Lorsqu'on utilise une fonction anonyme, on peut utiliser la notation `.x` et `.y` pour faire référence aux paramètres utilisés dans la fonction. Dans l'exemple suivant on veut concatener deux vecteurs de caractères.
+
+```{r}
+map2_chr(.x = c("a", "b", "c"), .y = c("x", "y", "z"), .f = ~paste(.x, .y, sep = "---"))
+```
+
+Dans ce cas, il y a eux trois itérations:
+
+1. `.x = "a"` et `.y = "x"`
+2. `.x = "b"` et `.y = "y"`
+3. `.x = "c"` et `.y = "z"`
+
+Ce qui est équivalent à:
+
+```{r, eval=FALSE}
+paste("a", "x", sep = "---")
+paste("b", "y", sep = "---")
+paste("c", "z", sep = "---")
 ```
 
 ---
@@ -1041,9 +1083,9 @@ set.seed(1234)
 pmap(
   .l =
     list(
-      mean = c(1, 5, 3),
-      sd = c(1, 2, 3),
-      n = c(1, 3, 2)
+      mean = c(1, 5, 3), #<<
+      sd = c(1, 2, 3), #<<
+      n = c(1, 3, 2) #<<
     ),
   .f = rnorm
 )
@@ -1065,9 +1107,9 @@ set.seed(1234)
 pmap(
   .l =
     list(
-      c(1, 5, 3),
-      c(1, 2, 3),
-      c(1, 3, 2)
+      c(1, 5, 3), #<<
+      c(1, 2, 3), #<<
+      c(1, 3, 2)  #<<
     ),
   .f = rnorm
 )
@@ -1129,6 +1171,8 @@ Une tâche courante consiste à lire plusieurs fichiers (CSV) dans un répertoir
 
 ## Lire le contenu d'un répertoire
 
+</br>
+
 <center>
 <img src="images/purrr_map_read_csv2.svg.png" height="200"/>
 </center>
@@ -1147,6 +1191,25 @@ Similaire au système Bixi à Montréal.
 <center>
 <img src="http://www.parcjeandrapeau.com/medias/images/header/bixi-parc-jean-drapeau-montreal.jpg" height="300"/>
 </center>
+
+---
+
+## Les données
+
+- Les statistiques sur l'utilisation des vélos pour l'année 2018 sont dans 12 fichiers différents (1 par mois).
+
+- Données: https://s3.amazonaws.com/capitalbikeshare-data/index.html
+
+- Plus de 3 500 000 lignes/observations (réduit de 90% pour les exercices suivants).
+
+- Exemple pour le mois de janvier 2018.
+
+```{r, echo=FALSE, message=FALSE, cache=TRUE, cache.extra = file.info("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv")}
+read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv") %>% 
+  arrange(start_date) %>% 
+  glimpse()
+
+```
 
 ---
 
@@ -1173,26 +1236,6 @@ library(ggmap)
 qmplot(longitude, latitude, data = coords, maptype = "toner-lite", color = I("red"), size = I(0.5)) +
   geom_segment(data = df %>% sample_frac(0.1), aes(x = longitude_start, y = latitude_start, xend = longitude_end, yend = latitude_end), size = 0.5, alpha = 0.1, inherit.aes = FALSE) +
   geom_point(data = coords, aes(x = longitude, y = latitude), color = "red", inherit.aes = FALSE, size = 0.5)
-```
-
-
----
-
-## Les données
-
-- Les statistiques sur l'utilisation des vélos pour l'année 2018 sont dans 12 fichiers différents (1 par mois).
-
-- Données: https://s3.amazonaws.com/capitalbikeshare-data/index.html
-
-- Plus de 3 500 000 lignes/observations (réduit de 90% pour les exercices suivants).
-
-- Exemple pour le mois de janvier 2018.
-
-```{r, echo=FALSE, message=FALSE, cache=TRUE, cache.extra = file.info("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv")}
-read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv") %>% 
-  arrange(start_date) %>% 
-  glimpse()
-
 ```
 
 ---
@@ -1421,9 +1464,14 @@ head(res, 1)
 df <- read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv")
 
 summarise(df, mean(duration))
-
-{{summarise(df, mean_duration = mean(duration))}} # Permet de spécifier le nom de la nouvelle colonne à créer
 ```
+
+Il est mieux de spéficier le nom de la nouvelle colonne à créer:
+
+```{r}
+summarise(df, mean_duration = mean(duration))
+```
+
 
 ---
 
@@ -1503,7 +1551,9 @@ group_by(mtcars, cyl)
 Calculer **les moyennes mensuelles** de toutes les colonnes numériques, en utilisant toutes les données de *bikeshare*. On peut diviser ce problème en trois étapes:
 
 1. Lire tous les fichiers.
+
 2. Grouper les données par mois.
+
 3. Calculer la moyenne de chacune des colonnes de type numérique.
 
 ---
@@ -1527,6 +1577,15 @@ df <- summarise_if(.tbl = df, .predicate = is.numeric, .funs = mean)
 head(df) # Afficher les 6 premières lignes
 ```
 
+
+---
+
+class: inverse, center, middle
+
+## L'opérateur pipe ` %>% `
+
+<center><img src="https://magrittr.tidyverse.org/logo.png" width="200"/></center>
+
 ---
 
 ## L'opérateur pipe ` %>% `
@@ -1542,6 +1601,8 @@ head(df) # Afficher les 6 premières lignes
 ---
 
 ## L'opérateur pipe ` %>% `
+
+Les deux commandes suivantes sont équivalentes:
 
 ```{r}
 3 %>% log()
@@ -1651,7 +1712,7 @@ mtcars %>%
 
 La fonction `unnest()` de décompresser un *data frame* qui a été compressé avec `nest()`.
 
-```{r}
+```{r, warning=FALSE}
 mtcars %>% 
   group_by(cyl) %>% # Grouper selon la variable "cyl"
   nest() %>% # "Compresser" le data frame, par défault, la nouvelle colonne se nomme "data"
