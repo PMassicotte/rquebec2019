@@ -399,7 +399,7 @@ df <- data.frame(
 Il faut bien gérer les index utilisées.
 
 ```{r, eval=FALSE}
-for (i in 1:ncol(df)) {
+for (i in seq_along(df)) {
   df2[, i] <- scale_vector(df[, i])
 
   ... # Code super compliqué avec plusieurs lignes
@@ -414,9 +414,9 @@ Propice aux erreurs lorsque plusieurs boucles sont imbriquées.
 
 ```{r, eval=FALSE}
 
-for(i in 1:ncol(df)) {
+for(i in seq_along(df1)) {
   
-  for(j = 1:ncol(df)) {
+  for(j = seq_along(df2)) {
     {{df2[j, i] <- df[i, j]}}
   }
   
@@ -662,7 +662,7 @@ Ou bien de faire une boucle:
 res <- vector(mode = "character", length = ncol(mtcars))
 
 # Faire une boucle sur toutes les colonnes de mtcars
-for(i in 1:ncol(mtcars)) {
+for(i in seq_along(mtcars)) {
   res[i] <- class(mtcars[, i])
 }
 

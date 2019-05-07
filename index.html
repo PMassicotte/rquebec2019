@@ -467,7 +467,7 @@ Il faut bien gérer les index utilisées.
 
 
 ```r
-for (i in 1:ncol(df)) {
+for (i in seq_along(df)) {
   df2[, i] &lt;- scale_vector(df[, i])
 
   ... # Code super compliqué avec plusieurs lignes
@@ -482,9 +482,9 @@ Propice aux erreurs lorsque plusieurs boucles sont imbriquées.
 
 
 ```r
-for(i in 1:ncol(df)) {
+for(i in seq_along(df1)) {
   
-  for(j = 1:ncol(df)) {
+  for(j = seq_along(df2)) {
 *    df2[j, i] &lt;- df[i, j]
   }
   
@@ -814,7 +814,7 @@ Ou bien de faire une boucle:
 res &lt;- vector(mode = "character", length = ncol(mtcars))
 
 # Faire une boucle sur toutes les colonnes de mtcars
-for(i in 1:ncol(mtcars)) {
+for(i in seq_along(mtcars)) {
   res[i] &lt;- class(mtcars[, i])
 }
 
@@ -2160,12 +2160,11 @@ mtcars %&gt;%
 
 ```
 ## # A tibble: 3 x 2
-##     cyl
-##   &lt;dbl&gt;
-## 1     6
-## 2     4
-## 3     8
-## # … with 1 more variable: data &lt;list&lt;df[,10]&gt;&gt;
+##     cyl            data
+##   &lt;dbl&gt; &lt;list&lt;df[,10]&gt;&gt;
+## 1     6        [7 × 10]
+## 2     4       [11 × 10]
+## 3     8       [14 × 10]
 ```
 
 ---
@@ -2215,12 +2214,11 @@ mtcars %&gt;%
 
 ```
 ## # A tibble: 3 x 3
-##     cyl
-##   &lt;dbl&gt;
-## 1     6
-## 2     4
-## 3     8
-## # … with 2 more variables: data &lt;list&lt;df[,10]&gt;&gt;, mod &lt;list&gt;
+##     cyl            data mod     
+##   &lt;dbl&gt; &lt;list&lt;df[,10]&gt;&gt; &lt;list&gt;  
+## 1     6        [7 × 10] &lt;S3: lm&gt;
+## 2     4       [11 × 10] &lt;S3: lm&gt;
+## 3     8       [14 × 10] &lt;S3: lm&gt;
 ```
 
 La *data frame* contient maintenant:
@@ -2249,16 +2247,14 @@ mtcars %&gt;%
 
 ```
 ## # A tibble: 6 x 8
-##     cyl
-##   &lt;dbl&gt;
-## 1     6
-## 2     6
-## 3     4
-## 4     4
-## 5     8
-## 6     8
-## # … with 7 more variables: data &lt;list&lt;df[,10]&gt;&gt;, mod &lt;list&gt;, term &lt;chr&gt;,
-## #   estimate &lt;dbl&gt;, std.error &lt;dbl&gt;, statistic &lt;dbl&gt;, p.value &lt;dbl&gt;
+##     cyl         data mod     term     estimate std.error statistic  p.value
+##   &lt;dbl&gt; &lt;list&lt;df[,1&gt; &lt;list&gt;  &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1     6     [7 × 10] &lt;S3: l… (Interc…    28.4      4.18       6.79  1.05e-3
+## 2     6     [7 × 10] &lt;S3: l… wt          -2.78     1.33      -2.08  9.18e-2
+## 3     4    [11 × 10] &lt;S3: l… (Interc…    39.6      4.35       9.10  7.77e-6
+## 4     4    [11 × 10] &lt;S3: l… wt          -5.65     1.85      -3.05  1.37e-2
+## 5     8    [14 × 10] &lt;S3: l… (Interc…    23.9      3.01       7.94  4.05e-6
+## 6     8    [14 × 10] &lt;S3: l… wt          -2.19     0.739     -2.97  1.18e-2
 ```
 
 ---
