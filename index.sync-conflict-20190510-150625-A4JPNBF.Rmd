@@ -1170,14 +1170,12 @@ rnorm(n = 3, mean = 3, sd = 2)
 
 Avec les fonctions `map()` et `map2()` on pouvait utiliser l'approche par *formule* en faisant référence aux paramètres en utilisant `.x` et `.y`.
 
-Rappel: 
-
 ```{r, eval=FALSE}
-# Avec 1 ou 2 entrées, on peut utiliser .x et .y
+# Avec 1 ou 2 entrés, on peut utiliser .x et .y
 map2_chr(c("a", "b", "c"), c("x", "y", "z"), ~paste(.x, .y, sep = "---"))
 ```
 
-Comment pouvons nous faire lorsqu'il y a plus de deux paramètres? Il suffit d'utiliser la notation `..1`, `..2`, `...n`.
+Comment pouvons nous faire lorsqu'il y a plus de deux paramètres? Il s'uffit d'utiliser la notation `..1`, `..2`, `...n`.
 
 ```{r}
 pmap_chr(
@@ -1213,13 +1211,12 @@ Une tâche courante consiste à lire plusieurs fichiers (CSV) dans un répertoir
 
 ## Lire le contenu d'un répertoire
 
-En utilisant l'approche fonctionnelle, il est très facile de lire une liste de fichiers contenus dans un répertoire.
-
 </br>
 
 <center>
 <img src="images/purrr_map_read_csv2.svg.png" height="200"/>
 </center>
+
 
 ---
 
@@ -1327,8 +1324,10 @@ df %>%
   xlab(NULL) +
   ylab("Durée moyen de l'emprunt (minutes)") +
   labs(caption = "Data source: https://s3.amazonaws.com/capitalbikeshare-data/index.html") +
-  labs(title = "Temps d'emprunt moyen par jour en 2018")
+  labs(title = "Temps d'emprunt moyen par jour en 2018") 
+
 ```
+
 
 ---
 
@@ -1675,7 +1674,7 @@ files <- list.files(
 files %>%
   map_df(read_csv) %>%
   group_by(
-    month = format(start_date, "%b")
+    month = lubridate::month(start_date)
   ) %>%
   summarise_if(is.numeric, mean)
 ```
@@ -1695,7 +1694,7 @@ files %>%
 
 ## Appliquer plusieurs fonctions
 
-Il est possible d'appliquer plus d'une fonction en utilisant le paramètre `.funs` avec une liste nommée de fonctions à utiliser.
+Il est possible d'appliquer plus d'une fonction en utilisant le paramètre `.funs`.
 
 ```{r, cache=TRUE}
 files %>%
