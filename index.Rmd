@@ -406,21 +406,7 @@ df <- data.frame(
 
 --
 
-Il faut bien gérer les index utilisées.
-
-```{r, eval=FALSE}
-for (i in seq_along(df)) {
-  df2[, i] <- scale_vector(df[, i])
-
-  ... # Code super compliqué avec plusieurs lignes
-
-  {{i <- i / pi}} # Changer sans le vouloir la valeur de l'index
-}
-```
-
---
-
-Propice aux erreurs lorsque plusieurs boucles sont imbriquées.
+Il faut bien gérer les index utilisées, ce qui est propice aux erreurs lorsque plusieurs boucles sont imbriquées.
 
 ```{r, eval=FALSE}
 
@@ -432,6 +418,8 @@ for(i in seq_along(df1)) {
   
 }
 ```
+
+De plus, l'accent est mis sur *la mécanique de l'opération* plutôt que sur le résultat attendu.
 
 ---
 
@@ -481,6 +469,11 @@ f_fast <- function(n) {
 
 ]
 
+</br>
+</br>
+
+.content-box-blue[Il est important de **toujours** initialiser les vecteurs avant d'entrer dans une boucle.]
+
 ---
 
 ## Rapidité des boucles
@@ -504,7 +497,7 @@ Les boucles ne sont pas foncièrement lentes! Evidemment, on aurait du utiliser:
 v <- 1:1000 # Méthode la plus rapide pour initialiser un vecteur
 ```
 
-```{r, message=FALSE, echo=TRUE, fig.height=3, fig.align="center"}
+```{r, message=FALSE, echo=TRUE, fig.height=3, fig.align="center", warning=FALSE, cache=TRUE}
 # Calculer le temps d'exécution des deux fonctions/boucles
 n <- 1000
 timing <- microbenchmark::microbenchmark(f_slow(n), f_fast(n), 1:n)
@@ -1256,7 +1249,7 @@ read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv") %
 
 ---
 
-```{r, cache=TRUE, echo=FALSE, warning=FALSE, fig.align='center', fig.width=10, fig.height=9, dev='Cairo_png', dpi=300}
+```{r, cache=TRUE, echo=FALSE, warning=FALSE, fig.align='center', fig.width=10, fig.height=9, dev='svglite'}
 files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
 
 df <- files %>% 
