@@ -166,7 +166,7 @@ x
 ```
 
 ```
-##  [1] 10  6  5  4  1  8  2  7  9  3
+##  [1]  2  6  5  8  9  4  1  7 10  3
 ```
 
 ```r
@@ -175,8 +175,8 @@ x
 ```
 
 ```
-##  [1] 1.0000000 0.5555556 0.4444444 0.3333333 0.0000000 0.7777778 0.1111111
-##  [8] 0.6666667 0.8888889 0.2222222
+##  [1] 0.1111111 0.5555556 0.4444444 0.7777778 0.8888889 0.3333333 0.0000000
+##  [8] 0.6666667 1.0000000 0.2222222
 ```
 
 ---
@@ -600,7 +600,7 @@ Advanced R (Chapman &amp; Hall/CRC The R Series)
 
 - La principale caractéristique de la programmation fonctionnelle est **que des fonctions sont passées en paramètre** à d'autres fonctions.
 
-- Comparé à l'utilisation à l'approche *impérative*, l'accent est mis sur l'opération effectuée (*i.e. la fonction à appliquer*) et non sur la mécanique nécessaire pour naviguer au travers des éléments et sur comment enregistrer le résultat.
+- Comparé à l'utilisation de l'approche *impérative*, l'accent est mis sur l'opération effectuée (*i.e. la fonction à appliquer*) et non sur la mécanique nécessaire pour naviguer au travers des éléments et sur comment enregistrer le résultat.
 
 - Il y a de fortes chances que vous ayez déjà utilisé la fonction `lapply()`. 
   - La fonction `lapply()` est appelé **un fonctionnel**, car elle utilise une fonction comme paramètre.
@@ -612,7 +612,7 @@ Advanced R (Chapman &amp; Hall/CRC The R Series)
 1. Le code est plus compacte (plus facile à lire et comprendre).
 
 2. Plus facile à maintenir: 
-  * Lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. Chaque emplacement de votre code où la même tâche est effectuée est automatiquement mise à jour.
+  * Lorsque vous créez une fonction pour une tâche répétée, il est facile de modifier cette fonction. Chaque emplacement de votre code où la même tâche est effectuée est automatiquement mis à jour.
 
 3. Modularité: si vous écrivez une fonction pour des tâches individuelles spécifiques, vous pouvez les utiliser plusieurs fois. Une fonction que vous écrivez pour un script peut même être réutilisée dans d'autres scripts!
 
@@ -778,7 +778,7 @@ head(mtcars, 20) # Afficher les 20 premières lignes
 
 ## La fonction `map()`
 
-Il est tentant de faire du copié/collé en utilisant la fonction `class()`:
+Il est tentant de faire du copier/coller en utilisant la fonction `class()`:
 
 
 ```r
@@ -865,7 +865,7 @@ map(.x = c(1, 2, 3), .f = f)
 
 ## Les fonctions anonymes et formules
 
-L'exemple précédent peut se ré-écrie en utilisant une fonction anonyme. Avec cette approche, nous n'avons pas besoin de fournir un nom de fonction.
+L'exemple précédent peut se ré-écrire en utilisant une fonction anonyme. Avec cette approche, nous n'avons pas besoin de fournir un nom de fonction.
 
 
 ```r
@@ -929,7 +929,7 @@ class: inverse
 
 
 
-.full-width[.content-box-gray[Calculez la moyenne de chacune des colonnes de ce jeux de données en utilisant une fonction anonyme.]]
+.full-width[.content-box-gray[Calculez la moyenne de chacune des colonnes de ce jeu de données en utilisant une fonction anonyme.]]
 
 
 ```r
@@ -941,10 +941,10 @@ head(df, 3)
 ## # A tibble: 3 x 9
 ##   car     mpg cylinders displacement horsepower weight acceleration model
 ##   &lt;chr&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
-## 1 Chev…    18         8          307        130   3504         12      70
-## 2 Buic…    15         8          350        165   3693         11.5    70
-## 3 Plym…    18         8          318        150   3436         11      70
-## # … with 1 more variable: origin &lt;chr&gt;
+## 1 Chev~    18         8          307        130   3504         12      70
+## 2 Buic~    15         8          350        165   3693         11.5    70
+## 3 Plym~    18         8          318        150   3436         11      70
+## # ... with 1 more variable: origin &lt;chr&gt;
 ```
 
 ```r
@@ -1094,7 +1094,7 @@ map_dbl(mtcars, mean)
 ##  17.848750   0.437500   0.406250   3.687500   2.812500
 ```
 
-Il est intéressant de pouvoir être explicite sur la classe des données attendues. Dans le prochain cas, un erreur est généré, car la fonction `mean()` retourne une valeur de type *double* alors que je spécifie que je devrais reçevoir un *integer*.
+Il est intéressant de pouvoir être explicite sur la classe des données attendues. Dans le prochain cas, une erreur est générée, car la fonction `mean()` retourne une valeur de type *double* alors que je spécifie que je devrais reçevoir un *integer*.
 
 
 ```r
@@ -1129,7 +1129,7 @@ class: inverse
 
 ## Exercice (1/2)
 
-.full-width[.content-box-gray[Séparez le jeux de données `mtcars` en fonction du nombre de cylindre. Utilisez une variante de la fonction `map_*()` pour connaitre le nombre d'observation de chaque groupe.]]
+.full-width[.content-box-gray[Séparez le jeu de données `mtcars` en fonction du nombre de cylindres. Utilisez une variante de la fonction `map_*()` pour connaitre le nombre d'observation de chaque groupe.]]
 
 
 ```r
@@ -1142,7 +1142,7 @@ class: inverse
 
 ## Exercice (2/2)
 
-.full-width[.content-box-gray[Séparez le jeux de données `mtcars` en fonction du nombre de cylindre. Pour chacun des groupes, faire un modèle linéaire `mpg` en fonction de `wt` (`lm(mpg ~ wt)`). Écrivez une fonction `fit()` pour faire le modèle linéaire.]]
+.full-width[.content-box-gray[Séparez le jeu de données `mtcars` en fonction du nombre de cylindres. Pour chacun des groupes, faire un modèle linéaire `mpg` en fonction de `wt` (`lm(mpg ~ wt)`). Écrivez une fonction `fit()` pour faire le modèle linéaire.]]
 
 
 ```r
@@ -1204,13 +1204,13 @@ map(mu, rnorm, n = 4)
 
 ```
 ## [[1]]
-## [1] 4.026914 3.241738 3.647475 2.415420
+## [1] 4.985443 4.183248 2.233771 3.379466
 ## 
 ## [[2]]
-## [1] -1.5534406 -0.5081871 -2.8831839 -1.9671185
+## [1]  0.6560430  0.8098054 -2.1750368 -1.3667033
 ## 
 ## [[3]]
-## [1] 1.945614 3.050837 2.370583 3.924317
+## [1] 3.353625 3.319156 2.420043 2.046721
 ```
 ]
 
@@ -1242,13 +1242,13 @@ map2(.x = mu, .y = sigma, .f = rnorm, n = 4)
 
 ```
 ## [[1]]
-## [1] 5.101436 5.133209 3.434006 4.175488
+## [1] 3.820571 5.009808 4.023627 3.350972
 ## 
 ## [[2]]
-## [1] -1.6102518 -1.8041091 -4.4294302  0.7992169
+## [1] -3.017497  5.457566 -2.787839  2.052707
 ## 
 ## [[3]]
-## [1] 0.8043237 9.0238669 1.9688712 0.7424697
+## [1] 13.30203080  6.10565433  0.04794691  2.71998862
 ```
 ]
 
@@ -1383,13 +1383,13 @@ pmap(.l = l, .f = rnorm)
 
 ```
 ## [[1]]
-## [1] 0.7214487
+## [1] 0.50772
 ## 
 ## [[2]]
-## [1] -198.3900 -200.5131 -200.2121
+## [1] -197.5446 -200.2991 -196.9000
 ## 
 ## [[3]]
-## [1] 5.5597270 7.7831691 4.3649485 0.4928501 3.9441637 3.6428748
+## [1]  1.315162  1.058648  3.429396  3.072566  1.486645 -1.744190
 ```
 
 ---
@@ -1591,15 +1591,15 @@ Similaire au système Bixi à Montréal.
 ```
 ## Observations: 16,859
 ## Variables: 9
-## $ duration             &lt;dbl&gt; 369, 293, 717, 407, 383, 327, 167, 214, 463…
-## $ start_date           &lt;dttm&gt; 2018-01-01 00:18:07, 2018-01-01 00:23:41, …
-## $ end_date             &lt;dttm&gt; 2018-01-01 00:24:17, 2018-01-01 00:28:35, …
-## $ start_station_number &lt;dbl&gt; 31618, 31646, 31111, 31116, 31101, 31601, 3…
-## $ start_station        &lt;chr&gt; "4th &amp; East Capitol St NE", "Maine Ave &amp; 9t…
-## $ end_station_number   &lt;dbl&gt; 31619, 31108, 31285, 31203, 31114, 31630, 3…
-## $ end_station          &lt;chr&gt; "Lincoln Park / 13th &amp; East Capitol St NE",…
-## $ bike_number          &lt;chr&gt; "W21076", "W00800", "W22760", "W23304", "W2…
-## $ member_type          &lt;chr&gt; "Member", "Member", "Member", "Member", "Me…
+## $ duration             &lt;dbl&gt; 369, 293, 717, 407, 383, 327, 167, 214, 4...
+## $ start_date           &lt;dttm&gt; 2018-01-01 00:18:07, 2018-01-01 00:23:41...
+## $ end_date             &lt;dttm&gt; 2018-01-01 00:24:17, 2018-01-01 00:28:35...
+## $ start_station_number &lt;dbl&gt; 31618, 31646, 31111, 31116, 31101, 31601,...
+## $ start_station        &lt;chr&gt; "4th &amp; East Capitol St NE", "Maine Ave &amp; ...
+## $ end_station_number   &lt;dbl&gt; 31619, 31108, 31285, 31203, 31114, 31630,...
+## $ end_station          &lt;chr&gt; "Lincoln Park / 13th &amp; East Capitol St NE...
+## $ bike_number          &lt;chr&gt; "W21076", "W00800", "W22760", "W23304", "...
+## $ member_type          &lt;chr&gt; "Member", "Member", "Member", "Member", "...
 ```
 
 ---
@@ -1609,6 +1609,12 @@ Similaire au système Bixi à Montréal.
 ---
 
 ## Les données
+
+
+```
+## Warning in guess_header_(datasource, tokenizer, locale): '.Random.seed[1]'
+## is not a valid integer, so ignored
+```
 
 &lt;img src="index_files/figure-html/unnamed-chunk-75-1.svg" style="display: block; margin: auto;" /&gt;
 
@@ -1634,18 +1640,18 @@ files
 ```
 
 ```
-##  [1] "data/clean/capitale_bikeshare//201801_capitalbikeshare_tripdata.csv"
-##  [2] "data/clean/capitale_bikeshare//201802-capitalbikeshare-tripdata.csv"
-##  [3] "data/clean/capitale_bikeshare//201803-capitalbikeshare-tripdata.csv"
-##  [4] "data/clean/capitale_bikeshare//201804-capitalbikeshare-tripdata.csv"
-##  [5] "data/clean/capitale_bikeshare//201805-capitalbikeshare-tripdata.csv"
-##  [6] "data/clean/capitale_bikeshare//201806-capitalbikeshare-tripdata.csv"
-##  [7] "data/clean/capitale_bikeshare//201807-capitalbikeshare-tripdata.csv"
-##  [8] "data/clean/capitale_bikeshare//201808-capitalbikeshare-tripdata.csv"
-##  [9] "data/clean/capitale_bikeshare//201809-capitalbikeshare-tripdata.csv"
-## [10] "data/clean/capitale_bikeshare//201810-capitalbikeshare-tripdata.csv"
-## [11] "data/clean/capitale_bikeshare//201811-capitalbikeshare-tripdata.csv"
-## [12] "data/clean/capitale_bikeshare//201812-capitalbikeshare-tripdata.csv"
+##  [1] "data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv"
+##  [2] "data/clean/capitale_bikeshare/201802-capitalbikeshare-tripdata.csv"
+##  [3] "data/clean/capitale_bikeshare/201803-capitalbikeshare-tripdata.csv"
+##  [4] "data/clean/capitale_bikeshare/201804-capitalbikeshare-tripdata.csv"
+##  [5] "data/clean/capitale_bikeshare/201805-capitalbikeshare-tripdata.csv"
+##  [6] "data/clean/capitale_bikeshare/201806-capitalbikeshare-tripdata.csv"
+##  [7] "data/clean/capitale_bikeshare/201807-capitalbikeshare-tripdata.csv"
+##  [8] "data/clean/capitale_bikeshare/201808-capitalbikeshare-tripdata.csv"
+##  [9] "data/clean/capitale_bikeshare/201809-capitalbikeshare-tripdata.csv"
+## [10] "data/clean/capitale_bikeshare/201810-capitalbikeshare-tripdata.csv"
+## [11] "data/clean/capitale_bikeshare/201811-capitalbikeshare-tripdata.csv"
+## [12] "data/clean/capitale_bikeshare/201812-capitalbikeshare-tripdata.csv"
 ```
 
 ```r
@@ -1721,9 +1727,9 @@ install.packages("furrr")
 ##  [9] "future_invoke_map_chr" "future_invoke_map_dbl"
 ## [11] "future_invoke_map_dfc" "future_invoke_map_dfr"
 ## [13] "future_invoke_map_int" "future_invoke_map_lgl"
-## [15] "future_iwalk"          "future_map"           
-## [17] "future_map_at"         "future_map_chr"       
-## [19] "future_map_dbl"        "future_map_dfc"
+## [15] "future_map"            "future_map_at"        
+## [17] "future_map_chr"        "future_map_dbl"       
+## [19] "future_map_dfc"        "future_map_dfr"
 ```
 
 ---
@@ -1855,7 +1861,14 @@ head(res, 1)
 
 ```r
 df &lt;- read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv")
+```
 
+```
+## Warning in guess_header_(datasource, tokenizer, locale): '.Random.seed[1]'
+## is not a valid integer, so ignored
+```
+
+```r
 summarise(df, mean(duration))
 ```
 
@@ -1978,7 +1991,7 @@ group_by(mtcars, cyl)
 ##  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
 ##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
 ## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
-## # … with 22 more rows
+## # ... with 22 more rows
 ```
 
 ---
@@ -2149,15 +2162,20 @@ files %&gt;%
 ```
 
 ```
+## Warning in guess_header_(datasource, tokenizer, locale): '.Random.seed[1]'
+## is not a valid integer, so ignored
+```
+
+```
 ## Observations: 12
 ## Variables: 7
-## $ month                       &lt;ord&gt; Jan, Feb, Mar, Apr, May, Jun, Jul, A…
-## $ duration_mymean             &lt;dbl&gt; 801.5229, 865.4528, 1092.4281, 1233.…
-## $ start_station_number_mymean &lt;dbl&gt; 31325.86, 31322.42, 31320.56, 31318.…
-## $ end_station_number_mymean   &lt;dbl&gt; 31328.16, 31322.27, 31321.56, 31322.…
-## $ duration_mysd               &lt;dbl&gt; 1456.249, 1725.301, 2061.086, 2069.9…
-## $ start_station_number_mysd   &lt;dbl&gt; 227.3051, 223.2809, 217.6609, 216.72…
-## $ end_station_number_mysd     &lt;dbl&gt; 225.8574, 220.9612, 213.6642, 215.49…
+## $ month                       &lt;ord&gt; Jan, Feb, Mar, Apr, May, Jun, Jul,...
+## $ duration_mymean             &lt;dbl&gt; 801.5229, 865.4528, 1092.4281, 123...
+## $ start_station_number_mymean &lt;dbl&gt; 31325.86, 31322.42, 31320.56, 3131...
+## $ end_station_number_mymean   &lt;dbl&gt; 31328.16, 31322.27, 31321.56, 3132...
+## $ duration_mysd               &lt;dbl&gt; 1456.249, 1725.301, 2061.086, 2069...
+## $ start_station_number_mysd   &lt;dbl&gt; 227.3051, 223.2809, 217.6609, 216....
+## $ end_station_number_mysd     &lt;dbl&gt; 225.8574, 220.9612, 213.6642, 215....
 ```
 
 ---
@@ -2199,11 +2217,11 @@ mtcars %&gt;%
 
 ```
 ## # A tibble: 3 x 2
-##     cyl            data
-##   &lt;dbl&gt; &lt;list&lt;df[,10]&gt;&gt;
-## 1     6        [7 × 10]
-## 2     4       [11 × 10]
-## 3     8       [14 × 10]
+##     cyl data              
+##   &lt;dbl&gt; &lt;list&gt;            
+## 1     6 &lt;tibble [7 x 10]&gt; 
+## 2     4 &lt;tibble [11 x 10]&gt;
+## 3     8 &lt;tibble [14 x 10]&gt;
 ```
 
 ---
@@ -2234,7 +2252,7 @@ mtcars %&gt;%
 ##  8     4  22.8  108     93  3.85  2.32  18.6     1     1     4     1
 ##  9     4  24.4  147.    62  3.69  3.19  20       1     0     4     2
 ## 10     4  22.8  141.    95  3.92  3.15  22.9     1     0     4     2
-## # … with 22 more rows
+## # ... with 22 more rows
 ```
 
 ---
@@ -2253,11 +2271,11 @@ mtcars %&gt;%
 
 ```
 ## # A tibble: 3 x 3
-##     cyl            data mod     
-##   &lt;dbl&gt; &lt;list&lt;df[,10]&gt;&gt; &lt;list&gt;  
-## 1     6        [7 × 10] &lt;S3: lm&gt;
-## 2     4       [11 × 10] &lt;S3: lm&gt;
-## 3     8       [14 × 10] &lt;S3: lm&gt;
+##     cyl data               mod     
+##   &lt;dbl&gt; &lt;list&gt;             &lt;list&gt;  
+## 1     6 &lt;tibble [7 x 10]&gt;  &lt;S3: lm&gt;
+## 2     4 &lt;tibble [11 x 10]&gt; &lt;S3: lm&gt;
+## 3     8 &lt;tibble [14 x 10]&gt; &lt;S3: lm&gt;
 ```
 
 La *data frame* contient maintenant:
@@ -2285,15 +2303,15 @@ mtcars %&gt;%
 ```
 
 ```
-## # A tibble: 6 x 8
-##     cyl         data mod     term     estimate std.error statistic  p.value
-##   &lt;dbl&gt; &lt;list&lt;df[,1&gt; &lt;list&gt;  &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1     6     [7 × 10] &lt;S3: l… (Interc…    28.4      4.18       6.79  1.05e-3
-## 2     6     [7 × 10] &lt;S3: l… wt          -2.78     1.33      -2.08  9.18e-2
-## 3     4    [11 × 10] &lt;S3: l… (Interc…    39.6      4.35       9.10  7.77e-6
-## 4     4    [11 × 10] &lt;S3: l… wt          -5.65     1.85      -3.05  1.37e-2
-## 5     8    [14 × 10] &lt;S3: l… (Interc…    23.9      3.01       7.94  4.05e-6
-## 6     8    [14 × 10] &lt;S3: l… wt          -2.19     0.739     -2.97  1.18e-2
+## # A tibble: 6 x 6
+##     cyl term        estimate std.error statistic    p.value
+##   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1     6 (Intercept)    28.4      4.18       6.79 0.00105   
+## 2     6 wt             -2.78     1.33      -2.08 0.0918    
+## 3     4 (Intercept)    39.6      4.35       9.10 0.00000777
+## 4     4 wt             -5.65     1.85      -3.05 0.0137    
+## 5     8 (Intercept)    23.9      3.01       7.94 0.00000405
+## 6     8 wt             -2.19     0.739     -2.97 0.0118
 ```
 
 ---
@@ -2314,17 +2332,17 @@ cars
 ## # A tibble: 406 x 9
 ##    car     mpg cylinders displacement horsepower weight acceleration model
 ##    &lt;chr&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;
-##  1 Chev…    18         8          307        130   3504         12      70
-##  2 Buic…    15         8          350        165   3693         11.5    70
-##  3 Plym…    18         8          318        150   3436         11      70
-##  4 AMC …    16         8          304        150   3433         12      70
-##  5 Ford…    17         8          302        140   3449         10.5    70
-##  6 Ford…    15         8          429        198   4341         10      70
-##  7 Chev…    14         8          454        220   4354          9      70
-##  8 Plym…    14         8          440        215   4312          8.5    70
-##  9 Pont…    14         8          455        225   4425         10      70
-## 10 AMC …    NA         8          390        190   3850          8.5    70
-## # … with 396 more rows, and 1 more variable: origin &lt;chr&gt;
+##  1 Chev~    18         8          307        130   3504         12      70
+##  2 Buic~    15         8          350        165   3693         11.5    70
+##  3 Plym~    18         8          318        150   3436         11      70
+##  4 AMC ~    16         8          304        150   3433         12      70
+##  5 Ford~    17         8          302        140   3449         10.5    70
+##  6 Ford~    15         8          429        198   4341         10      70
+##  7 Chev~    14         8          454        220   4354          9      70
+##  8 Plym~    14         8          440        215   4312          8.5    70
+##  9 Pont~    14         8          455        225   4425         10      70
+## 10 AMC ~    NA         8          390        190   3850          8.5    70
+## # ... with 396 more rows, and 1 more variable: origin &lt;chr&gt;
 ```
 
 ---
