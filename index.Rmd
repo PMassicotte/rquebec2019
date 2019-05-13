@@ -883,6 +883,11 @@ class: inverse
 res <- split(mtcars, mtcars$cyl)
 ```
 
+```{r, echo=FALSE}
+map(res, head, n = 2)
+```
+
+
 ---
 
 class: inverse
@@ -1249,7 +1254,7 @@ read_csv("data/clean/capitale_bikeshare/201801_capitalbikeshare_tripdata.csv") %
 
 ---
 
-```{r, cache=TRUE, echo=FALSE, warning=FALSE, fig.align='center', fig.width=10, fig.height=9, dev='svglite'}
+```{r, cache=TRUE, echo=FALSE, warning=FALSE, fig.align='center', fig.width=10, fig.height=9, dev='CairoPNG'}
 files <- list.files("data/clean/capitale_bikeshare/", full.names = TRUE)
 
 df <- files %>% 
